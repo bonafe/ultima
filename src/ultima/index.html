@@ -1,31 +1,13 @@
 <html>
 <head>
-	<script src="./objetoRemotoController.js"></script>
-	<script src="./objetoRemotoView.js"></script>
-	<script src="./objetoRemotoMetadadosView.js"></script>
-	<script src="./objetoRemotoModel.js"></script>
-	<script src="./baseDeMetadados.js"></script>
-	<link href="./ultima.css" rel="stylesheet">
+	<script type="module">
+		import { PessoaView } from "./PessoaView.js";
+	</script>
 </head>
 <body>	
 	
-	<div id="containerPagina">
-		<div id="containerMetadadosObjeto">
-		</div>
-		<div id="containerObjeto">
-		</div>		
-	</div>
+	<pessoa-view></pessoa-view>
 	
-	<script>
-	
-		let containerObjeto = document.getElementById("containerObjeto");
-		let containerMetadadosObjeto = document.getElementById("containerMetadadosObjeto");
-	
-		let baseMetadados = new BaseDeMetadados();		
-		let viewObjeto = new ObjetoRemotoView(containerObjeto);
-		let viewMetadadosObjeto = new ObjetoRemotoMetadadosView(containerMetadadosObjeto);
-		let model = new ObjetoRemotoModel();
-		let controller = new ObjetoRemotoController(baseMetadados, model, viewObjeto, viewMetadadosObjeto);
-	</script>
+
 </body>
 </html>
