@@ -5,15 +5,7 @@ export class BaseTestesTreeMap{
         "telas": [
         {   "id": 1,
             "descricao": "Contatos de A a J",            
-            "componentes": [
-                {
-                    "descricao": "Componente 1",
-                    "importancia": 10,
-                    "componente":{
-                        "url": "/componentes/contatos/contatos_view.js",
-                        "nome": "contatos-view"
-                    }                                 
-                },
+            "componentes": [                
                 { 
                     "descricao": "Componente 2",
                     "importancia": 16,
@@ -31,37 +23,6 @@ export class BaseTestesTreeMap{
                     }
                 }
             ]            
-        },
-        {
-            "id": 2,
-            "descricao": "Todos os contatos",
-            "componentes": [            
-                {
-                    "descricao": "Componente 4",
-                    "importancia": 6,
-                    "componente":{
-                        "url": "/componentes/contatos/contatos_view.js",
-                        "nome": "contatos-view"
-                    }
-                },
-                {
-                    "descricao": "Componente 5",                    
-                    "importancia": 4,
-                    "componente":{
-                        "url": "/componentes/contatos/contatos_view.js",
-                        "nome": "contatos-view"
-                    }
-                },
-                {
-                    "descricao": "Componente 6",
-                    "importancia": 8,
-                    "componente":{
-                        "url": "/componentes/contatos/contatos_view.js",
-                        "nome": "contatos-view"
-                    }
-                },            
-            ]
-        }
-        ]
+        }]
     };
 }

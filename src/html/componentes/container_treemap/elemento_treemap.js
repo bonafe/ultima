@@ -4,7 +4,7 @@ import { ComponenteBase } from '../componente_base.js';
 
 export class ElementoTreeMap extends ComponenteBase {
 
-
+    static EVENTO_SELECAO_OBJETO = 'EVENTO_SELECAO_OBJETO';
 
     constructor(){
         super({templateURL:"/componentes/container_treemap/elemento_treemap.html", shadowDOM:true});
@@ -64,10 +64,19 @@ export class ElementoTreeMap extends ComponenteBase {
                 this.instanciaComponente.setAttribute("dados", this.dados);
             }
 
+            //O componente deve retornar esse mesmo tipo de evento
+            this.instanciaComponente.addEventListener(ElementoTreeMap.EVENTO_SELECAO_OBJETO, evento => {
+                this.selecionouObjeto(evento.detail);
+            });
+
             this.noRaiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);
 
             this.componenteCarregado = true;
         });
+    }
+
+    selecionouObjeto(objeto){        
+        this.dispatchEvent(new CustomEvent(ElementoTreeMap.EVENTO_SELECAO_OBJETO, {detail:objeto}));        
     }
 }
 customElements.define('elemento-treemap', ElementoTreeMap);
