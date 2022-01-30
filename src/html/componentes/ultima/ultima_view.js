@@ -26,7 +26,7 @@ export class UltimaView extends ComponenteBase{
                             "url": "/componentes/editor_json/editor_json.js",
                             "nome": "editor-json"
                         },                    
-                        "dados":{...evento.detail}                        
+                        "dados":{...evento.detail.objeto}                        
                     }
                 );
                 this.controleNavegador.elementos = e;

@@ -14,12 +14,12 @@ export class BaseTestesTreeMap{
                         "nome": "editor-json"
                     },                    
                     "dados":{
-                        "nome":"valor do nome tipo string",
-                        "lista":["elemento1",2,3,4,true,false,{"id":"12"},[1,2,3]],
-                        "objeto":{
-                            "titulo":"esse é o título",
-                            "ano":1913
-                        }
+                        "descricao":"Lista de Contatos",
+                        "contatos":[
+                            {"nome":"fulano", "telefone":"(ddd)nnnn-nnnn", "email":"email@email.com"},
+                            {"nome":"siclano", "telefone":"(ddd)nnnn-nnnn", "email":"email@email.com"},
+                            {"nome":"beltrano", "telefone":"(ddd)nnnn-nnnn", "email":"email@email.com"}
+                        ]                        
                     }
                 }
             ]            

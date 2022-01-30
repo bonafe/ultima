@@ -78,7 +78,7 @@ export class EditorJSON extends ComponenteBase {
                 }
             }
         };
-        this.editor = new JSONEditor(container, opcoes);
+        this.editor = new JSONEditor(container, opcoes);        
         this.atualizarDadosEditor();
     }
 
@@ -87,6 +87,7 @@ export class EditorJSON extends ComponenteBase {
     atualizarDadosEditor(){
         if (this.editor && this.dados){
             this.editor.set(this.dados);
+            this.editor.expandAll();
         }
     }
 }
