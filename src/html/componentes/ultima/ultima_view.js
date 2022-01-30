@@ -18,8 +18,12 @@ export class UltimaView extends ComponenteBase{
                 console.log ("Recebeu evento treemap");
                 console.dir(evento.detail);
                 let e = this.controleNavegador.elementos;
-                e["telas"][0]["componentes"].push(
-                    { 
+                let novoId = e["proximoId"];
+                e["proximoId"] = novoId + 1;
+
+                e["telas"][0]["elementos"].push(
+                    {
+                        "id":novoId, 
                         "descricao": "Componente X",
                         "importancia": 10,
                         "componente":{                        

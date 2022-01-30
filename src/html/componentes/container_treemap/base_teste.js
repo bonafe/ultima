@@ -1,12 +1,14 @@
 export class BaseTestesTreeMap{
 
     static base = {
+        "proximoId":2,
         "descricao": "Conjunto de telas salvas",
         "telas": [
         {   "id": 1,
             "descricao": "Contatos de A a J",            
-            "componentes": [                
+            "elementos": [                
                 { 
+                    "id":1,
                     "descricao": "Componente 2",
                     "importancia": 16,
                     "componente":{                        

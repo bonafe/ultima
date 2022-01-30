@@ -19,6 +19,20 @@ label{
     align-items: flex-end;
     flex-wrap: wrap;
     background-color: rgb(0, 225, 255);
+    opacity: 50%;
+    transition: 0.3s;
+}
+
+.controlesJanela:hover{
+  opacity: 100%;
+}
+
+.controleJanela{
+  transition: 0.3s;
+}
+
+.controleJanela:hover{  
+  background: rgba(39,62,84,0.82);  
 }
 
 #containerComponente{

@@ -4,7 +4,15 @@ import { ComponenteBase } from '../componente_base.js';
 
 export class ElementoTreeMap extends ComponenteBase {
 
+
+    
     static EVENTO_SELECAO_OBJETO = 'EVENTO_SELECAO_OBJETO';
+    static EVENTO_AUMENTAR = 'EVENTO_AUMENTAR';
+    static EVENTO_DIMINUIR = 'EVENTO_DIMINUIR';
+    static EVENTO_IR_PARA_TRAS = 'EVENTO_IR_PARA_TRAS';
+    static EVENTO_IR_PARA_FRENTE = 'EVENTO_IR_PARA_FRENTE';    
+
+
 
     constructor(){
         super({templateURL:"/componentes/container_treemap/elemento_treemap.html", shadowDOM:true});
@@ -17,13 +25,26 @@ export class ElementoTreeMap extends ComponenteBase {
             if (this.componente){                             
                 this.carregarComponente();
             }
+
+            this.noRaiz.querySelector("#aumentar").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_AUMENTAR, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#diminuir").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_DIMINUIR, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#irParaTras").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_TRAS, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#irParaFrente").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_FRENTE, {detail:this._id}));
+            });
         });
     }
 
 
 
     static get observedAttributes() {
-        return ['dados','componente'];
+        return ['dados','componente','id'];
     }
 
 
@@ -40,10 +61,13 @@ export class ElementoTreeMap extends ComponenteBase {
                 this.carregarComponente();
             }
         } else if (nomeAtributo.localeCompare("dados") == 0){
-            this.dados  = novoValor;
+            this.dados  = JSON.parse(novoValor);
             if (this.instanciaComponente){
-                this.instanciaComponente.setAttribute("dados", this.dados);
+                this.instanciaComponente.setAttribute("dados", JSON.stringify(this.dados));
             }
+
+        } else if (nomeAtributo.localeCompare("id") == 0){
+            this._id = Number(novoValor);
         }
     }
 
@@ -61,7 +85,7 @@ export class ElementoTreeMap extends ComponenteBase {
             this.instanciaComponente = document.createElement(this.componente.nome);
 
             if (this.dados){
-                this.instanciaComponente.setAttribute("dados", this.dados);
+                this.instanciaComponente.setAttribute("dados", JSON.stringify(this.dados));
             }
 
             //O componente deve retornar esse mesmo tipo de evento
