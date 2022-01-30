@@ -124,7 +124,36 @@ export class ContainerTreeMap extends ComponenteBase{
                         this.renderizar();   
                     }
                 });     
-                          
+                elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_INICIO, (evento) => {
+                    let idElementoProcurado = evento.detail;
+                    let indice = this.elementos["telas"][0]["elementos"].map(e => e.id).indexOf (idElementoProcurado);
+
+                    if (indice > 0){
+
+                        //Remove o elemento da posição
+                        let [elemento] = this.elementos["telas"][0]["elementos"].splice(indice,1);
+
+                        //O recoloca no inicio
+                        this.elementos["telas"][0]["elementos"].splice(0,0,elemento);
+                            
+                        this.renderizar();   
+                    }
+                });   
+                elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_FIM, (evento) => {
+                    let idElementoProcurado = evento.detail;
+                    let indice = this.elementos["telas"][0]["elementos"].map(e => e.id).indexOf (idElementoProcurado);
+
+                    if (indice < (this.elementos["telas"][0]["elementos"].length-1)){
+
+                        //Remove o elemento da posição
+                        let [elemento] = this.elementos["telas"][0]["elementos"].splice(indice,1);
+
+                        //O recoloca no final
+                        this.elementos["telas"][0]["elementos"].splice(this.elementos["telas"][0]["elementos"].length,0,elemento);
+                            
+                        this.renderizar();   
+                    }
+                });    
             });
         }
     }

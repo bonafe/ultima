@@ -11,7 +11,8 @@ export class ElementoTreeMap extends ComponenteBase {
     static EVENTO_DIMINUIR = 'EVENTO_DIMINUIR';
     static EVENTO_IR_PARA_TRAS = 'EVENTO_IR_PARA_TRAS';
     static EVENTO_IR_PARA_FRENTE = 'EVENTO_IR_PARA_FRENTE';    
-
+    static EVENTO_IR_PARA_INICIO = 'EVENTO_IR_PARA_INICIO';
+    static EVENTO_IR_PARA_FIM = 'EVENTO_IR_PARA_FIM'; 
 
 
     constructor(){
@@ -37,6 +38,12 @@ export class ElementoTreeMap extends ComponenteBase {
             });
             this.noRaiz.querySelector("#irParaFrente").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_FRENTE, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#irParaInicio").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_INICIO, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#irParaFim").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_FIM, {detail:this._id}));
             });
         });
     }
