@@ -4,7 +4,7 @@ export class ComponenteBase extends HTMLElement{
     constructor(propriedades){
         super();
         
-        this.carregou = true;
+        this.carregou = false;
 
         this._prefixoEndereco = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
 

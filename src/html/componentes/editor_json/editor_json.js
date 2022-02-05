@@ -31,7 +31,23 @@ export class EditorJSON extends ComponenteBase {
 
         if (nomeAtributo.localeCompare("dados") == 0){
             this.dados = JSON.parse(novoValor);
-            this.atualizarDadosEditor();
+
+            if (this.dados.url){ 
+                this.url = this.dados.url;
+
+                fetch(this.url)
+                    .then(retorno => retorno.json())
+                    .then(json => {
+                        this.dados = json;
+                        this.atualizarDadosEditor();
+                    })
+                    .catch (e => alert (e));
+            }else{
+                this.atualizarDadosEditor();
+            }
+
+            
+
         }
     }  
 

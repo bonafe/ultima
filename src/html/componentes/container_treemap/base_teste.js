@@ -12,17 +12,24 @@ export class BaseTestesTreeMap{
                     "descricao": "Componente 2",
                     "importancia": 16,
                     "componente":{                        
-                        "url": "/componentes/editor_json/editor_json.js",
-                        "nome": "editor-json"
+                        "url": "/componentes/equipe/grafo_equipe.js",
+                        "nome": "grafo-equipe"
                     },                    
-                    "dados":{
-                        "descricao":"Lista de Contatos",
-                        "contatos":[
-                            {"nome":"fulano", "telefone":"(ddd)nnnn-nnnn", "email":"email@email.com"},
-                            {"nome":"siclano", "telefone":"(ddd)nnnn-nnnn", "email":"email@email.com"},
-                            {"nome":"beltrano", "telefone":"(ddd)nnnn-nnnn", "email":"email@email.com"}
-                        ]                        
+                    "dados": {
+                        "nome": "equipe principal",
+                        "equipes":[
+                            {
+                                "nome":"equipe 1",
+                                "escala":[
+                                    {
+                                        "nome": "fulano",
+                                        "cargo": "cargo"
+                                    }
+                                ]
+                            }
+                        ]
                     }
+                    
                 }
             ]            
         }]
