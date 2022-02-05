@@ -9,12 +9,20 @@ export class GrafoEquipe extends ComponenteBase {
         
         this.addEventListener("carregou", () => {
         
+            //TODO: carregar dinamicamente o vis.js
             //Importa dinamicamente a biblioteca JSONEditor
             //import(`${super.prefixoEndereco}/bibliotecas/vis.js/vis.js`).then(modulo => {
 
                 this.vis = true;
                 this.gerarGrafoEquipe();                               
             //});
+
+            this.noRaiz.querySelector("#adicionar").addEventListener("click", ()=>{
+                this.elementosGrafo.nodes.add({
+                    id:(Math.random()*1e7).toString(32),
+                    label: "novo nó"
+                })
+            });
         });
     }
 
@@ -63,15 +71,30 @@ export class GrafoEquipe extends ComponenteBase {
                     stabilization: false,                    
                   }
             };
-            let grafo = new vis.Network (this.noRaiz.querySelector("#divGrafo"), elementosGrafo, options);
+            this.elementosGrafo = elementosGrafo;
+            let grafo = new vis.Network (this.noRaiz.querySelector("#divGrafo"), this.elementosGrafo, options);            
+
+            window.requestAnimationFrame(this.animarGrafo.bind(this));
         }
+    }
+
+    animarGrafo(timestamp){
+        if (!this.inicio) this.inicio = timestamp;
+        this.elementosGrafo.nodes.update(
+            this.elementosGrafo.nodes.get().map(no => {        
+                no.color = ((Math.random() < 0.5) ?"red" :"blue");
+                return no;
+            })
+        );
+        
+        window.requestAnimationFrame(this.animarGrafo.bind(this));
     }
 
 
 
     transformarListaEmGrafo (equipes, idPai, nivel){
 
-        let elementosGrafo = {nodes:[], edges:[]};
+        let elementosGrafo = {nodes:new vis.DataSet(), edges:new vis.DataSet()};
 
         for (let iEquipe in equipes){
 
@@ -89,8 +112,8 @@ export class GrafoEquipe extends ComponenteBase {
                     to: idEquipe
             }
 
-            elementosGrafo.nodes.push(no);
-            elementosGrafo.edges.push(ligacao);
+            elementosGrafo.nodes.add(no);
+            elementosGrafo.edges.add(ligacao);
 
 
             for (let iEscala in equipe.escala){
@@ -130,7 +153,7 @@ export class GrafoEquipe extends ComponenteBase {
                     color = "#fe3523";
 
                 }
-
+                
 
                 let no = {
                         label: nomePessoa,
@@ -144,8 +167,8 @@ export class GrafoEquipe extends ComponenteBase {
                         to: idEscalaGrafo
                 }
 
-                elementosGrafo.nodes.push(no);
-                elementosGrafo.edges.push(ligacao);
+                elementosGrafo.nodes.add(no);
+                elementosGrafo.edges.add(ligacao);
             }
 
 
@@ -154,8 +177,8 @@ export class GrafoEquipe extends ComponenteBase {
                 if (Object.keys(equipe.equipes).length > 0){
 
                     let elementosGrafoGerados = this.transformarListaEmGrafo(equipe.equipes, idEquipe, nivel-10);
-                    elementosGrafo.nodes = elementosGrafo.nodes.concat(elementosGrafoGerados.nodes);
-                    elementosGrafo.edges = elementosGrafo.edges.concat(elementosGrafoGerados.edges);
+                    elementosGrafo.nodes.add(elementosGrafoGerados.nodes.get());
+                    elementosGrafo.edges.add(elementosGrafoGerados.edges.get());
                 }
             }
         }

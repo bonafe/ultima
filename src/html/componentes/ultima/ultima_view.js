@@ -1,6 +1,6 @@
 import { ComponenteBase } from "../componente_base.js";
 import { ContainerTreeMap } from "../container_treemap/container_treemap.js";
-import { BaseTestesTreeMap } from "../container_treemap/base_teste.js";
+import { BaseTestesTreeMap } from "./base_teste.js";
 
 export class UltimaView extends ComponenteBase{
 
@@ -12,7 +12,7 @@ export class UltimaView extends ComponenteBase{
         this.addEventListener('carregou', () => {
             
             this.controleNavegador = this.noRaiz.querySelector("container-treemap");
-            this.controleNavegador.elementos = BaseTestesTreeMap.base;
+            this.controleNavegador.elementos = BaseTestesTreeMap.base;      
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaView.EVENTO_SELECAO_OBJETO, (evento) => {
                 console.log ("Recebeu evento treemap");
