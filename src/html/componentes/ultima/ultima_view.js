@@ -1,4 +1,5 @@
 import { ComponenteBase } from "../componente_base.js";
+import { UltimaEvento } from "./ultima.js";
 import { ContainerTreeMap } from "../container_treemap/container_treemap.js";
 import { BaseTestesTreeMap } from "./base_teste.js";
 
@@ -14,26 +15,22 @@ export class UltimaView extends ComponenteBase{
             this.controleNavegador = this.noRaiz.querySelector("container-treemap");
             this.controleNavegador.elementos = BaseTestesTreeMap.base;      
 
-            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaView.EVENTO_SELECAO_OBJETO, (evento) => {
-                console.log ("Recebeu evento treemap");
-                console.dir(evento.detail);
-                let e = this.controleNavegador.elementos;
-                let novoId = e["proximoId"];
-                e["proximoId"] = novoId + 1;
+            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {
 
-                e["telas"][0]["elementos"].push(
-                    {
-                        "id":novoId, 
+                console.info ("ULTIMA: Recebeu evento seleção objeto");
+                console.dir(evento.detail);               
+
+                this.controleNavegador.adicionarElementos(
+                    {                         
                         "descricao": "Componente X",
                         "importancia": 10,
                         "componente":{                        
-                            "url": "/componentes/equipe/grafo_equipe.js",
-                            "nome": "grafo-equipe"
+                            "url": "/componentes/editor_json/editor_json.js",
+                            "nome": "editor-json"
                         },                    
                         "dados":{...evento.detail.objeto}                        
                     }
-                );
-                this.controleNavegador.elementos = e;
+                )
             });
         });
     }

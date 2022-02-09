@@ -1,10 +1,8 @@
 import { ComponenteBase } from '../componente_base.js';
-
+import { UltimaEvento } from '../ultima/ultima.js';
 
 
 export class EditorJSON extends ComponenteBase {
-
-    static EVENTO_SELECAO_OBJETO = 'EVENTO_SELECAO_OBJETO';
 
     constructor(){
         super({templateURL:"/componentes/editor_json/editor_json.html", shadowDOM:true});
@@ -59,9 +57,8 @@ export class EditorJSON extends ComponenteBase {
             let dado = EditorJSON.trazerDado(no.path, this.dados);
 
             if (typeof dado === 'object'){
-
-                let eventoSelecaoObjeto = new CustomEvent (EditorJSON.EVENTO_SELECAO_OBJETO,{detail:dado});
-                this.dispatchEvent(eventoSelecaoObjeto);
+                
+                this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO,dado));
             }
         }
     }

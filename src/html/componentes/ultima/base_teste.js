@@ -12,8 +12,8 @@ export class BaseTestesTreeMap{
                     "descricao": "Componente 2",
                     "importancia": 16,
                     "componente":{                        
-                        "url": "/componentes/equipe/grafo_equipe.js",
-                        "nome": "grafo-equipe"
+                        "url": "/componentes/editor_json/editor_json.js",
+                        "nome": "editor-json"
                     },                    
                     "dados": {
                         "nome": "equipe principal",

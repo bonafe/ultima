@@ -1,8 +1,9 @@
 import { ComponenteBase } from '../componente_base.js';
-
+import { UltimaEvento } from '../ultima/ultima.js';
 
 
 export class GrafoEquipe extends ComponenteBase {
+    
 
     constructor(){
         super({templateURL:"/componentes/equipe/grafo_equipe.html", shadowDOM:true});
@@ -74,7 +75,12 @@ export class GrafoEquipe extends ComponenteBase {
             this.elementosGrafo = elementosGrafo;
             let grafo = new vis.Network (this.noRaiz.querySelector("#divGrafo"), this.elementosGrafo, options);            
 
-            window.requestAnimationFrame(this.animarGrafo.bind(this));
+            grafo.on ("click", parametros => {
+                console.dir(parametros);
+                this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO, parametros));
+            });
+
+            //window.requestAnimationFrame(this.animarGrafo.bind(this));
         }
     }
 

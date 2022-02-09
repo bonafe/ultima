@@ -5,14 +5,15 @@ import { ComponenteBase } from '../componente_base.js';
 export class ElementoTreeMap extends ComponenteBase {
 
 
-    
-    static EVENTO_SELECAO_OBJETO = 'EVENTO_SELECAO_OBJETO';
+
     static EVENTO_AUMENTAR = 'EVENTO_AUMENTAR';
     static EVENTO_DIMINUIR = 'EVENTO_DIMINUIR';
     static EVENTO_IR_PARA_TRAS = 'EVENTO_IR_PARA_TRAS';
     static EVENTO_IR_PARA_FRENTE = 'EVENTO_IR_PARA_FRENTE';    
     static EVENTO_IR_PARA_INICIO = 'EVENTO_IR_PARA_INICIO';
     static EVENTO_IR_PARA_FIM = 'EVENTO_IR_PARA_FIM'; 
+    static EVENTO_MUDAR_VISUALIZACAO = 'EVENTO_MUDAR_VISUALIZACAO';
+
 
 
     constructor(){
@@ -44,6 +45,9 @@ export class ElementoTreeMap extends ComponenteBase {
             });
             this.noRaiz.querySelector("#irParaFim").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_FIM, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#mudarVisualizacao").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, {detail:this._id}));
             });
         });
     }
@@ -95,19 +99,10 @@ export class ElementoTreeMap extends ComponenteBase {
                 this.instanciaComponente.setAttribute("dados", JSON.stringify(this.dados));
             }
 
-            //O componente deve retornar esse mesmo tipo de evento
-            this.instanciaComponente.addEventListener(ElementoTreeMap.EVENTO_SELECAO_OBJETO, evento => {
-                this.selecionouObjeto(evento.detail);
-            });
-
             this.noRaiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);
 
             this.componenteCarregado = true;
         });
-    }
-
-    selecionouObjeto(objeto){        
-        this.dispatchEvent(new CustomEvent(ElementoTreeMap.EVENTO_SELECAO_OBJETO, {detail:objeto}));        
     }
 }
 customElements.define('elemento-treemap', ElementoTreeMap);
