@@ -86,6 +86,7 @@ export class EditorJSON extends ComponenteBase {
         let opcoes = {
             mode: 'tree',
             onEvent: (no, evento) =>{
+                console.log(evento.type);
                 if (evento.type.localeCompare("click") ==0){
                     this.dispararEventoSelecaoObjeto(no);
                 }
