@@ -1,7 +1,6 @@
 import { ComponenteBase } from "../componente_base.js";
-import { UltimaEvento } from "./ultima.js";
+import { UltimaEvento, UltimaDAO } from "./ultima.js";
 import { ContainerTreeMap } from "../container_treemap/container_treemap.js";
-import { BaseTestesTreeMap } from "./base_teste.js";
 
 export class UltimaView extends ComponenteBase{
 
@@ -13,26 +12,48 @@ export class UltimaView extends ComponenteBase{
         this.addEventListener('carregou', () => {
             
             this.controleNavegador = this.noRaiz.querySelector("container-treemap");
-            this.controleNavegador.elementos = BaseTestesTreeMap.base;      
+            
+            UltimaDAO.getInstance().telas().then (telas => {
+                //TODO: só está pegando a primeira tela
+                this.tela  = telas[0];
+                this.controleNavegador.tela = JSON.parse(JSON.stringify(this.tela));
+            });
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {
 
                 console.info ("ULTIMA: Recebeu evento seleção objeto");
                 console.dir(evento.detail);               
 
-                this.controleNavegador.adicionarElementos(
-                    {                         
-                        "descricao": "Componente X",
-                        "importancia": 10,
-                        "componente":{                        
-                            "url": "/componentes/editor_json/editor_json.js",
-                            "nome": "editor-json"
-                        },                    
-                        "dados":{...evento.detail.objeto}                        
-                    }
-                )
+                let novoElemento = {                        
+                    "id": this.novoId(this.tela.elementos), 
+                    "descricao": "Componente X",
+                    "importancia": 10,
+                    "componente":{                        
+                        "url": "/componentes/editor_json/editor_json.js",
+                        "nome": "editor-json"
+                    },                    
+                    "dados":{...evento.detail.objeto}                        
+                };
+
+                this.tela.elementos.push(novoElemento);
+                UltimaDAO.getInstance().atualizarTela(this.tela);
+
+                this.controleNavegador.adicionarElemento(novoElemento);                                   
+            });
+
+            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, evento => {
             });
         });
+    }
+
+    novoId(elementos){
+        let id = 0;
+        elementos.forEach(elemento => {
+            if (elemento.id > id){
+                id = elemento.id;
+            }
+        });
+        return ++id;
     }
 }
 customElements.define('ultima-view', UltimaView);

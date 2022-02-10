@@ -7,6 +7,8 @@ export class EditorJSON extends ComponenteBase {
     constructor(){
         super({templateURL:"/componentes/editor_json/editor_json.html", shadowDOM:true});
 
+        this._dados = undefined;
+
         this.addEventListener("carregou", () => {
 
             //Importa dinamicamente a biblioteca JSONEditor
@@ -19,6 +21,18 @@ export class EditorJSON extends ComponenteBase {
 
 
 
+    get dados(){
+        return this._dados;
+    }
+
+
+
+    set dados(novosDados){
+        this._dados = novosDados;
+    }
+
+
+
     static get observedAttributes() {
         return ['dados'];
     }
@@ -27,6 +41,7 @@ export class EditorJSON extends ComponenteBase {
 
     attributeChangedCallback(nomeAtributo, valorAntigo, novoValor) {
 
+    
         if (nomeAtributo.localeCompare("dados") == 0){
             this.dados = JSON.parse(novoValor);
 
@@ -43,9 +58,6 @@ export class EditorJSON extends ComponenteBase {
             }else{
                 this.atualizarDadosEditor();
             }
-
-            
-
         }
     }  
 
@@ -85,10 +97,18 @@ export class EditorJSON extends ComponenteBase {
         let container = this.noRaiz.querySelector("#editorJSON");
         let opcoes = {
             mode: 'tree',
-            onEvent: (no, evento) =>{
-                console.log(evento.type);
+            onEvent: (no, evento) =>{                
+
                 if (evento.type.localeCompare("click") ==0){
+
                     this.dispararEventoSelecaoObjeto(no);
+
+
+                }else  if (evento.type.localeCompare("input") ==0){
+                    
+                    let valorAntigo = this.dados;
+                    this.dados = this.editor.get();
+                    this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, {"valorAntigo":valorAntigo, "novoValor":this.dados}));
                 }
             }
         };
