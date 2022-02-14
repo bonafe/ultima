@@ -1,4 +1,5 @@
 import { ComponenteBase } from '../componente_base.js';
+import { UltimaEvento } from '../ultima/ultima.js';
 
 
 
@@ -100,6 +101,24 @@ export class ElementoTreeMap extends ComponenteBase {
             }
 
             this.noRaiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);
+
+            this.instanciaComponente.addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, evento => {
+
+                //Para a propagaçaõ do evento do componente
+                evento.stopPropagation();
+
+                //Cria um novo evento indicando dados do componente
+                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, {                    
+                        componente: this.componente,
+                        dados:{
+                            valorAntigo:evento.detail.objeto.valorAntigo, 
+                            novoValor:evento.detail.objeto.novoValor
+                        },
+                        id: this._id,                    
+                });
+                
+                this.dispatchEvent(eventoCompleto);                
+            });
 
             this.componenteCarregado = true;
         });

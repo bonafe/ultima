@@ -25,7 +25,8 @@ export class UltimaView extends ComponenteBase{
                 console.dir(evento.detail);               
 
                 let novoElemento = {                        
-                    "id": this.novoId(this.tela.elementos), 
+                    "id": this.proximoIdElemento(this.tela.elementos), 
+                    "ordem": this.proximaOrdem(this.tela.elementos),
                     "descricao": "Componente X",
                     "importancia": 10,
                     "componente":{                        
@@ -36,17 +37,29 @@ export class UltimaView extends ComponenteBase{
                 };
 
                 this.tela.elementos.push(novoElemento);
+
+                //Todo: tratamento de erro???
                 UltimaDAO.getInstance().atualizarTela(this.tela);
 
                 this.controleNavegador.adicionarElemento(novoElemento);                                   
             });
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, evento => {
+                let id_elemento = evento.detail.objeto.id;
+                let elemento = this.tela.elementos.find (elemento => elemento.id == id_elemento);
+
+                elemento.dados = evento.detail.objeto.dados.novoValor;
+                elemento.componente = evento.detail.objeto.componente;
+                elemento.descricao = evento.detail.objeto.descricao;
+                elemento.importancia = evento.detail.objeto.importancia;
+                elemento.ordem = evento.detail.objeto.ordem;
+
+                UltimaDAO.getInstance().atualizarTela(this.tela);
             });
         });
     }
 
-    novoId(elementos){
+    proximoIdElemento(elementos){
         let id = 0;
         elementos.forEach(elemento => {
             if (elemento.id > id){
@@ -54,6 +67,20 @@ export class UltimaView extends ComponenteBase{
             }
         });
         return ++id;
+    }
+
+    proximaOrdem(elementos){
+        let ordem = 0;
+        elementos.forEach(elemento => {
+            if (elemento.ordem > ordem){
+                ordem = elemento.ordem;
+            }
+        });
+        ++ordem;
+
+        console.log(ordem);
+
+        return ordem;
     }
 }
 customElements.define('ultima-view', UltimaView);

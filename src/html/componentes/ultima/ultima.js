@@ -85,7 +85,7 @@ export class UltimaDAO extends EventTarget{
 
         let object_store_telas = this.banco.transaction ("telas", "readwrite").objectStore ("telas");
 
-        let telas = [];
+        tela.elementos.sort ((a, b) => a.ordem - b.ordem);        
         
         return new Promise((resolve, reject) => {
             let request = object_store_telas.put(tela);
@@ -103,11 +103,6 @@ export class UltimaDAO extends EventTarget{
         //Recuperar a tela atual do banco
     }
 
-
-
-    atualizarTela (tela){
-        //Atualiza o registro de tela no banco ou adiciona novo
-    }
 
 
 

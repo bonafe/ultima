@@ -11,6 +11,7 @@ export class BaseTestesTreeMap{
                     "id":1,
                     "descricao": "Componente 2",
                     "importancia": 16,
+                    "ordem":1,
                     "componente":{                        
                         "url": "/componentes/editor_json/editor_json.js",
                         "nome": "editor-json"
