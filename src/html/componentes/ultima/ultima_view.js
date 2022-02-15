@@ -19,10 +19,7 @@ export class UltimaView extends ComponenteBase{
                 this.controleNavegador.tela = JSON.parse(JSON.stringify(this.tela));
             });
 
-            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {
-
-                console.info ("ULTIMA: Recebeu evento seleção objeto");
-                console.dir(evento.detail);               
+            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {        
 
                 let novoElemento = {                        
                     "id": this.proximoIdElemento(this.tela.elementos), 
@@ -33,10 +30,13 @@ export class UltimaView extends ComponenteBase{
                         "url": "/componentes/editor_json/editor_json.js",
                         "nome": "editor-json"
                     },                    
-                    "dados":{...evento.detail.objeto}                        
+                    "dados":{...evento.detail}                        
                 };
 
                 this.tela.elementos.push(novoElemento);
+
+                console.log ("adicionando elemento");
+                this.tela.elementos.forEach(e => console.log (e.ordem));
 
                 //Todo: tratamento de erro???
                 UltimaDAO.getInstance().atualizarTela(this.tela);
@@ -45,14 +45,14 @@ export class UltimaView extends ComponenteBase{
             });
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, evento => {
-                let id_elemento = evento.detail.objeto.id;
+                let id_elemento = evento.detail.id;
                 let elemento = this.tela.elementos.find (elemento => elemento.id == id_elemento);
 
-                elemento.dados = evento.detail.objeto.dados.novoValor;
-                elemento.componente = evento.detail.objeto.componente;
-                elemento.descricao = evento.detail.objeto.descricao;
-                elemento.importancia = evento.detail.objeto.importancia;
-                elemento.ordem = evento.detail.objeto.ordem;
+                elemento.dados = evento.detail.dados;
+                elemento.componente = evento.detail.componente;
+                elemento.descricao = evento.detail.descricao;
+                elemento.importancia = evento.detail.importancia;
+                elemento.ordem = evento.detail.ordem;
 
                 UltimaDAO.getInstance().atualizarTela(this.tela);
             });
@@ -76,9 +76,7 @@ export class UltimaView extends ComponenteBase{
                 ordem = elemento.ordem;
             }
         });
-        ++ordem;
-
-        console.log(ordem);
+        ++ordem;        
 
         return ordem;
     }

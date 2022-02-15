@@ -6,7 +6,7 @@ export class UltimaEvento extends CustomEvent{
     static EVENTO_ATUALIZACAO_OBJETO = 'EVENTO_ATUALIZACAO_OBJETO'; 
 
     constructor(evento, objetoDeDados){
-        super(evento, {'detail':{'objeto':objetoDeDados}, 'bubbles': true, 'composed':true});
+        super(evento, {'detail':objetoDeDados, 'bubbles': true, 'composed':true});
     }
 }
 
@@ -15,11 +15,13 @@ export class UltimaEvento extends CustomEvent{
 export class UltimaDAO extends EventTarget{
 
 
+
     static EVENTO_BANCO_CARREGADO = "EVENTO_BANCO_CARREGADO";
 
     static instancia = undefined;
     static NOME_BANCO = "UltimaDB";
     static VERSAO = 1;
+
 
 
     static getInstance(){
@@ -44,6 +46,7 @@ export class UltimaDAO extends EventTarget{
     }
 
 
+
     aguardarBanco(){
         return new Promise ((resolve, reject) => {
             if (this.banco){
@@ -55,6 +58,7 @@ export class UltimaDAO extends EventTarget{
             }
         });
     }
+
 
 
     async telas(){
@@ -79,6 +83,7 @@ export class UltimaDAO extends EventTarget{
     }
 
 
+
     async atualizarTela (tela){
        
         await this.aguardarBanco();
@@ -99,10 +104,10 @@ export class UltimaDAO extends EventTarget{
      }
 
 
+
     telaAtual(){
         //Recuperar a tela atual do banco
     }
-
 
 
 
@@ -159,7 +164,7 @@ export class UltimaDAO extends EventTarget{
         };
     }
 
-    adi
+
 
     bancoCarregado(){
         this.dispatchEvent (new Event(UltimaDAO.EVENTO_BANCO_CARREGADO));

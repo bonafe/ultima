@@ -49,6 +49,9 @@ export class ContainerTreeMap extends ComponenteBase{
         
         this.atualizarOrdemElementos(tela);
 
+        console.log ("containertreemap");
+        tela.elementos.forEach(e => console.log (e.ordem));
+
         return d3.hierarchy(tela, (d) => d.elementos).sum((d) => d.importancia)
                 .sort((a, b) =>{                    
                      return (a.ordem - b.ordem);
@@ -214,6 +217,26 @@ export class ContainerTreeMap extends ComponenteBase{
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, (evento) => {
                 this.atualizarTreeMap();
             });
+
+            elementoTreemap.addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, evento => {
+
+                //Para a propagaçaõ do evento do componente
+                evento.stopPropagation();
+
+                let elemento = this.tela.elementos.find(e => e.id == evento.detail.id);
+
+                //Cria um novo evento indicando dados do componente
+                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, {                    
+                        componente: evento.detail.componente,
+                        descricao: elemento.descricao,
+                        importancia: elemento.importancia,
+                        orde: elemento.ordem,
+                        dados:evento.detail.dados,
+                        id: elemento.id,                    
+                });
+                
+                this.dispatchEvent(eventoCompleto);                
+            });
         });
     }
 
@@ -221,10 +244,7 @@ export class ContainerTreeMap extends ComponenteBase{
          //Cria um novo evento indicando dados do componente
          let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, {                    
             componente: elemento.componente,
-            dados:{
-                valorAntigo: elemento.dados, 
-                novoValor: elemento.dados
-            },
+            dados: elemento.dados,                 
             id: elemento.id,
             descricao: elemento.descricao,
             importancia: elemento.importancia,

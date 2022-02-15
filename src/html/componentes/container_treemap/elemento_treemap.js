@@ -106,14 +106,11 @@ export class ElementoTreeMap extends ComponenteBase {
 
                 //Para a propagaçaõ do evento do componente
                 evento.stopPropagation();
-
+               
                 //Cria um novo evento indicando dados do componente
                 let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, {                    
-                        componente: this.componente,
-                        dados:{
-                            valorAntigo:evento.detail.objeto.valorAntigo, 
-                            novoValor:evento.detail.objeto.novoValor
-                        },
+                        componente: this.componente,                        
+                        dados:evento.detail.novoValor,
                         id: this._id,                    
                 });
                 
