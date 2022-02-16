@@ -230,7 +230,7 @@ export class ContainerTreeMap extends ComponenteBase{
                         componente: evento.detail.componente,
                         descricao: elemento.descricao,
                         importancia: elemento.importancia,
-                        orde: elemento.ordem,
+                        ordem: elemento.ordem,
                         dados:evento.detail.dados,
                         id: elemento.id,                    
                 });
@@ -249,9 +249,9 @@ export class ContainerTreeMap extends ComponenteBase{
             descricao: elemento.descricao,
             importancia: elemento.importancia,
             ordem: elemento.ordem
-    });
+        });
     
-    this.dispatchEvent(eventoCompleto);   
+        this.dispatchEvent(eventoCompleto);   
     }
 
 
