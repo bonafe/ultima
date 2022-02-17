@@ -47,10 +47,7 @@ export class ContainerTreeMap extends ComponenteBase{
 
     criarRaizHierarquicaD3JS(tela){
         
-        this.atualizarOrdemElementos(tela);
-
-        console.log ("containertreemap");
-        tela.elementos.forEach(e => console.log (e.ordem));
+        this.atualizarOrdemElementos(tela);        
 
         return d3.hierarchy(tela, (d) => d.elementos).sum((d) => d.importancia)
                 .sort((a, b) =>{                    
@@ -127,7 +124,7 @@ export class ContainerTreeMap extends ComponenteBase{
                 //TODO: Tamanho máximo???
                 elemento.importancia *= 1.5;
 
-                this.atualizouElementoTreemap(elemento);
+                this.atualizouTreemap();
 
                 this.atualizarTreeMap();                  
             });
@@ -137,7 +134,7 @@ export class ContainerTreeMap extends ComponenteBase{
                 //TODO: Tamanho mínimo???
                 elemento.importancia *= 0.50;
 
-                this.atualizouElementoTreemap(elemento);
+                this.atualizouTreemap();
 
                 this.atualizarTreeMap();   
             });     
@@ -154,7 +151,7 @@ export class ContainerTreeMap extends ComponenteBase{
                     
                     this.atualizarOrdemElementos(this.tela);
 
-                    this.atualizouElementoTreemap(elemento);
+                    this.atualizouTreemap();
                     
                     this.criarTreeMap();   
                 }
@@ -172,7 +169,7 @@ export class ContainerTreeMap extends ComponenteBase{
                     
                     this.atualizarOrdemElementos(this.tela);
 
-                    this.atualizouElementoTreemap(elemento);
+                    this.atualizouTreemap();
 
                     this.criarTreeMap();   
                 }
@@ -190,7 +187,7 @@ export class ContainerTreeMap extends ComponenteBase{
                     
                     this.atualizarOrdemElementos(this.tela);
 
-                    this.atualizouElementoTreemap(elemento);
+                    this.atualizouTreemap();
 
                     this.criarTreeMap();   
                 }
@@ -208,7 +205,7 @@ export class ContainerTreeMap extends ComponenteBase{
                     
                     this.atualizarOrdemElementos(this.tela);
 
-                    this.atualizouElementoTreemap(elemento);
+                    this.atualizouTreemap();
 
                     this.criarTreeMap();   
                 }
@@ -218,7 +215,7 @@ export class ContainerTreeMap extends ComponenteBase{
                 this.atualizarTreeMap();
             });
 
-            elementoTreemap.addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, evento => {
+            elementoTreemap.addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
 
                 //Para a propagaçaõ do evento do componente
                 evento.stopPropagation();
@@ -226,7 +223,7 @@ export class ContainerTreeMap extends ComponenteBase{
                 let elemento = this.tela.elementos.find(e => e.id == evento.detail.id);
 
                 //Cria um novo evento indicando dados do componente
-                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, {                    
+                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, {                    
                         componente: evento.detail.componente,
                         descricao: elemento.descricao,
                         importancia: elemento.importancia,
@@ -240,15 +237,10 @@ export class ContainerTreeMap extends ComponenteBase{
         });
     }
 
-    atualizouElementoTreemap(elemento){
+    atualizouTreemap(){
          //Cria um novo evento indicando dados do componente
-         let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, {                    
-            componente: elemento.componente,
-            dados: elemento.dados,                 
-            id: elemento.id,
-            descricao: elemento.descricao,
-            importancia: elemento.importancia,
-            ordem: elemento.ordem
+         let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, {                    
+            tela: this.tela
         });
     
         this.dispatchEvent(eventoCompleto);   

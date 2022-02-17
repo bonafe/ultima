@@ -2,9 +2,9 @@ import { ComponenteBase } from "../componente_base.js";
 import { UltimaEvento, UltimaDAO } from "./ultima.js";
 import { ContainerTreeMap } from "../container_treemap/container_treemap.js";
 
-export class UltimaView extends ComponenteBase{
+export class UltimaView extends ComponenteBase{    
 
-    static EVENTO_SELECAO_OBJETO = 'EVENTO_SELECAO_OBJETO';
+
 
     constructor(){        
         super({templateURL:"/componentes/ultima/ultima_view.html", shadowDOM:false});
@@ -44,16 +44,19 @@ export class UltimaView extends ComponenteBase{
                 this.controleNavegador.adicionarElemento(novoElemento);                                   
             });
 
-            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, evento => {
+            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
                 let id_elemento = evento.detail.id;
                 let elemento = this.tela.elementos.find (elemento => elemento.id == id_elemento);
 
                 elemento.dados = evento.detail.dados;
                 elemento.componente = evento.detail.componente;
-                elemento.descricao = evento.detail.descricao;
-                elemento.importancia = evento.detail.importancia;
-                elemento.ordem = evento.detail.ordem;
+                elemento.descricao = evento.detail.descricao;                
 
+                UltimaDAO.getInstance().atualizarTela(this.tela);
+            });
+
+            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, evento => {
+                this.tela = evento.detail.tela;
                 UltimaDAO.getInstance().atualizarTela(this.tela);
             });
         });

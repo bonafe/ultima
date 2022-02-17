@@ -108,7 +108,7 @@ export class EditorJSON extends ComponenteBase {
                     
                     let valorAntigo = this.dados;
                     this.dados = this.editor.get();
-                    this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_OBJETO, {"valorAntigo":valorAntigo, "novoValor":this.dados}));
+                    this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, {"valorAntigo":valorAntigo, "novoValor":this.dados}));
                 }
             }
         };
