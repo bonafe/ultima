@@ -13,24 +13,10 @@ export class BaseTestesTreeMap{
                     "importancia": 16,
                     "ordem":0,
                     "componente":{                        
-                        "url": "/componentes/editor_json/editor_json.js",
-                        "nome": "editor-json"
+                        "url": "/componentes/data/seletor_meses.js",
+                        "nome": "seletor-meses"
                     },                    
-                    "dados": {
-                        "nome": "equipe principal",
-                        "equipes":[
-                            {
-                                "nome":"equipe 1",
-                                "escala":[
-                                    {
-                                        "nome": "fulano",
-                                        "cargo": "cargo"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                    
+                    "dados": [{ano:2020, mes:"01", selecionado:true},{ano:2020, mes:"02"}, {ano: 2019, mes:"05"}, {ano: 2018, mes:"01"}]                    
                 }
             ]            
         }]
