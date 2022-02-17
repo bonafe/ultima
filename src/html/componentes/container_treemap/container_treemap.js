@@ -46,13 +46,14 @@ export class ContainerTreeMap extends ComponenteBase{
 
 
     criarRaizHierarquicaD3JS(tela){
-        
-        this.atualizarOrdemElementos(tela);        
-
-        return d3.hierarchy(tela, (d) => d.elementos).sum((d) => d.importancia)
-                .sort((a, b) =>{                    
-                     return (a.ordem - b.ordem);
-                });;
+                        
+        return d3.hierarchy(tela, (d) => d.elementos)
+            .sum( d => {
+                return d.importancia;
+            })
+            .sort((a, b) => {             
+                return a.data.ordem - b.data.ordem;
+            });              
     }
 
 
@@ -153,7 +154,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
                     
-                    this.criarTreeMap();   
+                    //this.atualizarTreeMap();
+                    this.criarTreeMap();      
                 }
             }); 
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_FRENTE, (evento) => {
@@ -171,7 +173,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
 
-                    this.criarTreeMap();   
+                    //this.atualizarTreeMap();
+                    this.criarTreeMap();      
                 }
             });     
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_INICIO, (evento) => {
@@ -185,11 +188,18 @@ export class ContainerTreeMap extends ComponenteBase{
                     //O recoloca no inicio
                     this.tela.elementos.splice(0,0,elemento);
                     
-                    this.atualizarOrdemElementos(this.tela);
+                    console.log ("ANTES")
+                    this.tela.elementos.forEach (e => console.log (`${e.id}-${e.ordem}`));
+
+                    this.atualizarOrdemElementos(this.tela);        
+
+                    console.log ("DEPOIS")
+                    this.tela.elementos.forEach (e => console.log (`${e.id}-${e.ordem}`));                    
 
                     this.atualizouTreemap();
 
-                    this.criarTreeMap();   
+                    //this.atualizarTreeMap();
+                    this.criarTreeMap();      
                 }
             });   
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_FIM, (evento) => {
@@ -207,6 +217,7 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
 
+                    //this.atualizarTreeMap();
                     this.criarTreeMap();   
                 }
             });  
@@ -254,13 +265,13 @@ export class ContainerTreeMap extends ComponenteBase{
         const height = this.container.clientHeight - margin.top - margin.bottom;
         const color = d3.scaleOrdinal().range(d3.schemeCategory20c);            
     
-        this.treemap = d3.treemap().size([width, height]);                            
+        this.treemap = d3.treemap().size([width, height]);                                      
 
         const root = this.criarRaizHierarquicaD3JS(this.tela); 
 
         this.node.data(this.treemap(root).leaves())
             .transition()
-                .duration(500)
+                .duration(500)                
                 .style("left", d => `${d.x0}px`)
                 .style("top", d => `${d.y0}px`)
                 .style('width', d => `${Math.max(0, d.x1 - d.x0 -1)}px`)
