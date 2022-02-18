@@ -26,17 +26,12 @@ export class UltimaView extends ComponenteBase{
                     "ordem": this.proximaOrdem(this.tela.elementos),
                     "descricao": "Componente X",
                     "importancia": 10,
-                    "componente":{                        
-                        "url": "/componentes/editor_json/editor_json.js",
-                        "nome": "editor-json"
-                    },                    
+                    "componente-padrao": "seletor-meses",
+                    "componentes": ["seletor-meses", "editor-json"],                   
                     "dados":{...evento.detail}                        
                 };
 
-                this.tela.elementos.push(novoElemento);
-
-                console.log ("adicionando elemento");
-                this.tela.elementos.forEach(e => console.log (e.ordem));
+                this.tela.elementos.push(novoElemento);                
 
                 //Todo: tratamento de erro???
                 UltimaDAO.getInstance().atualizarTela(this.tela);

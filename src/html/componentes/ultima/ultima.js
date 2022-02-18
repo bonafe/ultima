@@ -118,7 +118,7 @@ export class UltimaDAO extends EventTarget{
 
 
 
-    abrirBanco(){
+    async abrirBanco(){
 
         let request = window.indexedDB.open(UltimaDAO.NOME_BANCO, UltimaDAO.VERSAO);
 
@@ -148,21 +148,58 @@ export class UltimaDAO extends EventTarget{
             console.info (`Função de upgrade do banco: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
             this.banco = request.result;                        
 
+            Promise.all([
+                this.criarObjectStoreTelas(),
+                this.criarObjectStoreComponentes()
+            ]).then( valores => {
+                console.info (`Dados do banco foram inicializados: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
+                this.bancoCarregado();
+            });                                 
+        };
+    }
+
+
+
+    criarObjectStoreTelas(){
+
+        return new Promise((resolve, reject) => {
             let object_store_telas = this.banco.createObjectStore("telas", { keyPath: "id", autoIncrement: true });
 
             object_store_telas.createIndex("index_nome", "nome", { unique: false});
-
+    
             object_store_telas.transaction.oncomplete = evento => {
-
+    
                 object_store_telas = this.banco.transaction ("telas", "readwrite").objectStore ("telas");
                 object_store_telas.add (BaseTestesTreeMap.base.telas[0]);
                 object_store_telas.transaction.oncomplete = evento => {
-                    console.info (`Dados do banco foram inicializados: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
-                }
-                this.bancoCarregado();
-                return;
-            };            
-        };
+                    resolve(true);
+                }                                
+            };   
+        });   
+    }
+
+
+
+    criarObjectStoreComponentes(){
+
+        return new Promise((resolve, reject) => {
+            let object_store_componentes = this.banco.createObjectStore("componentes", { keyPath: "id", autoIncrement: true });
+
+            object_store_componentes.createIndex("index_nome", "nome", { unique: false});
+    
+            object_store_componentes.transaction.oncomplete = evento => {
+    
+                object_store_componentes = this.banco.transaction ("componentes", "readwrite").objectStore ("componentes");
+                
+                BaseTestesTreeMap.base.componentes.forEach (componente => {
+                    object_store_componentes.add (componente);
+                });
+
+                object_store_componentes.transaction.oncomplete = evento => {
+                    resolve(true);
+                }                                
+            };   
+        });   
     }
 
 
