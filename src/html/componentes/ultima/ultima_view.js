@@ -27,7 +27,11 @@ export class UltimaView extends ComponenteBase{
                     "descricao": "Componente X",
                     "importancia": 10,
                     "componente-padrao": "seletor-meses",
-                    "componentes": ["seletor-meses", "editor-json"],                   
+                    "componentes": ["seletor-meses", "editor-json"],   
+                    "componente":{
+                        "url": "/componentes/editor_json/editor_json.js",
+                        "nome": "editor-json"
+                    },                
                     "dados":{...evento.detail}                        
                 };
 

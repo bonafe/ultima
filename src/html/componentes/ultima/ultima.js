@@ -66,6 +66,8 @@ export class UltimaDAO extends EventTarget{
 
     async telas(){
         
+        return  BaseTestesTreeMap.base.telas;
+
         await this.aguardarBanco();
 
         let object_store_telas = this.banco.transaction ("telas", "readonly").objectStore ("telas");

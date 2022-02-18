@@ -23,7 +23,11 @@ export class BaseTestesTreeMap{
                         "ordem": 0,
                         "componente-padrao": "seletor-meses",
                         "componentes": ["seletor-meses", "editor-json"],
-                        "dados": [{ano:2020, mes:"01", selecionado:true},{ano:2020, mes:"02"}, {ano: 2019, mes:"05"}, {ano: 2018, mes:"01"}]                    
+                        "componente":{
+                            "url": "/componentes/editor_json/editor_json.js",
+                            "nome": "editor-json"
+                        },
+                        "dados": {"anos":[{ano:2020, mes:"01", selecionado:true},{ano:2020, mes:"02"}, {ano: 2019, mes:"05"}, {ano: 2018, mes:"01"}]}                    
                     }
                 ]            
             }
