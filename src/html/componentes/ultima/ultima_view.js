@@ -19,7 +19,7 @@ export class UltimaView extends ComponenteBase{
                 this.controleNavegador.tela = JSON.parse(JSON.stringify(this.tela));
             });
 
-            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {        
+            this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {                        
 
                 let novoElemento = {                        
                     "id": this.proximoIdElemento(this.tela.elementos), 
@@ -35,17 +35,22 @@ export class UltimaView extends ComponenteBase{
                     "dados":{...evento.detail}                        
                 };
 
-                this.tela.elementos.push(novoElemento);                
+                console.log (`adicionando novo elemento: ${novoElemento.id}`);
 
-                //Todo: tratamento de erro???
+                this.tela.elementos.push(novoElemento);                
+                
+                console.log (`numero de elementos: ${this.tela.elementos.length}`);
+
                 UltimaDAO.getInstance().atualizarTela(this.tela);
 
-                this.controleNavegador.adicionarElemento(novoElemento);                                   
+                this.controleNavegador.adicionarElemento(novoElemento);                                                   
             });
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
                 let id_elemento = evento.detail.id;
                 let elemento = this.tela.elementos.find (elemento => elemento.id == id_elemento);
+
+                console.log (`elemento recebeu novos dados: ${elemento.id}`);
 
                 elemento.dados = evento.detail.dados;
                 elemento.componente = evento.detail.componente;
@@ -55,6 +60,7 @@ export class UltimaView extends ComponenteBase{
             });
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, evento => {
+                console.log (`TREEMAP foi atualizando: ${this.tela.elementos.length} elementos`);
                 this.tela = evento.detail.tela;
                 UltimaDAO.getInstance().atualizarTela(this.tela);
             });

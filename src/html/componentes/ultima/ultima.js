@@ -91,15 +91,23 @@ export class UltimaDAO extends EventTarget{
 
     async atualizarTela (tela){
        
+        console.log (`vai salvar tela com ${tela.elementos.length} elementos`);
+
         await this.aguardarBanco();
+
+        console.log (`antes do objectStore ${tela.elementos.length} elementos`);
 
         let object_store_telas = this.banco.transaction ("telas", "readwrite").objectStore ("telas");
 
+        console.log (`antes do sort ${tela.elementos.length} elementos`);
         tela.elementos.sort ((a, b) => a.ordem - b.ordem);        
+        console.log (`depois do sort ${tela.elementos.length} elementos`);
         
         return new Promise((resolve, reject) => {
+            console.log (`salvando tela com ${tela.elementos.length} elementos`);
             let request = object_store_telas.put(tela);
             request.onsuccess = evento => {
+                console.log (`SALVOU TELA COM ${tela.elementos.length} elementos`);
                 resolve(true);
             };    
             request.onerror = evento => {
