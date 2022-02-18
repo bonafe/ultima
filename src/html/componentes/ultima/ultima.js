@@ -66,7 +66,7 @@ export class UltimaDAO extends EventTarget{
 
     async telas(){
         
-        return  BaseTestesTreeMap.base.telas;
+        //return  BaseTestesTreeMap.base.telas;
 
         await this.aguardarBanco();
 
@@ -144,6 +144,12 @@ export class UltimaDAO extends EventTarget{
 
             if (!this.atualizandoBanco){
                 this.bancoCarregado();
+            }else{
+                this.adicionarElementos().then ( retorno => {
+                    console.info (`Dados do banco foram inicializados: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
+                    this.atualizandoBanco = false;
+                    this.bancoCarregado();
+                });
             }
             return;
         };
@@ -157,47 +163,20 @@ export class UltimaDAO extends EventTarget{
             console.info (`Função de upgrade do banco: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
             this.banco = request.result;                        
 
-            this.criarTabelas().then( retorno => {
-                this.adicionarElementos().then ( retorno => {
-                    console.info (`Dados do banco foram inicializados: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
-                    this.atualizandoBanco = false;
-                    this.bancoCarregado();
-                });
-            });                                       
+            this.criarTabelas();                        
         };
     }
 
 
-    criarTabelas(){
-        return new Promise((resolve, reject) => {
+    criarTabelas(){      
 
-            Promise.all([
-                new Promise ((resolveT, rejectT) => {
-                    console.info ("Criando ObjectStore de Telas");
-                    
-                    let object_store_telas = this.banco.createObjectStore("telas", { keyPath: "id", autoIncrement: true });
-                    
-                    object_store_telas.createIndex("index_descricao_tela", "descricao", { unique: false});    
-                    
-                    object_store_telas.transaction.oncomplete = evento => {
-                        resolveT(true);
-                    };
-                }),
-                new Promise((resolveC, rejectC) => {
-                    console.info ("Criando ObjectStore de Componentes");
-                    let object_store_componentes = this.banco.createObjectStore("componentes", { keyPath: "id", autoIncrement: true });
+        console.info ("Criando ObjectStores");
+        
+        let object_store_telas = this.banco.createObjectStore("telas", { keyPath: "id", autoIncrement: true });                    
+        object_store_telas.createIndex("index_descricao_tela", "descricao", { unique: false});    
 
-                    object_store_componentes.createIndex("index_nome_componente", "nome", { unique: false});
-                                
-                    object_store_componentes.transaction.oncomplete = evento => {
-                        resolveC(true);
-                    };
-
-                })
-            ]).then(valores => {
-                resolve(true);
-            });
-        });
+        let object_store_componentes = this.banco.createObjectStore("componentes", { keyPath: "id", autoIncrement: true });
+        object_store_componentes.createIndex("index_nome_componente", "nome", { unique: false});
     }
 
     adicionarElementos(){
@@ -212,7 +191,7 @@ export class UltimaDAO extends EventTarget{
                 osComponentes.add (componente);
             });
 
-            transacao.transaction.oncomplete = evento => {
+            transacao.oncomplete = evento => {
                 console.info ("Elementos adicionados com sucesso");
                 resolve(true);
             }      
@@ -290,6 +269,7 @@ export class UltimaDAO extends EventTarget{
 
 
     bancoCarregado(){
+        this.carregado = true;
         this.dispatchEvent (new Event(UltimaDAO.EVENTO_BANCO_CARREGADO));
     }
 }
