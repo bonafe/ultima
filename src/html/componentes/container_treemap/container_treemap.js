@@ -144,7 +144,43 @@ export class ContainerTreeMap extends ComponenteBase{
                 this.atualizouTreemap();
 
                 this.atualizarTreeMap();   
-            });     
+            }); 
+            elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_MAXIMIZAR, (evento) => {
+                let idElementoProcurado = evento.detail;
+                let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
+
+                let somaImportanciaOutros = this.tela·elementos.reduce ((valorAnterior, elementoAtual) => {
+                    if (elementoAtual.id != elemento.id){
+                        return valorAnterior + elemento.importancia;
+                    }else{
+                        return valorAnterior;
+                    }
+                },0);
+                
+                elemento.importancia = somaImportanciaOutros;
+
+                this.atualizouTreemap();
+
+                this.atualizarTreeMap();   
+            }); 
+            elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_MINIMIZAR, (evento) => {
+                let idElementoProcurado = evento.detail;
+                let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
+
+                let menorImportancia = this.tela.elementos.reduce ((valorAnterior, elementoAtual) => {
+                    if (elementoAtual.importancia < valorAnterior){
+                        return elementoAtual.importancia;
+                    }else{
+                        return valorAnterior;
+                    }
+                },Number.MAX_VALUE);
+                
+                elemento.importancia = menorImportancia;
+
+                this.atualizouTreemap();
+
+                this.atualizarTreeMap();   
+            });   
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_TRAS, (evento) => {
                 let idElementoProcurado = evento.detail;
                 let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);

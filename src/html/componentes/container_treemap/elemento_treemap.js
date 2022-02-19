@@ -13,6 +13,9 @@ export class ElementoTreeMap extends ComponenteBase {
     static EVENTO_IR_PARA_FRENTE = 'EVENTO_IR_PARA_FRENTE';    
     static EVENTO_IR_PARA_INICIO = 'EVENTO_IR_PARA_INICIO';
     static EVENTO_IR_PARA_FIM = 'EVENTO_IR_PARA_FIM'; 
+    static EVENTO_MAXIMIZAR = 'EVENTO_MAXIMIZAR'; 
+    static EVENTO_MINIMIZAR = 'EVENTO_MINIMIZAR';
+    static EVENTO_RESTAURAR = 'EVENTO_RESTAURAR';
     static EVENTO_MUDAR_VISUALIZACAO = 'EVENTO_MUDAR_VISUALIZACAO';
 
 
@@ -46,6 +49,15 @@ export class ElementoTreeMap extends ComponenteBase {
             });
             this.noRaiz.querySelector("#irParaFim").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_FIM, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#maximizar").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MAXIMIZAR, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#restaurar").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_RESTAURAR, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#minimizar").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MINIMIZAR, {detail:this._id}));
             });
             this.noRaiz.querySelector("#mudarVisualizacao").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, {detail:this._id}));

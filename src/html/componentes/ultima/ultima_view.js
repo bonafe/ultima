@@ -30,7 +30,7 @@ export class UltimaView extends ComponenteBase{
                     "id": this.proximoIdElemento(this.tela.elementos), 
                     "ordem": this.proximaOrdem(this.tela.elementos),
                     "descricao": "Componente X",
-                    "importancia": 10,
+                    "importancia": this.mediaImportancia(this.tela.elementos),
                     "componente-padrao": "seletor-meses",
                     "componentes": ["seletor-meses", "editor-json"],   
                     "componente":{
@@ -81,6 +81,12 @@ export class UltimaView extends ComponenteBase{
                 UltimaDAO.getInstance().atualizarTela(this.tela);
             });
         });
+    }
+
+    mediaImportancia(elementos){
+        const soma = elementos.reduce((valorAnterior, elementoAtual) => valorAnterior + elementoAtual.importancia, 0);
+        const media = (soma / elementos.length) || 0;
+        return media;
     }
 
     proximoIdElemento(elementos){
