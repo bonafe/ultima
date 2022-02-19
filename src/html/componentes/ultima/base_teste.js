@@ -75,7 +75,7 @@ export class BaseTestesTreeMap{
                         }                    
                     },
                     { 
-                        "id":4,
+                        "id":5,
                         "descricao": "IFrame Youtube",
                         "importancia": 16,
                         "ordem": 3,
@@ -90,9 +90,9 @@ export class BaseTestesTreeMap{
                         }                    
                     },
                     { 
-                        "id":4,
+                        "id":6,
                         "descricao": "IFrame Youtube",
-                        "importancia": 16,
+                        "importancia": 40,
                         "ordem": 3,
                         "componente-padrao": "exibidor-iframe",
                         "componentes": ["exibidor-iframe", "editor-json"],
