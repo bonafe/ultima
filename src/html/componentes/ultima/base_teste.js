@@ -122,7 +122,7 @@ export class BaseTestesTreeMap{
                     },
                     { 
                         "id":8,
-                        "descricao": "Imagem Treemap D3.js",
+                        "descricao": "Google Maps",
                         "importancia": 100,
                         "ordem": 3,
                         "componente-padrao": "exibidor-iframe",
@@ -134,7 +134,22 @@ export class BaseTestesTreeMap{
                         "dados": {
                             "src":"https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d10881470.019101504!2d-57.21986250424784!3d-14.247311386949713!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spt-BR!2sbr!4v1645306504298!5m2!1spt-BR!2sbr",
                         }                    
-                    },            
+                    },
+                    { 
+                        "id":9,
+                        "descricao": "OpenStreetMap",
+                        "importancia": 100,
+                        "ordem": 3,
+                        "componente-padrao": "exibidor-iframe",
+                        "componentes": ["exibidor-iframe", "editor-json"],
+                        "componente":{
+                            "url": "/componentes/iframe/exibidor_iframe.js",
+                            "nome": "exibidor-iframe"
+                        },
+                        "dados": {
+                            "src":"https://www.openstreetmap.org/export/embed.html?bbox=-48.88641357421876%2C-23.755181766112624%2C-45.81298828125001%2C-22.664709810176827&amp;layer=mapnik",
+                        }                    
+                    },                          
                 ]            
             }
         ]
