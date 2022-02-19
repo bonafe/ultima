@@ -15,7 +15,7 @@ export class BaseTestesTreeMap{
             {   
                 "id": 1,
                 "descricao": "Contatos de A a J",            
-                "elementos": [                
+                "elementos": [                                   
                     { 
                         "id":1,
                         "descricao": "Componente 2",
@@ -103,8 +103,38 @@ export class BaseTestesTreeMap{
                         "dados": {
                             "src":"https://www.youtube.com/embed/nToRQ9NK92A"
                         }                    
-                    }        
-                              
+                    },
+                    { 
+                        "id":7,
+                        "descricao": "Imagem Treemap D3.js",
+                        "importancia": 16,
+                        "ordem": 3,
+                        "componente-padrao": "exibidor-imagem",
+                        "componentes": ["exibidor-imagem", "editor-json"],
+                        "componente":{
+                            "url": "/componentes/imagem/exibidor_imagem.js",
+                            "nome": "exibidor-imagem"
+                        },
+                        "dados": {
+                            "src":"/imagens/exemplo_treemap_d3js.png",
+                            "origem":"https://observablehq.com/@d3/treemap"
+                        }                    
+                    },
+                    { 
+                        "id":8,
+                        "descricao": "Imagem Treemap D3.js",
+                        "importancia": 100,
+                        "ordem": 3,
+                        "componente-padrao": "exibidor-iframe",
+                        "componentes": ["exibidor-iframe", "editor-json"],
+                        "componente":{
+                            "url": "/componentes/iframe/exibidor_iframe.js",
+                            "nome": "exibidor-iframe"
+                        },
+                        "dados": {
+                            "src":"https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d10881470.019101504!2d-57.21986250424784!3d-14.247311386949713!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spt-BR!2sbr!4v1645306504298!5m2!1spt-BR!2sbr",
+                        }                    
+                    },            
                 ]            
             }
         ]
