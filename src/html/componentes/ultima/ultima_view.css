@@ -5,7 +5,7 @@
     border: 3px solid rgb(63, 2, 87);
 }
 
-.cabecalho_principal_ultima{
+.cabecalho_principal_ultima{    
     background-color: rgb(100, 28, 167);
     border: 2px solid rgb(48, 2, 66);
     color: rgb(189, 144, 226);        
@@ -33,13 +33,17 @@
 */
 
 .navegacao_ultima{
+    width: 100%;
     display: flex;
     flex-direction: row;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
 }
 
-.navegacao_ultima a{    
+.navegacao_ultima a{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
     color: #ffe600;
     text-decoration: none;    
     opacity: 0.6;
