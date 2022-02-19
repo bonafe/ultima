@@ -39,9 +39,20 @@ export class UltimaView extends ComponenteBase{
 
                 this.tela.elementos.push(novoElemento);                
                 
-                console.log (`numero de elementos: ${this.tela.elementos.length}`);
+                //TODO: por algum motivo o número de elementos da variável tela estava mudando
+                //Tive que jogar o conteudo copiando por transformação json para conseguir fazer funcionar
+                //Acontecia quando usava o mover do treemap ou o aumentar/diminuir e ai adicionava um novo elemento
+                //Depois do aguardarBanco() o conteúdo mudava        
+                let nt = JSON.parse(JSON.stringify(this.tela)); 
 
+
+                 //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
+                console.log (`TODO: antes do atualizarTela ${this.tela.elementos.length} elementos`);
+                console.log (`TODO: antes do atualizarTela COPIA ${nt.elementos.length} elementos`);
                 UltimaDAO.getInstance().atualizarTela(this.tela);
+                //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
+                console.log (`TODO: depois do atualizarTela ${this.tela.elementos.length} elementos`);
+                console.log (`TODO: depois do atualizarTela COPIA ${nt.elementos.length} elementos`);
 
                 this.controleNavegador.adicionarElemento(novoElemento);                                                   
             });

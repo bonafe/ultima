@@ -91,23 +91,32 @@ export class UltimaDAO extends EventTarget{
 
     async atualizarTela (tela){
        
-        console.log (`vai salvar tela com ${tela.elementos.length} elementos`);
+        //TODO: por algum motivo o número de elementos da variável tela estava mudando
+        //Tive que jogar o conteudo copiando por transformação json para conseguir fazer funcionar
+        //Acontecia quando usava o mover do treemap ou o aumentar/diminuir e ai adicionava um novo elemento
+        //Depois do aguardarBanco() o conteúdo mudava        
+        let nt = JSON.parse(JSON.stringify(tela));        
+
+
+        //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
+        console.log (`TODO: antes do aguardarbanco ${tela.elementos.length} elementos`);
+        console.log (`TODO: antes do aguardarbanco COPIA ${nt.elementos.length} elementos`);
 
         await this.aguardarBanco();
 
-        console.log (`antes do objectStore ${tela.elementos.length} elementos`);
+        //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
+        console.log (`TODO: depois do aguardarbanco ${tela.elementos.length} elementos`);
+        console.log (`TODO: depois do aguardarbanco COPIA ${nt.elementos.length} elementos`);
+
+
 
         let object_store_telas = this.banco.transaction ("telas", "readwrite").objectStore ("telas");
-
-        console.log (`antes do sort ${tela.elementos.length} elementos`);
-        tela.elementos.sort ((a, b) => a.ordem - b.ordem);        
-        console.log (`depois do sort ${tela.elementos.length} elementos`);
         
-        return new Promise((resolve, reject) => {
-            console.log (`salvando tela com ${tela.elementos.length} elementos`);
-            let request = object_store_telas.put(tela);
-            request.onsuccess = evento => {
-                console.log (`SALVOU TELA COM ${tela.elementos.length} elementos`);
+        nt.elementos.sort ((a, b) => a.ordem - b.ordem);                
+        
+        return new Promise((resolve, reject) => {            
+            let request = object_store_telas.put(nt);
+            request.onsuccess = evento => {                
                 resolve(true);
             };    
             request.onerror = evento => {
