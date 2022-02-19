@@ -20,7 +20,10 @@
     }
     header{
       background-color: blueviolet;
-      color: rgb(220, 190, 245);      
+      color: rgb(220, 190, 245);        
+      display: flex;
+      align-items: center;
+      padding: 5px;
     }
     section{
       width: 100%;
@@ -38,17 +41,43 @@
         border: 1px solid rgb(255, 238, 0);
     }
 
+    .container_logo{             
+      padding-right: 10px;     
+    }
    
-    #logo_u{             
-      padding: 5px;
-      color: orange;    
+    .logo_icone_u{                   
+      color: orange;
     }    
+    .logo_icone_js{                   
+      color: orange;      
+    }
+
+    .ultima_titulo{
+      display: flex;
+      align-items: flex-start;
+
+    }
+
+    .ultima_nome{
+      font-family: Tahoma, sans-serif;      
+    }
+
+    .ultima_descricao{
+      font-family: Tahoma, sans-serif;
+      font-size: xx-small;
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
   <header>    
-    <i class="fa-solid fa-u" id="logo_u"></i>
-    Última - Visualização e navegação / Componentes e Dados
+    <span class="container_logo">
+      <i class="fa-solid fa-u fa-2x logo_icone_u"></i>
+      <i class="fa-brands fa-js logo_icone_js"></i>
+    </span>
+    <span class="ultimat_titulo">
+      <span class="ultima_nome"><strong>Última</strong></span><span class="ultima_descricao">Visualização e navegação / Componentes e Dados</span>
+    </span>
   </header>
   <section>
     <ultima-view></ultima-view>
