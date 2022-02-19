@@ -12,3 +12,17 @@
     background-color: rgb(0, 4, 255);
     border: 1px solid rgb(255, 238, 0);
 }
+
+navegacao_ultima{
+    display: flex;
+    flex-direction: row;
+}
+
+navegacao_ultima a{    
+    color: #ffe600;
+}
+
+navegacao_ultima a:hover{
+    font-weight: bold;
+    color: orange;
+}

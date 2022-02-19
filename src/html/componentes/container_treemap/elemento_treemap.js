@@ -100,6 +100,8 @@ export class ElementoTreeMap extends ComponenteBase {
                 this.instanciaComponente.setAttribute("dados", JSON.stringify(this.dados));
             }
 
+            this.instanciaComponente.classList.add('componente');
+
             this.noRaiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);
 
             this.instanciaComponente.addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
