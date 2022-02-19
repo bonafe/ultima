@@ -13,6 +13,11 @@ export class UltimaView extends ComponenteBase{
             
             this.controleNavegador = this.noRaiz.querySelector("container-treemap");
             
+            this.querySelector("#reiniciarBanco").addEventListener("click", () => {
+                UltimaDAO.getInstance().reiniciarBase();
+                this.controleNavegador.tela = JSON.parse(JSON.stringify(this.tela));
+            });
+
             UltimaDAO.getInstance().telas().then (telas => {
                 //TODO: só está pegando a primeira tela
                 this.tela  = telas[0];

@@ -63,6 +63,10 @@ export class UltimaDAO extends EventTarget{
     }
 
 
+    async reiniciarBase(){
+        this.atualizarTela(BaseTestesTreeMap.base.telas[0]);
+    }
+
 
     async telas(){
         
