@@ -13,7 +13,7 @@ export class ContainerTreeMap extends ComponenteBase{
 
         this.addEventListener("carregou", () => {
 
-            this.container = this.noRaiz.querySelector("#containerTreeMap");
+            this.container = this.noRaiz.querySelector(".container_treemap");
             this.renderizar();
         });        
     }

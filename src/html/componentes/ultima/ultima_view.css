@@ -1,28 +1,53 @@
-#containerPrincipal {
-    position: relative;
-    width: 100%;
-    height: 80%;
-    background-color: rgb(38, 0, 255);
-    border: 1px solid rgb(221, 245, 6);
-}
-
-#containerTreeMap {
+.container_principal_ultima {    
     width: 100%;
     height: 100%;
+    background-color: rgb(211, 157, 255);
+    border: 3px solid rgb(63, 2, 87);
+}
+
+.cabecalho_principal_ultima{
+    background-color: rgb(100, 28, 167);
+    border: 2px solid rgb(48, 2, 66);
+    color: rgb(189, 144, 226);        
+    display: flex;
+    align-items: center;
+    padding: 5px;
+  }    
+  .rodape_principal_ultima{
+    background-color: rgb(43, 11, 73);
+    color: rgb(188, 118, 192);      
+  }
+
+.secao_principal_ultima{    
+    width: 100%;
+    height: 85%;
+}
+
+/*
+.container_tela_ultima {
+    width: 50%;
+    height: 50%;
     background-color: rgb(0, 4, 255);
     border: 1px solid rgb(255, 238, 0);
 }
+*/
 
-navegacao_ultima{
+.navegacao_ultima{
     display: flex;
     flex-direction: row;
 }
 
-navegacao_ultima a{    
+.navegacao_ultima a{    
     color: #ffe600;
+    text-decoration: none;    
+    opacity: 0.6;
+    transition: 0.3s;
+    margin-left: 25px;
 }
 
-navegacao_ultima a:hover{
-    font-weight: bold;
+.navegacao_ultima a:hover{    
     color: orange;
+    text-decoration: none;
+    opacity: 1;
+    transform: scale(1.05);
 }
