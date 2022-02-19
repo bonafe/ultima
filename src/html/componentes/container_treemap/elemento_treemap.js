@@ -59,9 +59,9 @@ export class ElementoTreeMap extends ComponenteBase {
             this.noRaiz.querySelector("#minimizar").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MINIMIZAR, {detail:this._id}));
             });
-            this.noRaiz.querySelector("#mudarVisualizacao").addEventListener("click", ()=>{
+            /*this.noRaiz.querySelector("#mudarVisualizacao").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, {detail:this._id}));
-            });
+            });*/
         });
     }
 

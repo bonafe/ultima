@@ -14,8 +14,10 @@ export class UltimaView extends ComponenteBase{
             this.controleNavegador = this.noRaiz.querySelector("container-treemap");
             
             this.querySelector("#reiniciarBanco").addEventListener("click", () => {
-                UltimaDAO.getInstance().reiniciarBase();
-                this.controleNavegador.tela = JSON.parse(JSON.stringify(this.tela));
+                UltimaDAO.getInstance().reiniciarBase().then(() => {
+                    //TODO: está recarregando tudo
+                    document.location.reload(true);
+                });                
             });
 
             UltimaDAO.getInstance().telas().then (telas => {

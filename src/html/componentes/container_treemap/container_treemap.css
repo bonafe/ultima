@@ -1,6 +1,7 @@
 .container_principal_treemap{    
     width: 100%;
-    height: 100%;        
+    height: 100%;
+    background: rgba(76, 175, 80, 0.5)      
   }
 
 .container_treemap{
@@ -18,8 +19,7 @@
   }
   
   .container {
-      opacity: 0;
-      background: rgb(250, 158, 9);
+      opacity: 0;      
       height: 100%;
       width: 100%;
       animation: opacityOn .52s normal forwards step-end;
