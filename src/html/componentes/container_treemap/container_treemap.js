@@ -149,14 +149,14 @@ export class ContainerTreeMap extends ComponenteBase{
                 let idElementoProcurado = evento.detail;
                 let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
 
-                let somaImportanciaOutros = this.tela·elementos.reduce ((valorAnterior, elementoAtual) => {
-                    if (elementoAtual.id != elemento.id){
-                        return valorAnterior + elemento.importancia;
+                let somaImportanciaOutros = this.tela.elementos.reduce ((valorAnterior, elementoAtual) => {
+                    if (elementoAtual.id != elemento.id){                        
+                        return valorAnterior + elementoAtual.importancia;
                     }else{
                         return valorAnterior;
                     }
                 },0);
-                
+                console.log (`Soma importancia outros: ${somaImportanciaOutros}`);
                 elemento.importancia = somaImportanciaOutros;
 
                 this.atualizouTreemap();
@@ -180,7 +180,23 @@ export class ContainerTreeMap extends ComponenteBase{
                 this.atualizouTreemap();
 
                 this.atualizarTreeMap();   
-            });   
+            });
+            elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_RESTAURAR, (evento) => {
+                let idElementoProcurado = evento.detail;
+                let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
+
+                let somaImportancia = this.tela.elementos.reduce ((valorAnterior, elementoAtual) => {                    
+                    return valorAnterior + elementoAtual.importancia;                    
+                },0);
+                
+                const mediaImportancia = somaImportancia / this.tela.elementos.length || 0;
+
+                elemento.importancia = mediaImportancia;
+
+                this.atualizouTreemap();
+
+                this.atualizarTreeMap();   
+            });  
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_TRAS, (evento) => {
                 let idElementoProcurado = evento.detail;
                 let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);
