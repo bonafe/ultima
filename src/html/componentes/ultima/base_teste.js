@@ -73,7 +73,38 @@ export class BaseTestesTreeMap{
                         "dados": {
                             "src":"https://www.youtube.com/embed/RP7OMTA4gOE"
                         }                    
-                    }
+                    },
+                    { 
+                        "id":4,
+                        "descricao": "IFrame Youtube",
+                        "importancia": 16,
+                        "ordem": 3,
+                        "componente-padrao": "exibidor-iframe",
+                        "componentes": ["exibidor-iframe", "editor-json"],
+                        "componente":{
+                            "url": "/componentes/iframe/exibidor_iframe.js",
+                            "nome": "exibidor-iframe"
+                        },
+                        "dados": {
+                            "src":"https://www.youtube.com/embed/p-NC8IMzFSA"
+                        }                    
+                    },
+                    { 
+                        "id":4,
+                        "descricao": "IFrame Youtube",
+                        "importancia": 16,
+                        "ordem": 3,
+                        "componente-padrao": "exibidor-iframe",
+                        "componentes": ["exibidor-iframe", "editor-json"],
+                        "componente":{
+                            "url": "/componentes/iframe/exibidor_iframe.js",
+                            "nome": "exibidor-iframe"
+                        },
+                        "dados": {
+                            "src":"https://www.youtube.com/embed/nToRQ9NK92A"
+                        }                    
+                    }        
+                              
                 ]            
             }
         ]
