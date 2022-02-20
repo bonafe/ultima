@@ -58,52 +58,7 @@ export class BaseTestesTreeMap{
                         "dados": {
                             "src":"https://w3c.github.io/webappsec-csp/#directive-frame-ancestors"
                         }                    
-                    },
-                    { 
-                        "id":4,
-                        "descricao": "IFrame Youtube",
-                        "importancia": 64,
-                        "ordem": 3,
-                        "componente-padrao": "exibidor-iframe",
-                        "componentes": ["exibidor-iframe", "editor-json"],
-                        "componente":{
-                            "url": "/componentes/iframe/exibidor_iframe.js",
-                            "nome": "exibidor-iframe"
-                        },
-                        "dados": {
-                            "src":"https://www.youtube.com/embed/RP7OMTA4gOE"
-                        }                    
-                    },
-                    { 
-                        "id":5,
-                        "descricao": "IFrame Youtube",
-                        "importancia": 16,
-                        "ordem": 3,
-                        "componente-padrao": "exibidor-iframe",
-                        "componentes": ["exibidor-iframe", "editor-json"],
-                        "componente":{
-                            "url": "/componentes/iframe/exibidor_iframe.js",
-                            "nome": "exibidor-iframe"
-                        },
-                        "dados": {
-                            "src":"https://www.youtube.com/embed/p-NC8IMzFSA"
-                        }                    
-                    },
-                    { 
-                        "id":6,
-                        "descricao": "IFrame Youtube",
-                        "importancia": 40,
-                        "ordem": 3,
-                        "componente-padrao": "exibidor-iframe",
-                        "componentes": ["exibidor-iframe", "editor-json"],
-                        "componente":{
-                            "url": "/componentes/iframe/exibidor_iframe.js",
-                            "nome": "exibidor-iframe"
-                        },
-                        "dados": {
-                            "src":"https://www.youtube.com/embed/nToRQ9NK92A"
-                        }                    
-                    },
+                    },                    
                     { 
                         "id":7,
                         "descricao": "Imagem Treemap D3.js",
