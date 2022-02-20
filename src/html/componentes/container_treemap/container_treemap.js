@@ -196,7 +196,24 @@ export class ContainerTreeMap extends ComponenteBase{
                 this.atualizouTreemap();
 
                 this.atualizarTreeMap();   
-            });  
+            });
+            elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_FECHAR, (evento) => {
+                let idElementoProcurado = evento.detail;
+                let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);
+
+                if (indice >= 0){
+
+                    //Remove o elemento da posição
+                    let [elemento] = this.tela.elementos.splice(indice,1);
+                    
+                    this.atualizarOrdemElementos(this.tela);
+
+                    this.atualizouTreemap();
+                    
+                    //this.atualizarTreeMap();
+                    this.criarTreeMap();      
+                }
+            }); 
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_TRAS, (evento) => {
                 let idElementoProcurado = evento.detail;
                 let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);

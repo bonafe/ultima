@@ -13,6 +13,63 @@ export class UltimaView extends ComponenteBase{
             
             this.controleNavegador = this.noRaiz.querySelector("container-treemap");
             
+            this.querySelector("#filmes").addEventListener("click", () => {
+
+                    this.adicionarElemento (
+                        //Componente
+                        {
+                            "url": "/componentes/iframe/exibidor_iframe.js",
+                            "nome": "exibidor-iframe"
+                        },
+                        //Dados                        
+                        {
+                            "src":"https://www.youtube.com/embed/VyHV0BRtdxo",
+                        } 
+                    );                                                                   
+                });
+                this.querySelector("#saude").addEventListener("click", () => {
+
+                    this.adicionarElemento (
+                        //Componente
+                        {
+                            "url": "/componentes/iframe/exibidor_iframe.js",
+                            "nome": "exibidor-iframe"
+                        },
+                        //Dados                        
+                        {
+                            "src":"https://www.youtube.com/embed/RwBmiMb97HQ ",
+                        } 
+                    );                                                                   
+                });
+                this.querySelector("#agenda").addEventListener("click", () => {
+
+                    this.adicionarElemento (
+                        //Componente
+                        {
+                            "url": "/componentes/iframe/exibidor_iframe.js",
+                            "nome": "exibidor-iframe"
+                        },
+                        //Dados                        
+                        {
+                            "src":"https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo",
+                        } 
+                    );                                                                   
+                });              
+                               
+                this.querySelector("#musicas").addEventListener("click", () => {
+
+                    this.adicionarElemento (
+                        //Componente
+                        {
+                            "url": "/componentes/iframe/exibidor_iframe.js",
+                            "nome": "exibidor-iframe"
+                        },
+                        //Dados                        
+                        {                            
+                            "src":"https://www.youtube.com/embed/KWZGAExj-es",
+                        } 
+                    );                                                                   
+                }); 
             this.querySelector("#reiniciarBanco").addEventListener("click", () => {
                 UltimaDAO.getInstance().reiniciarBase().then(() => {
                     //TODO: está recarregando tudo
@@ -28,40 +85,15 @@ export class UltimaView extends ComponenteBase{
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {                        
 
-                let novoElemento = {                        
-                    "id": this.proximoIdElemento(this.tela.elementos), 
-                    "ordem": this.proximaOrdem(this.tela.elementos),
-                    "descricao": "Componente X",
-                    "importancia": this.mediaImportancia(this.tela.elementos),
-                    "componente-padrao": "seletor-meses",
-                    "componentes": ["seletor-meses", "editor-json"],   
-                    "componente":{
+                this.adicionarElemento (
+                    //Componente
+                    {
                         "url": "/componentes/editor_json/editor_json.js",
                         "nome": "editor-json"
-                    },                
-                    "dados":{...evento.detail}                        
-                };
-
-                console.log (`adicionando novo elemento: ${novoElemento.id}`);
-
-                this.tela.elementos.push(novoElemento);                
-                
-                //TODO: por algum motivo o número de elementos da variável tela estava mudando
-                //Tive que jogar o conteudo copiando por transformação json para conseguir fazer funcionar
-                //Acontecia quando usava o mover do treemap ou o aumentar/diminuir e ai adicionava um novo elemento
-                //Depois do aguardarBanco() o conteúdo mudava        
-                let nt = JSON.parse(JSON.stringify(this.tela)); 
-
-
-                 //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
-                console.log (`TODO: antes do atualizarTela ${this.tela.elementos.length} elementos`);
-                console.log (`TODO: antes do atualizarTela COPIA ${nt.elementos.length} elementos`);
-                UltimaDAO.getInstance().atualizarTela(this.tela);
-                //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
-                console.log (`TODO: depois do atualizarTela ${this.tela.elementos.length} elementos`);
-                console.log (`TODO: depois do atualizarTela COPIA ${nt.elementos.length} elementos`);
-
-                this.controleNavegador.adicionarElemento(novoElemento);                                                   
+                    },
+                    //Dados
+                    {...evento.detail}
+                );                                                                   
             });
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
@@ -111,6 +143,40 @@ export class UltimaView extends ComponenteBase{
         ++ordem;        
 
         return ordem;
+    }
+
+    adicionarElemento(componente, dados){
+
+        let novoElemento = {                        
+            "id": this.proximoIdElemento(this.tela.elementos), 
+            "ordem": this.proximaOrdem(this.tela.elementos),
+            "descricao": "Componente X",
+            "importancia": this.mediaImportancia(this.tela.elementos),
+            "componente-padrao": "seletor-meses",
+            "componentes": ["seletor-meses", "editor-json"],   
+            "componente": componente,                
+            "dados": dados                       
+        };
+        console.log (`adicionando novo elemento: ${novoElemento.id}`);
+
+        this.tela.elementos.push(novoElemento);                
+        
+        //TODO: por algum motivo o número de elementos da variável tela estava mudando
+        //Tive que jogar o conteudo copiando por transformação json para conseguir fazer funcionar
+        //Acontecia quando usava o mover do treemap ou o aumentar/diminuir e ai adicionava um novo elemento
+        //Depois do aguardarBanco() o conteúdo mudava        
+        let nt = JSON.parse(JSON.stringify(this.tela)); 
+
+
+            //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
+        console.log (`TODO: antes do atualizarTela ${this.tela.elementos.length} elementos`);
+        console.log (`TODO: antes do atualizarTela COPIA ${nt.elementos.length} elementos`);
+        UltimaDAO.getInstance().atualizarTela(this.tela);
+        //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
+        console.log (`TODO: depois do atualizarTela ${this.tela.elementos.length} elementos`);
+        console.log (`TODO: depois do atualizarTela COPIA ${nt.elementos.length} elementos`);
+
+        this.controleNavegador.adicionarElemento(novoElemento);
     }
 }
 customElements.define('ultima-view', UltimaView);

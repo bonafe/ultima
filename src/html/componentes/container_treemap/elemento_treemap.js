@@ -17,6 +17,8 @@ export class ElementoTreeMap extends ComponenteBase {
     static EVENTO_MINIMIZAR = 'EVENTO_MINIMIZAR';
     static EVENTO_RESTAURAR = 'EVENTO_RESTAURAR';
     static EVENTO_MUDAR_VISUALIZACAO = 'EVENTO_MUDAR_VISUALIZACAO';
+    static EVENTO_FECHAR = 'EVENTO_FECHAR';
+    
 
 
 
@@ -58,6 +60,9 @@ export class ElementoTreeMap extends ComponenteBase {
             });
             this.noRaiz.querySelector("#minimizar").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MINIMIZAR, {detail:this._id}));
+            });
+            this.noRaiz.querySelector("#fechar").addEventListener("click", ()=>{
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_FECHAR, {detail:this._id}));
             });
             /*this.noRaiz.querySelector("#mudarVisualizacao").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, {detail:this._id}));
