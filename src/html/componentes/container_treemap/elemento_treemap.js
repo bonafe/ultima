@@ -63,7 +63,7 @@ export class ElementoTreeMap extends ComponenteBase {
             });
             this.noRaiz.querySelector("#fechar").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_FECHAR, {detail:this._id}));
-            });
+            });            
             /*this.noRaiz.querySelector("#mudarVisualizacao").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, {detail:this._id}));
             });*/

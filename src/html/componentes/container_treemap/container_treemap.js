@@ -126,10 +126,15 @@ export class ContainerTreeMap extends ComponenteBase{
         this.noRaiz.querySelectorAll("elemento-treemap").forEach((elementoTreemap, indice) =>
         {                        
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_AUMENTAR, (evento) => {
-                let idElementoProcurado = evento.detail;
+                let idElementoProcurado = evento.detail.id;
                 let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
-                //TODO: Tamanho máximo???
-                elemento.importancia *= 1.5;
+
+                if (evento.detail.mousemove){
+                    elemento.importancia *= 1.01;
+                }else{
+                    //TODO: Tamanho máximo???
+                    elemento.importancia *= 1.5;
+                }
 
                 this.atualizouTreemap();
 
