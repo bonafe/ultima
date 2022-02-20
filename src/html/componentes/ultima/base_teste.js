@@ -71,7 +71,7 @@ export class BaseTestesTreeMap{
                             "nome": "exibidor-imagem"
                         },
                         "dados": {
-                            "src":"/imagens/exemplo_treemap_d3js.png",
+                            "src":"./imagens/exemplo_treemap_d3js.png",
                             "origem":"https://observablehq.com/@d3/treemap"
                         }                    
                     },
