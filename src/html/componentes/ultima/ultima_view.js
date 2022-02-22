@@ -1,5 +1,6 @@
 import { ComponenteBase } from "../componente_base.js";
-import { UltimaEvento, UltimaDAO } from "./ultima.js";
+import { UltimaEvento } from "./ultima_evento.js";
+import { UltimaDAO } from "./ultima_dao.js";
 import { ContainerTreeMap } from "../container_treemap/container_treemap.js";
 
 export class UltimaView extends ComponenteBase{    
@@ -87,12 +88,9 @@ export class UltimaView extends ComponenteBase{
 
                 this.adicionarElemento (
                     //Componente
-                    {
-                        "url": "/componentes/editor_json/editor_json.js",
-                        "nome": "editor-json"
-                    },
+                    evento.detail.elemento_origem.componente,
                     //Dados
-                    {...evento.detail}
+                    evento.detail.dados
                 );                                                                   
             });
 
@@ -100,7 +98,7 @@ export class UltimaView extends ComponenteBase{
                 let id_elemento = evento.detail.id;
                 let elemento = this.tela.elementos.find (elemento => elemento.id == id_elemento);
 
-                console.log (`elemento recebeu novos dados: ${elemento.id}`);
+                //console.log (`elemento recebeu novos dados: ${elemento.id}`);
 
                 elemento.dados = evento.detail.dados;
                 elemento.componente = evento.detail.componente;
@@ -110,7 +108,7 @@ export class UltimaView extends ComponenteBase{
             });
 
             this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, evento => {
-                console.log (`TREEMAP foi atualizando: ${this.tela.elementos.length} elementos`);
+                //console.log (`TREEMAP foi atualizando: ${this.tela.elementos.length} elementos`);
                 this.tela = evento.detail.tela;
                 UltimaDAO.getInstance().atualizarTela(this.tela);
             });
@@ -157,7 +155,7 @@ export class UltimaView extends ComponenteBase{
             "componente": componente,                
             "dados": dados                       
         };
-        console.log (`adicionando novo elemento: ${novoElemento.id}`);
+        //console.log (`adicionando novo elemento: ${novoElemento.id}`);
 
         this.tela.elementos.push(novoElemento);                
         
@@ -168,13 +166,13 @@ export class UltimaView extends ComponenteBase{
         let nt = JSON.parse(JSON.stringify(this.tela)); 
 
 
-            //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
-        console.log (`TODO: antes do atualizarTela ${this.tela.elementos.length} elementos`);
-        console.log (`TODO: antes do atualizarTela COPIA ${nt.elementos.length} elementos`);
+        //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
+        //console.log (`TODO: antes do atualizarTela ${this.tela.elementos.length} elementos`);
+        //console.log (`TODO: antes do atualizarTela COPIA ${nt.elementos.length} elementos`);
         UltimaDAO.getInstance().atualizarTela(this.tela);
         //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
-        console.log (`TODO: depois do atualizarTela ${this.tela.elementos.length} elementos`);
-        console.log (`TODO: depois do atualizarTela COPIA ${nt.elementos.length} elementos`);
+        //console.log (`TODO: depois do atualizarTela ${this.tela.elementos.length} elementos`);
+        //console.log (`TODO: depois do atualizarTela COPIA ${nt.elementos.length} elementos`);
 
         this.controleNavegador.adicionarElemento(novoElemento);
     }

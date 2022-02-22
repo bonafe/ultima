@@ -1,6 +1,6 @@
 import { ComponenteBase } from '../componente_base.js';
 import { ElementoTreeMap } from './elemento_treemap.js';
-import { UltimaEvento } from '../ultima/ultima.js';
+import { UltimaEvento } from '../ultima/ultima_evento.js';
 
 
 export class ContainerTreeMap extends ComponenteBase{
@@ -16,13 +16,6 @@ export class ContainerTreeMap extends ComponenteBase{
             this.container = this.noRaiz.querySelector(".container_treemap");
             this.renderizar();
         });        
-    }
-
-
-
-    processarNovasDimensoes(largura, altura){
-        
-        this.renderizar();
     }
 
 
@@ -46,9 +39,7 @@ export class ContainerTreeMap extends ComponenteBase{
 
 
     criarRaizHierarquicaD3JS(tela){
-        
-        console.log (`CONTAINER TREEMAP: criando hierarquia com ${tela.elementos.length}`);
-
+                
         return d3.hierarchy(tela, (d) => d.elementos)
             .sum( d => {
                 return d.importancia;
@@ -59,34 +50,19 @@ export class ContainerTreeMap extends ComponenteBase{
     }
 
 
-    adicionarElemento(elemento){                                  
-        
-        console.log (`CONTAINER TREEMAP: antes adicionar elemento ${elemento.id}. número de elementos: ${this._tela.elementos.length}`);
+    adicionarElemento(elemento){                                          
 
         this._tela.elementos.push(JSON.parse(JSON.stringify(elemento)));
         
-        console.log (`CONTAINER TREEMAP: depois adicionar elemento ${elemento.id}. número de elementos: ${this._tela.elementos.length}`);
+        const root = this.criarRaizHierarquicaD3JS(this._tela);
+       
+        //TODO: não funciona!!!!
+        //this.atualizarTreeMap();
+        //this.d3Enter(root);
 
         //TODO: não pode criar, tem que atualizar, código abaixo não estã funcionando
         this.criarTreeMap();
-
-        /*
-        const div = d3.select(this.container).select("div");
-
-        const root = this.criarRaizHierarquicaD3JS(elementos);
-                
-        const node = div.datum(root).selectAll(".node")
-            .data(this.treemap(root).leaves())
-                .enter().append("elemento-treemap")
-                    .attr("class", "node container")
-                    .attr("id",(d) => JSON.stringify(d.data.id))
-                    .attr("componente",(d) => JSON.stringify(d.data.componente))
-                    .attr("dados",(d) => JSON.stringify(d.data.dados))                        
-                    .style("left", (d) => d.x0 + "px")
-                    .style("top", (d) => d.y0 + "px")
-                    .style("width", (d) => Math.max(0, d.x1 - d.x0 - 1) + "px")
-                    .style("height", (d) => Math.max(0, d.y1 - d.y0  - 1) + "px"); 
-        */
+        
     }
 
 
@@ -101,7 +77,7 @@ export class ContainerTreeMap extends ComponenteBase{
     
         this.treemap = d3.treemap().size([width, height]);
 
-        const div = d3.select(this.container).append("div")
+        this.divD3 = d3.select(this.container).append("div")
             .style("position", "relative")
             .style("width", (width + margin.left + margin.right) + "px")
             .style("height", (height + margin.top + margin.bottom) + "px")
@@ -110,7 +86,15 @@ export class ContainerTreeMap extends ComponenteBase{
         
         const root = this.criarRaizHierarquicaD3JS(this._tela);        
             
-        this.node = div.datum(root).selectAll(".node")
+        this.d3Enter(root);                      
+                    
+        this.adicionarListenersElementoTreepmap();
+    }
+
+
+
+    d3Enter(root){
+        this.node = this.divD3.datum(root).selectAll(".node")
             .data(this.treemap(root).leaves())
                 .enter().append("elemento-treemap")
                     .attr("class", "node container")
@@ -120,8 +104,65 @@ export class ContainerTreeMap extends ComponenteBase{
                     .style("left", (d) => d.x0 + "px")
                     .style("top", (d) => d.y0 + "px")
                     .style("width", (d) => Math.max(0, d.x1 - d.x0 - 1) + "px")
-                    .style("height", (d) => Math.max(0, d.y1 - d.y0  - 1) + "px");                            
-                    
+                    .style("height", (d) => Math.max(0, d.y1 - d.y0  - 1) + "px");  
+    }
+
+
+
+    atualizarTreeMap(){
+
+        const margin = {top: 0, right: 0, bottom: 0, left: 0};
+        const width = this.container.clientWidth - margin.left - margin.right;
+        const height = this.container.clientHeight - margin.top - margin.bottom;
+        const color = d3.scaleOrdinal().range(d3.schemeCategory20c);            
+    
+        this.treemap = d3.treemap().size([width, height]);                                      
+
+        const root = this.criarRaizHierarquicaD3JS(this.tela); 
+
+        this.node.data(this.treemap(root).leaves())
+            .transition()
+                .duration(500)                
+                .style("left", d => `${d.x0}px`)
+                .style("top", d => `${d.y0}px`)
+                .style('width', d => `${Math.max(0, d.x1 - d.x0 -1)}px`)
+                .style('height', d => `${Math.max(0, d.y1 - d.y0 -1)}px`);
+    }
+
+
+
+    set tela(novaTela){
+        this._tela = JSON.parse(JSON.stringify(novaTela));
+        this.renderizar();
+    }
+
+
+
+    get tela(){
+        return this._tela;
+    }
+
+
+
+    static get observedAttributes() {
+        return ['tela'];
+    }
+
+
+
+    attributeChangedCallback(nomeAtributo, valorAntigo, novoValor) {
+
+        //Atributo componente é usado pelo ElementoTreeMap para definir qual componente renderizar
+        if (nomeAtributo.localeCompare("tela") == 0){
+
+            this._tela = JSON.parse(novoValor);
+            this.renderizar();
+        }
+    }
+
+
+
+    adicionarListenersElementoTreepmap(){
         //TODO: levar listeners para dentro do adicionar elementos
         this.noRaiz.querySelectorAll("elemento-treemap").forEach((elementoTreemap, indice) =>
         {                        
@@ -234,8 +275,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
                     
-                    //this.atualizarTreeMap();
-                    this.criarTreeMap();      
+                    this.atualizarTreeMap();
+                    //this.criarTreeMap();      
                 }
             }); 
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_FRENTE, (evento) => {
@@ -253,8 +294,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
 
-                    //this.atualizarTreeMap();
-                    this.criarTreeMap();      
+                    this.atualizarTreeMap();
+                    //this.criarTreeMap();      
                 }
             });     
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_INICIO, (evento) => {
@@ -278,8 +319,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
 
-                    //this.atualizarTreeMap();
-                    this.criarTreeMap();      
+                    this.atualizarTreeMap();
+                    //this.criarTreeMap();      
                 }
             });   
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_FIM, (evento) => {
@@ -313,80 +354,49 @@ export class ContainerTreeMap extends ComponenteBase{
 
                 let elemento = this.tela.elementos.find(e => e.id == evento.detail.id);
 
+                elemento.dados = evento.detail.dados;
+
                 //Cria um novo evento indicando dados do componente
-                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, JSON.parse(JSON.stringify({                    
-                        componente: evento.detail.componente,
-                        descricao: elemento.descricao,
-                        importancia: elemento.importancia,
-                        ordem: elemento.ordem,
-                        dados:evento.detail.dados,
-                        id: elemento.id,                    
-                })));
+                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, 
+                    JSON.parse(JSON.stringify(elemento))
+                );
                 
                 this.dispatchEvent(eventoCompleto);                
+            });
+            elementoTreemap.addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {                        
+
+                //Para a propagaçaõ do evento do componente
+                evento.stopPropagation();
+
+                let elemento =  JSON.parse(JSON.stringify(this.tela.elementos.find(e => e.id == evento.detail.id_origem)));
+
+                //Cria um novo evento indicando dados do componente
+                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO,{
+                    elemento_origem: elemento,
+                    dados: evento.detail.dados
+                });
+                
+                this.dispatchEvent(eventoCompleto);                                                                  
             });
         });
     }
 
+
+
     atualizouTreemap(){
-         //Cria um novo evento indicando dados do componente
-         let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, {                    
-            tela: JSON.parse(JSON.stringify(this.tela))
-        });
-    
-        this.dispatchEvent(eventoCompleto);   
-    }
-
-
-    atualizarTreeMap(){
-
-        const margin = {top: 0, right: 0, bottom: 0, left: 0};
-        const width = this.container.clientWidth - margin.left - margin.right;
-        const height = this.container.clientHeight - margin.top - margin.bottom;
-        const color = d3.scaleOrdinal().range(d3.schemeCategory20c);            
-    
-        this.treemap = d3.treemap().size([width, height]);                                      
-
-        const root = this.criarRaizHierarquicaD3JS(this.tela); 
-
-        this.node.data(this.treemap(root).leaves())
-            .transition()
-                .duration(500)                
-                .style("left", d => `${d.x0}px`)
-                .style("top", d => `${d.y0}px`)
-                .style('width', d => `${Math.max(0, d.x1 - d.x0 -1)}px`)
-                .style('height', d => `${Math.max(0, d.y1 - d.y0 -1)}px`);
+        //Cria um novo evento indicando dados do componente
+        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, {                    
+           tela: JSON.parse(JSON.stringify(this.tela))
+       });
+   
+       this.dispatchEvent(eventoCompleto);   
     }
 
 
 
-    encontrarComponente(componente){
-
-    }
-
-    set tela(novaTela){
-        this._tela = JSON.parse(JSON.stringify(novaTela));
+    processarNovasDimensoes(largura, altura){
+        
         this.renderizar();
-    }
-
-    get tela(){
-        return this._tela;
-    }
-
-    static get observedAttributes() {
-        return ['tela'];
-    }
-
-
-
-    attributeChangedCallback(nomeAtributo, valorAntigo, novoValor) {
-
-        //Atributo componente é usado pelo ElementoTreeMap para definir qual componente renderizar
-        if (nomeAtributo.localeCompare("tela") == 0){
-
-            this._tela = JSON.parse(novoValor);
-            this.renderizar();
-        }
     }
 }
 

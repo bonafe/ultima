@@ -1,5 +1,5 @@
 import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima.js';
+import { UltimaEvento } from '../ultima/ultima_evento.js';
 
 
 export class EditorJSON extends ComponenteBase {
@@ -66,11 +66,11 @@ export class EditorJSON extends ComponenteBase {
     dispararEventoSelecaoObjeto(no){        
 
         if (no.path.length > 0){
-            let dado = EditorJSON.trazerDado(no.path, this.dados);
+            let dados = EditorJSON.trazerDado(no.path, this.dados);
 
-            if (typeof dado === 'object'){
+            if (typeof dados === 'object'){
                 
-                this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO,dado));
+                this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO,dados));
             }
         }
     }

@@ -1,5 +1,5 @@
 import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima.js';
+import { UltimaEvento } from '../ultima/ultima_evento.js';
 
 
 
@@ -127,10 +127,23 @@ export class ElementoTreeMap extends ComponenteBase {
                 evento.stopPropagation();
                
                 //Cria um novo evento indicando dados do componente
-                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, {                    
-                        componente: this.componente,                        
+                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, {                                              
                         dados:evento.detail.novoValor,
                         id: this._id,                    
+                });
+                
+                this.dispatchEvent(eventoCompleto);                
+            });
+
+            this.instanciaComponente.addEventListener(UltimaEvento.EVENTO_SELECAO_OBJETO, evento => {
+
+                //Para a propagaçaõ do evento do componente
+                evento.stopPropagation();
+               
+                //Cria um novo evento indicando dados do componente
+                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO, {                                                                      
+                        id_origem: this._id,                    
+                        dados:evento.detail,
                 });
                 
                 this.dispatchEvent(eventoCompleto);                

@@ -1,15 +1,5 @@
 import { BaseTestesTreeMap } from "./base_teste.js";
 
-export class UltimaEvento extends CustomEvent{
-
-    static EVENTO_SELECAO_OBJETO = 'EVENTO_SELECAO_OBJETO'; 
-    static EVENTO_ATUALIZACAO_DADOS = 'EVENTO_ATUALIZACAO_DADOS';
-    static EVENTO_ATUALIZACAO_TREEMAP = 'EVENTO_ATUALIZACAO_TREEMAP';
-
-    constructor(evento, objetoDeDados){
-        super(evento, {'detail':objetoDeDados, 'bubbles': true, 'composed':true});
-    }
-}
 
 
 
@@ -103,14 +93,14 @@ export class UltimaDAO extends EventTarget{
 
 
         //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
-        console.log (`TODO: antes do aguardarbanco ${tela.elementos.length} elementos`);
-        console.log (`TODO: antes do aguardarbanco COPIA ${nt.elementos.length} elementos`);
+        //console.log (`TODO: antes do aguardarbanco ${tela.elementos.length} elementos`);
+        //console.log (`TODO: antes do aguardarbanco COPIA ${nt.elementos.length} elementos`);
 
         await this.aguardarBanco();
 
         //TODO: PQ MUDA O NÚMERO DE ELEMENTOS DE TELA???
-        console.log (`TODO: depois do aguardarbanco ${tela.elementos.length} elementos`);
-        console.log (`TODO: depois do aguardarbanco COPIA ${nt.elementos.length} elementos`);
+        //console.log (`TODO: depois do aguardarbanco ${tela.elementos.length} elementos`);
+        //console.log (`TODO: depois do aguardarbanco COPIA ${nt.elementos.length} elementos`);
 
 
 
