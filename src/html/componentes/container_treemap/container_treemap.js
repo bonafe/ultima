@@ -275,8 +275,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
                     
-                    this.atualizarTreeMap();
-                    //this.criarTreeMap();      
+                    //this.atualizarTreeMap();
+                    this.criarTreeMap();      
                 }
             }); 
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_FRENTE, (evento) => {
@@ -294,8 +294,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
 
-                    this.atualizarTreeMap();
-                    //this.criarTreeMap();      
+                    //this.atualizarTreeMap();
+                    this.criarTreeMap();      
                 }
             });     
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_INICIO, (evento) => {
@@ -319,8 +319,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
                     this.atualizouTreemap();
 
-                    this.atualizarTreeMap();
-                    //this.criarTreeMap();      
+                    //this.atualizarTreeMap();
+                    this.criarTreeMap();      
                 }
             });   
             elementoTreemap.addEventListener(ElementoTreeMap.EVENTO_IR_PARA_FIM, (evento) => {
@@ -354,9 +354,10 @@ export class ContainerTreeMap extends ComponenteBase{
 
                 let elemento = this.tela.elementos.find(e => e.id == evento.detail.id);
 
+                //Mantêm esta referência dos dados atualizada com a mudança
                 elemento.dados = evento.detail.dados;
 
-                //Cria um novo evento indicando dados do componente
+                //Cria um novo evento acrescentando o restante do elemento
                 let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, 
                     JSON.parse(JSON.stringify(elemento))
                 );
@@ -368,6 +369,7 @@ export class ContainerTreeMap extends ComponenteBase{
                 //Para a propagaçaõ do evento do componente
                 evento.stopPropagation();
 
+                //Cria uma copia por valor para enviar de forma segura no evento
                 let elemento =  JSON.parse(JSON.stringify(this.tela.elementos.find(e => e.id == evento.detail.id_origem)));
 
                 //Cria um novo evento indicando dados do componente
