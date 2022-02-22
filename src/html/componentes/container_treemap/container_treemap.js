@@ -57,11 +57,11 @@ export class ContainerTreeMap extends ComponenteBase{
         const root = this.criarRaizHierarquicaD3JS(this._tela);
        
         //TODO: não funciona!!!!
-        //this.atualizarTreeMap();
+        this.atualizarTreeMap();
         //this.d3Enter(root);
 
         //TODO: não pode criar, tem que atualizar, código abaixo não estã funcionando
-        this.criarTreeMap();
+        //this.criarTreeMap();
         
     }
 
@@ -86,7 +86,7 @@ export class ContainerTreeMap extends ComponenteBase{
         
         const root = this.criarRaizHierarquicaD3JS(this._tela);        
             
-        this.d3Enter(root);                      
+        this.node = this.d3Enter(root);                      
                     
         this.adicionarListenersElementoTreepmap();
     }
@@ -94,7 +94,7 @@ export class ContainerTreeMap extends ComponenteBase{
 
 
     d3Enter(root){
-        this.node = this.divD3.datum(root).selectAll(".node")
+        return this.divD3.datum(root).selectAll(".node")
             .data(this.treemap(root).leaves())
                 .enter().append("elemento-treemap")
                     .attr("class", "node container")
@@ -107,7 +107,9 @@ export class ContainerTreeMap extends ComponenteBase{
                     .style("height", (d) => Math.max(0, d.y1 - d.y0  - 1) + "px");  
     }
 
-
+    d3Exit(root){
+        this.divD3.datum(root).selectAll(".node").exit().remove();
+    }
 
     atualizarTreeMap(){
 
@@ -120,9 +122,15 @@ export class ContainerTreeMap extends ComponenteBase{
 
         const root = this.criarRaizHierarquicaD3JS(this.tela); 
 
+        this.d3Enter(root);
+
+        //TODO: FALTA REMOVER
+        //this.d3Exit(root);
+
+        this.node = this.divD3.datum(root).selectAll(".node");
+
         this.node.data(this.treemap(root).leaves())
-            .transition()
-                .duration(500)                
+            .transition().duration(500)
                 .style("left", d => `${d.x0}px`)
                 .style("top", d => `${d.y0}px`)
                 .style('width', d => `${Math.max(0, d.x1 - d.x0 -1)}px`)
@@ -309,12 +317,10 @@ export class ContainerTreeMap extends ComponenteBase{
                     //O recoloca no inicio
                     this.tela.elementos.splice(0,0,elemento);
                     
-                    console.log ("ANTES")
                     this.tela.elementos.forEach (e => console.log (`${e.id}-${e.ordem}`));
 
                     this.atualizarOrdemElementos(this.tela);        
-
-                    console.log ("DEPOIS")
+                    
                     this.tela.elementos.forEach (e => console.log (`${e.id}-${e.ordem}`));                    
 
                     this.atualizouTreemap();
