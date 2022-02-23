@@ -186,10 +186,10 @@ export class ContainerTreeMap extends ComponenteBase{
             {evento:ElementoTreeMap.EVENTO_IR_PARA_TRAS, funcao:this.irParaTras},
             {evento:ElementoTreeMap.EVENTO_IR_PARA_FRENTE, funcao:this.irParaFrente},
             {evento:ElementoTreeMap.EVENTO_IR_PARA_INICIO, funcao:this.irParaInicio},
-            {evento:ElementoTreeMap.EVENTO_IR_PARA_FIM, funcao:this.irParaFim},
-            {evento:ElementoTreeMap.EVENTO_ATUALIZACAO_DADOS, funcao:this.atualizacaoDados},
-            {evento:ElementoTreeMap.EVENTO_SELECAO_OBJETO, funcao:this.selecaoObjeto},
+            {evento:ElementoTreeMap.EVENTO_IR_PARA_FIM, funcao:this.irParaFim},            
             {evento:ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, funcao:this.mudarVisualizacao},
+            {evento:UltimaEvento.EVENTO_ATUALIZACAO_DADOS, funcao:this.atualizacaoDados},
+            {evento:UltimaEvento.EVENTO_SELECAO_OBJETO, funcao:this.selecaoObjeto},
         ].forEach (e => {
             novosNos.on (e.evento, e.funcao.bind(this));                
         });                                
