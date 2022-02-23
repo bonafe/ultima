@@ -35,7 +35,7 @@ export class ElementoTreeMap extends ComponenteBase {
             }
 
             this.noRaiz.querySelector("#aumentar").addEventListener("click", ()=>{
-                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_AUMENTAR, {detail:{id:this._id}}));
+                this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_AUMENTAR, {detail:this._id}));
             });
             this.noRaiz.querySelector("#diminuir").addEventListener("click", ()=>{
                 this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_DIMINUIR, {detail:this._id}));
