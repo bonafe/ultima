@@ -6,6 +6,7 @@ export class ComponenteBase extends HTMLElement{
         
         this.carregou = false;
 
+        //TODO: como fazer se o componente está hospedado em outro domínio?
         this._prefixoEndereco = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
 
         if (propriedades.shadowDOM){

@@ -54,7 +54,17 @@ export class UltimaDAO extends EventTarget{
 
 
     async reiniciarBase(){
-        this.atualizarTela(BaseInicialUltima.base.telas[0]);       
+
+        await this.aguardarBanco();
+
+        return new Promise ((resolve, reject) => {
+
+            this.limparObjectStore("componentes")
+                .then(() => this.limparObjectStore("telas"))
+                    .then(() => this.adicionarElementos())
+                        .then(()=> resolve(true));
+        
+        });      
     }
 
     
@@ -213,5 +223,22 @@ export class UltimaDAO extends EventTarget{
                 reject("");
             };
         });    
+     }
+
+     async limparObjectStore(objectStore){
+         
+        await this.aguardarBanco();
+
+        let object_store = this.banco.transaction (objectStore, "readwrite").objectStore (objectStore);
+                
+        return new Promise((resolve, reject) => {            
+            let request = object_store.clear();
+            request.onsuccess = evento => {                
+                resolve(true);
+            };    
+            request.onerror = evento => {
+                reject("");
+            };
+        });
      }
 }
