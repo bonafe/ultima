@@ -10,6 +10,12 @@ export class ContainerTreeMap extends ComponenteBase{
         super({templateURL:"/componentes/container_treemap/container_treemap.html", shadowDOM:false});        
 
         this._tela = undefined;
+        this._componentes = undefined;
+
+        this.componentePadrao = {
+            nome: "editor-json",
+            url: "/componentes/editor_json/editor_json.js"
+        };
 
         this.addEventListener("carregou", () => {
 
@@ -31,7 +37,10 @@ export class ContainerTreeMap extends ComponenteBase{
 
     renderizar() {
 
-        if (this.container && this._tela){
+        if (this.container && this._tela && this._componentes){
+
+            //Atualiza o atributo ordem do elemento
+            this._tela.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
 
             if (!this.node){
                 this.criarTreeMap();
@@ -40,34 +49,18 @@ export class ContainerTreeMap extends ComponenteBase{
             }
         }
     }
-
-
-    atualizarOrdemElementos(tela){
-        tela.elementos.forEach ((elemento, indice) => elemento["ordem"] = indice);
-    }
-
-
-    criarRaizHierarquicaD3JS(tela){
-        
-        this.atualizarOrdemElementos(tela);
-
-        return d3.hierarchy(tela, (d) => d.elementos)
-            .sum( d => {
-                return d.importancia;
-            })
-            .sort((a, b) => {             
-                return a.data.ordem - b.data.ordem;
-            });                    
-    }
+    
 
 
     adicionarElemento(elemento){                                          
 
         this._tela.elementos.push(JSON.parse(JSON.stringify(elemento)));
-        
-        const root = this.criarRaizHierarquicaD3JS(this._tela);
-               
+                               
         this.renderizar();    
+    }
+
+    atualizarElemento(elemento){
+        
     }
 
 
@@ -92,8 +85,16 @@ export class ContainerTreeMap extends ComponenteBase{
     enterUpdateExit(){
 
         this.treemap = d3.treemap().size([this.widthTreemap, this.heightTreemap]);
-
-        const root = this.criarRaizHierarquicaD3JS(this._tela);        
+        
+        const root = d3.hierarchy(this.tela, (d) => d.elementos)
+            //Valor do elemento para cálculo da área do TreeMap
+            .sum( d => {
+                return d.importancia;
+            })
+            //Ordem dos elementos no Treemap
+            .sort((a, b) => {             
+                return a.data.ordem - b.data.ordem;
+            });         
         
         //console.log (root.children.map(e => `[id:${e.data.id} descricao:${e.data.descricao} ordem:${e.data.ordem} importancia:${e.data.importancia}]`).join("\n"));
 
@@ -111,7 +112,10 @@ export class ContainerTreeMap extends ComponenteBase{
                         //console.log (`+++ Adicionando elemento-treemap: ${d.data.id} (ordem: ${d.data.ordem})`);
                         return JSON.stringify(d.data.id);
                     })
-                    .attr("componente",(d) => JSON.stringify(d.data.componente))
+                    .attr("componente",(d) => {
+                        let componente = this.componentes.find (c => c.nome == d.data.componente.padrao);
+                        return JSON.stringify((componente ? componente : this.componentePadrao));
+                    })
                     .attr("dados",(d) => JSON.stringify(d.data.dados))                        
                     .style("left", (d) => d.x0 + "px")
                     .style("top", (d) => d.y0 + "px")
@@ -139,10 +143,20 @@ export class ContainerTreeMap extends ComponenteBase{
         this.enterUpdateExit();
     }
 
+    set componentes(novosComponentes){        
+        this._componentes = JSON.parse(JSON.stringify(novosComponentes));
+        this.renderizar();
+    }
 
 
-    set tela(novaTela){
-        //console.log ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NOVOS DADOS DE TELA (via set)");
+
+    get componentes(){
+        return this._componentes;
+    }
+
+
+
+    set tela(novaTela){        
         this._tela = JSON.parse(JSON.stringify(novaTela));
         this.renderizar();
     }
@@ -156,7 +170,7 @@ export class ContainerTreeMap extends ComponenteBase{
 
 
     static get observedAttributes() {
-        return ['tela'];
+        return ['tela','componentes'];
     }
 
 
@@ -171,6 +185,13 @@ export class ContainerTreeMap extends ComponenteBase{
             this._tela = JSON.parse(novoValor);
             this.renderizar();
         }
+
+        //Atributo componente é usado pelo ElementoTreeMap para definir qual componente renderizar
+        if (nomeAtributo.localeCompare("componentes") == 0){
+
+            this._componentes = JSON.parse(novoValor);
+            this.renderizar();
+        }        
     }
 
 
@@ -233,9 +254,9 @@ export class ContainerTreeMap extends ComponenteBase{
             //TODO: Tamanho máximo???
             elemento.importancia *= 1.5;
         }
-
-        this.atualizouTreemap();
+        
         this.renderizar();                  
+        this.atualizouTreemap();
     }
 
 
@@ -250,9 +271,9 @@ export class ContainerTreeMap extends ComponenteBase{
         let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
         //TODO: Tamanho mínimo???
         elemento.importancia *= 0.50;
-
-        this.atualizouTreemap();
+        
         this.renderizar();   
+        this.atualizouTreemap();
     }
 
 
@@ -276,8 +297,8 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.log (`Soma importancia outros: ${somaImportanciaOutros}`);
         elemento.importancia = somaImportanciaOutros;
 
-        this.atualizouTreemap();
-        this.renderizar();   
+        this.renderizar();
+        this.atualizouTreemap();          
     }
 
 
@@ -301,8 +322,8 @@ export class ContainerTreeMap extends ComponenteBase{
         
         elemento.importancia = menorImportancia;
 
-        this.atualizouTreemap();
-        this.renderizar();   
+        this.renderizar();
+        this.atualizouTreemap();         
     }
 
 
@@ -324,8 +345,8 @@ export class ContainerTreeMap extends ComponenteBase{
 
         elemento.importancia = mediaImportancia;
 
-        this.atualizouTreemap();
         this.renderizar();   
+        this.atualizouTreemap();        
     }
 
 
@@ -344,8 +365,8 @@ export class ContainerTreeMap extends ComponenteBase{
             //Remove o elemento da posição
             let [elemento] = this.tela.elementos.splice(indice,1);                                        
 
-            this.atualizouTreemap();                    
-            this.renderizar();                     
+            this.renderizar();
+            this.atualizouTreemap();                                                     
         }
     }
 
@@ -367,8 +388,8 @@ export class ContainerTreeMap extends ComponenteBase{
             //O recoloca em uma posição anterior
             this.tela.elementos.splice(indice-1,0,elemento);                                        
 
-            this.atualizouTreemap();
             this.renderizar();                    
+            this.atualizouTreemap();            
         }
     }
 
@@ -390,8 +411,8 @@ export class ContainerTreeMap extends ComponenteBase{
             //O recoloca em uma posição posterior
             this.tela.elementos.splice(indice+1,0,elemento);                                        
 
-            this.atualizouTreemap();
-            this.renderizar();                    
+            this.renderizar();   
+            this.atualizouTreemap();                             
         }
     }
 
@@ -412,11 +433,9 @@ export class ContainerTreeMap extends ComponenteBase{
             let [elemento] = this.tela.elementos.splice(indice,1);
             //O recoloca no final
             this.tela.elementos.splice(this.tela.elementos.length,0,elemento);
-            
-            this.atualizarOrdemElementos(this.tela);
-
-            this.atualizouTreemap();
+                        
             this.renderizar(); 
+            this.atualizouTreemap();            
         }
     }
 
@@ -438,8 +457,8 @@ export class ContainerTreeMap extends ComponenteBase{
             //O recoloca no inicio
             this.tela.elementos.splice(0,0,elemento);                       
 
-            this.atualizouTreemap();
-            this.renderizar();     
+            this.renderizar(); 
+            this.atualizouTreemap();                
         }
     }
 
