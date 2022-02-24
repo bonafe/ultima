@@ -41,7 +41,7 @@ export class BaseInicialUltima{
                             "padrao": "exibidor-imagem",                            
                         },
                         "dados": {
-                            "src":"/imagens/hubble.jpg"
+                            "src":"./imagens/hubble.jpg"
                         }
                     }                         
                 ]            
