@@ -30,6 +30,7 @@ export class UltimaView extends ComponenteBase{
         this.controleNavegador = this.noRaiz.querySelector("container-treemap");
 
             UltimaDAO.getInstance().componentes().then( componentes => {                
+                this.componentes = componentes;
                 this.controleNavegador.setAttribute("componentes", JSON.stringify(componentes));                                            
             });
 
@@ -202,7 +203,10 @@ export class UltimaView extends ComponenteBase{
             alert ("Já está aberta a configuração!");
         }else{
             this.adicionarElemento (["configuracao-ultima"],"configuracao-ultima",                
-                {configuracao: JSON.parse(JSON.stringify(this.tela))} 
+                {
+                    componentes: JSON.parse(JSON.stringify(this.componentes)),
+                    tela: JSON.parse(JSON.stringify(this.tela))
+                } 
             );   
         }
     }
@@ -210,7 +214,7 @@ export class UltimaView extends ComponenteBase{
 
     atualizarConfiguracao(elementoConfiguracao){
         
-        elementoConfiguracao.dados.configuracao.elementos.forEach(elemento_configuracao => {
+        elementoConfiguracao.dados.tela.elementos.forEach(elemento_configuracao => {
 
             let elemento_atualizado = JSON.parse(JSON.stringify(elemento_configuracao));
 
