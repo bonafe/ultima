@@ -61,7 +61,7 @@ export class UltimaDAO extends EventTarget{
 
             this.limparObjectStore("componentes")
                 .then(() => this.limparObjectStore("telas"))
-                    .then(() => this.adicionarElementos())
+                    .then(() => this.adicionarComponentesIniciais())
                         .then(()=> resolve(true));
         
         });      
@@ -74,8 +74,27 @@ export class UltimaDAO extends EventTarget{
     }
 
 
+
     async telas(){        
         return this.lerTodosElementos("telas");
+    }
+
+
+
+    async atualizarComponentes (componentes){
+        return new Promise((resolve, reject) => {
+            this.limparObjectStore("componentes").then(()=>{
+                Promisse.all(componentes.map (componente => this.atualizarComponentes(componente))).then(retornos => {
+                    resolve(true);
+                })
+            })
+        });
+    }
+
+
+
+    async atualizarComponentes (componente){      
+        return this.atualizarRegistro (componente, "componentes");    
     }
 
 
@@ -84,9 +103,13 @@ export class UltimaDAO extends EventTarget{
         return this.atualizarRegistro (tela, "telas");    
     }
 
+
+
     telaAtual(){
         //Recuperar a tela atual do banco
     }
+
+
 
     removerTela(tela){
         //Remove a tela do banco        
@@ -117,7 +140,10 @@ export class UltimaDAO extends EventTarget{
             if (!this.atualizandoBanco){
                 this.bancoCarregado();
             }else{
-                this.adicionarElementos().then ( retorno => {
+
+                //Rodou a função de upgrade, ainda estamos em processo de inicialização do banco
+                //Adiciona os componentes iniciais para funcionamento mínimo do sistema Ultima
+                this.adicionarComponentesIniciais().then ( retorno => {
                     console.info (`Dados do banco foram inicializados: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
                     this.atualizandoBanco = false;
                     this.bancoCarregado();
@@ -140,6 +166,7 @@ export class UltimaDAO extends EventTarget{
     }
 
 
+
     criarTabelas(){      
 
         console.info ("Criando ObjectStores");
@@ -153,17 +180,14 @@ export class UltimaDAO extends EventTarget{
 
 
 
-    adicionarElementos(){
+    adicionarComponentesIniciais(){
         return new Promise((resolve, reject) => {
             let transacao = this.banco.transaction (["telas","componentes"], "readwrite")
-
-            let osTelas = transacao.objectStore ("telas");            
-            osTelas.add (BaseInicialUltima.base.telas[0]);
-            
+           
             let osComponentes = transacao.objectStore ("componentes");      
             BaseInicialUltima.base.componentes.forEach (componente => {
                 console.log (`adicionando componente: ${componente.nome}`);
-                osComponentes.add (componente);
+                osComponentes.put (componente);
             });
 
             transacao.oncomplete = evento => {

@@ -10,35 +10,71 @@ export class UltimaView extends ComponenteBase{
     constructor(){        
         super({templateURL:"/componentes/ultima/ultima_view.html", shadowDOM:false});
         
+        this.configuracoesCarregadas = false;
+
         this.addEventListener('carregou', () => {
             
-            this.criarEIniciarControleNavegadorTreemap();
-
-            this.adicionarComportamentoMenu();
-            
-            this.adicionarComportamentoSelecaoObjetos();
-
-            this.adicionarComportamentoAtualizacaoDados();
-
-            this.adicionarComportamentoAtualizacaoTreemap();            
+            this.renderizar();            
         });
     }
 
 
+    renderizar(){
 
+        //TODO: Deve alterar a exibição caso um novo arquivo seja carregado
+        if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
+
+            this.criarEIniciarControleNavegadorTreemap();
+
+            this.adicionarComportamentoMenu();
+                
+            this.adicionarComportamentoSelecaoObjetos();
+
+            this.adicionarComportamentoAtualizacaoDados();
+
+            this.adicionarComportamentoAtualizacaoTreemap();
+            
+            this.renderizado = true;
+        }         
+    }
+
+    static get observedAttributes() {
+        return ['src'];
+    }
+
+
+
+    attributeChangedCallback(nomeAtributo, valorAntigo, novoValor) {
+        
+        //URL do arquivo de configuração
+        if (nomeAtributo.localeCompare("src") == 0){
+            
+            this._src = novoValor;
+            fetch(this._src)
+                .then (response => response.json())
+                .then(configuracao => this.carregarConfiguracao(configuracao));                     
+        }      
+    }
+
+
+    
     criarEIniciarControleNavegadorTreemap(){
         this.controleNavegador = this.noRaiz.querySelector("container-treemap");
 
+            //Primeiro carrega os componentes
             UltimaDAO.getInstance().componentes().then( componentes => {                
+
                 this.componentes = componentes;
                 this.controleNavegador.setAttribute("componentes", JSON.stringify(componentes));                                            
-            });
 
-            UltimaDAO.getInstance().telas().then (telas => {
-                //TODO: só está pegando a primeira tela
-                this.tela  = telas[0];
-                this.controleNavegador.tela = JSON.parse(JSON.stringify(this.tela));
-            });
+                //Depois carrega as telas
+                UltimaDAO.getInstance().telas().then (telas => {
+
+                    //TODO: só está pegando a primeira tela
+                    this.tela  = telas[0];
+                    this.controleNavegador.tela = JSON.parse(JSON.stringify(this.tela));
+                });
+            });           
     }
 
 
@@ -210,6 +246,38 @@ export class UltimaView extends ComponenteBase{
             );   
         }
     }
+
+
+
+    carregarConfiguracao(configuracao){
+
+        UltimaDAO.getInstance().telas().then (telas => {
+
+            //Caso não existam telas na base [1ª Vez]
+            if (telas.length == 0){
+
+                this.componentes = configuracao.componentes;                        
+                this.tela = configuracao.tela;
+
+                Promise.all([
+                    UltimaDAO.getInstance().atualizarComponentes(this.componentes),
+                    UltimaDAO.getInstance().atualizarTela(this.tela)
+                ]).then (respostas => {        
+                    this.configuracoesCarregadas = true;                            
+                    this.renderizar();              
+                });
+
+            //Se existirem telas na base não recarrega
+            //TODO: precisa tratar mudança de versão, colocar versão no arquivo de configuração e fazer merge das configurações se for atualizado
+            }else{
+                this.configuracoesCarregadas = true;        
+                this.renderizar();
+            }
+        });
+
+        
+    }
+
 
 
     atualizarConfiguracao(elementoConfiguracao){

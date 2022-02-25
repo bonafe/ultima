@@ -4,7 +4,7 @@ export class ComponenteBase extends HTMLElement{
     constructor(propriedades){
         super();
         
-        this.carregou = false;
+        this.carregado = false;
 
         //TODO: como fazer se o componente está hospedado em outro domínio?
         this._prefixoEndereco = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
@@ -36,7 +36,7 @@ export class ComponenteBase extends HTMLElement{
         //Observa no próximo laço de eventos
         setTimeout(()=>this.observar());
 
-        this.carregou = true;
+        this.carregado = true;
         this.dispatchEvent(new Event("carregou"));
     }
 

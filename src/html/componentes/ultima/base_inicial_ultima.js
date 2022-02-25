@@ -26,26 +26,6 @@ export class BaseInicialUltima{
                 "url": "/componentes/ultima/configuracao_ultima.js",
                 "nome": "configuracao-ultima"
             }
-        ],
-        "telas": [
-            {   
-                "id": 1,
-                "descricao": "Contatos de A a J",            
-                "elementos": [                                   
-                    { 
-                        "id":1,
-                        "descricao": "Configuração Última",
-                        "importancia": 16,
-                        "ordem": 0,
-                        "componente":{
-                            "padrao": "exibidor-imagem",                            
-                        },
-                        "dados": {
-                            "src":"./imagens/hubble.jpg"
-                        }
-                    }                         
-                ]            
-            }
         ]
     };
 }
