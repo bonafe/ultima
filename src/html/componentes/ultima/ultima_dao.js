@@ -11,7 +11,7 @@ export class UltimaDAO extends EventTarget{
 
     static instancia = undefined;
     static NOME_BANCO = "UltimaDB";
-    static VERSAO = 1;
+    static VERSAO = 2;
 
 
 
@@ -176,23 +176,41 @@ export class UltimaDAO extends EventTarget{
             console.info (`Função de upgrade do banco: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
             this.banco = request.result;                        
 
-            this.criarTabelas();                        
+            this.atualizacaoVersao(evento.oldVersion);                        
         };
     }
 
 
 
-    criarTabelas(){      
+    atualizacaoVersao(versaoAnterior){      
 
-        console.info ("Criando ObjectStores");
-        
-        let object_store_views = this.banco.createObjectStore("views", { keyPath: "id", autoIncrement: true });                    
-        object_store_views.createIndex("index_descricao_views", "descricao", { unique: false});    
+        [
+            () => {
+                console.info ("Criando ObjectStores - VERSÃO 1");
+                let object_store_views = this.banco.createObjectStore("telas", { keyPath: "id", autoIncrement: true });                    
+                object_store_views.createIndex("index_descricao_telas", "descricao", { unique: false});    
 
-        let object_store_elementos = this.banco.createObjectStore("elementos", { keyPath: "id", autoIncrement: true });                            
+                let object_store_elementos = this.banco.createObjectStore("elementos", { keyPath: "id", autoIncrement: true });                            
 
-        let object_store_componentes = this.banco.createObjectStore("componentes", { keyPath: "id", autoIncrement: true });
-        object_store_componentes.createIndex("index_nome_componente", "nome", { unique: false});
+                let object_store_componentes = this.banco.createObjectStore("componentes", { keyPath: "id", autoIncrement: true });
+                object_store_componentes.createIndex("index_nome_componente", "nome", { unique: false});
+            },
+            () => {
+                console.info ("Atualizando ObjectStores - VERSÃO 2");
+                this.banco.deleteObjectStore("telas");
+
+                let object_store_views = this.banco.createObjectStore("views", { keyPath: "id", autoIncrement: true });                    
+                object_store_views.createIndex("index_descricao_views", "descricao", { unique: false});
+            }
+
+        ].forEach((funcaoDeUpgradeVersao, versao) => {
+            versao++;
+
+            if (versao > versaoAnterior){
+
+                funcaoDeUpgradeVersao();
+            }
+        });
     }
 
 
