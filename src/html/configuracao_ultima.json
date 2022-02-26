@@ -62,7 +62,12 @@
             "id": 5,
             "descricao": "Video do Youtube sobre CSS",
             "dados":{
-                "src":"yMEjLBKyvEg"
+                "src":"yMEjLBKyvEg",
+                "acoes":[
+                    {"descricao":"abrir outro elemento"},
+                    {"descricao":"fechar elemento"},
+                    {"descricao":"mudar de lugar"}
+                ]
             }
         }
     ],
