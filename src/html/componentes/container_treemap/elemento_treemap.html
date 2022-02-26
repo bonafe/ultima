@@ -1,12 +1,14 @@
 <link rel="stylesheet" href="componentes/container_treemap/elemento_treemap.css">
+<link rel="stylesheet" href="componentes/ultima/ultima_view.css">
 <link rel="stylesheet" href="bibliotecas/fontawesome-free-6.0.0-web/css/all.css">
 <div class="container">    
     <nav>
         <nav class="toogle_menu">
             <i class="fa-solid fa-ellipsis" id="menu"></i>
         </nav>
-        <nav class="controles_janela">
-            <!--div><input class="controle_janela" type="button" id="mudarVisualizacao" value="mudar"></input></div-->
+        <nav class="controles_janela">            
+            <div><i class="fa-solid fa-arrow-left controle_janela" id="voltar"></i></div>
+            <div><i class="fa-solid fa-gear controle_janela" id="configuracao"></i></div>
             <div><i class="fa fa-search-minus controle_janela" id="diminuir"></i></div>
             <div><i class="fa fa-search-plus controle_janela" id="aumentar"></i></div>
             <div><i class="fa fa-fast-backward controle_janela" id="irParaInicio"></i></div>
@@ -19,6 +21,21 @@
             <div><i class="fa fa-times controle_janela" id="fechar"></i></div>
         </nav>
     </nav>
-    <div class='container_componente' id='containerComponente'>        
-    </div>    
+    <div class='container_elemento_principal' id='containerComponente'>        
+    </div>
+    <div class='container_elemento_principal' id='containerConfiguracao'>
+        <nav class="navegacao_ultima cabecalho_principal_ultima">
+            <select name="select" id="selectComponente">
+                <option value="valor1">Editor JSON</option>
+                <option value="valor2" selected>Mapa (Google)</option>
+                <option value="valor3">Mapa (OpenStreeMap)</option>
+                <option value="valor3">Mapa Interativo</option>
+            </select>
+            <a href="#">Duplicar</a>
+            <a href="#">Carregar Template</a>
+        </nav>
+        <div class='container_dados' id="containerDados">
+            <editor-json id="editorDados"></editor-json>
+        </div>    
+    </div>
 </div>

@@ -9,13 +9,7 @@ export class ContainerTreeMap extends ComponenteBase{
     constructor(){
         super({templateURL:"/componentes/container_treemap/container_treemap.html", shadowDOM:false});        
 
-        this._tela = undefined;
-        this._componentes = undefined;
-
-        this.componentePadrao = {
-            nome: "editor-json",
-            url: "/componentes/editor_json/editor_json.js"
-        };
+        this._view = undefined;
 
         this.addEventListener("carregou", () => {
 
@@ -37,10 +31,10 @@ export class ContainerTreeMap extends ComponenteBase{
 
     renderizar() {
 
-        if (this.container && this._tela && this._componentes){
+        if (this.container && this._view){
 
             //Atualiza o atributo ordem do elemento
-            this._tela.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
+            this._view.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
 
             if (!this.node){
                 this.criarTreeMap();
@@ -54,7 +48,7 @@ export class ContainerTreeMap extends ComponenteBase{
 
     adicionarElemento(elemento){                                          
 
-        this._tela.elementos.push(JSON.parse(JSON.stringify(elemento)));
+        this._view.elementos.push(JSON.parse(JSON.stringify(elemento)));
                                
         this.renderizar();    
     }
@@ -86,7 +80,7 @@ export class ContainerTreeMap extends ComponenteBase{
 
         this.treemap = d3.treemap().size([this.widthTreemap, this.heightTreemap]);
         
-        const root = d3.hierarchy(this.tela, (d) => d.elementos)
+        const root = d3.hierarchy(this.view, (d) => d.elementos)
             //Valor do elemento para cálculo da área do TreeMap
             .sum( d => {
                 return d.importancia;
@@ -108,15 +102,7 @@ export class ContainerTreeMap extends ComponenteBase{
             .enter()
                 .append("elemento-treemap")                    
                     .attr("class", "node container")
-                    .attr("id",(d) => {
-                        //console.log (`+++ Adicionando elemento-treemap: ${d.data.id} (ordem: ${d.data.ordem})`);
-                        return JSON.stringify(d.data.id);
-                    })
-                    .attr("componente",(d) => {
-                        let componente = this.componentes.find (c => c.nome == d.data.componente.padrao);
-                        return JSON.stringify((componente ? componente : this.componentePadrao));
-                    })
-                    .attr("dados",(d) => JSON.stringify(d.data.dados))                        
+                    .attr("id",(d) => JSON.stringify(d.data.id))                     
                     .style("left", (d) => d.x0 + "px")
                     .style("top", (d) => d.y0 + "px")
                     .style("width", (d) => Math.max(0, d.x1 - d.x0 - 1) + "px")
@@ -143,34 +129,23 @@ export class ContainerTreeMap extends ComponenteBase{
         this.enterUpdateExit();
     }
 
-    set componentes(novosComponentes){        
-        this._componentes = JSON.parse(JSON.stringify(novosComponentes));
+
+
+    set view(novaview){        
+        this._view = JSON.parse(JSON.stringify(novaview));
         this.renderizar();
     }
 
 
 
-    get componentes(){
-        return this._componentes;
-    }
-
-
-
-    set tela(novaTela){        
-        this._tela = JSON.parse(JSON.stringify(novaTela));
-        this.renderizar();
-    }
-
-
-
-    get tela(){
-        return this._tela;
+    get view(){
+        return this._view;
     }
 
 
 
     static get observedAttributes() {
-        return ['tela','componentes'];
+        return ['view'];
     }
 
 
@@ -178,20 +153,11 @@ export class ContainerTreeMap extends ComponenteBase{
     attributeChangedCallback(nomeAtributo, valorAntigo, novoValor) {
 
         //Atributo componente é usado pelo ElementoTreeMap para definir qual componente renderizar
-        if (nomeAtributo.localeCompare("tela") == 0){
+        if (nomeAtributo.localeCompare("view") == 0){
 
-            //console.log ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NOVOS DADOS DE TELA (via attributeChangedCallback[tela])");
-
-            this._tela = JSON.parse(novoValor);
+            this._view = JSON.parse(novoValor);
             this.renderizar();
-        }
-
-        //Atributo componente é usado pelo ElementoTreeMap para definir qual componente renderizar
-        if (nomeAtributo.localeCompare("componentes") == 0){
-
-            this._componentes = JSON.parse(novoValor);
-            this.renderizar();
-        }        
+        }       
     }
 
 
@@ -209,7 +175,7 @@ export class ContainerTreeMap extends ComponenteBase{
             {evento:ElementoTreeMap.EVENTO_IR_PARA_INICIO, funcao:this.irParaInicio},
             {evento:ElementoTreeMap.EVENTO_IR_PARA_FIM, funcao:this.irParaFim},            
             {evento:ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, funcao:this.mudarVisualizacao},
-            {evento:UltimaEvento.EVENTO_ATUALIZACAO_DADOS, funcao:this.atualizacaoDados},
+            {evento:UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, funcao:this.atualizacaoElemento},            
             {evento:UltimaEvento.EVENTO_SELECAO_OBJETO, funcao:this.selecaoObjeto},
         ].forEach (e => {
             novosNos.on (e.evento, e.funcao.bind(this));                
@@ -221,7 +187,7 @@ export class ContainerTreeMap extends ComponenteBase{
     atualizouTreemap(){
         //Cria um novo evento indicando dados do componente
         let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, {                    
-           tela: JSON.parse(JSON.stringify(this.tela))
+           view: JSON.parse(JSON.stringify(this.view))
        });
    
        this.dispatchEvent(eventoCompleto);   
@@ -246,7 +212,7 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_AUMENTAR elemento Treemap: ${evento.detail}`);
 
         let idElementoProcurado = evento.detail;
-        let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
+        let elemento = this.view.elementos.find (elemento => elemento.id == idElementoProcurado);
 
         if (evento.detail.mousemove){
             elemento.importancia *= 1.01;
@@ -268,7 +234,7 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_DIMINUIR elemento Treemap: ${evento.detail}`);
 
         let idElementoProcurado = evento.detail;
-        let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
+        let elemento = this.view.elementos.find (elemento => elemento.id == idElementoProcurado);
         //TODO: Tamanho mínimo???
         elemento.importancia *= 0.50;
         
@@ -285,9 +251,9 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_MAXIMIZAR elemento Treemap: ${evento.detail}`);
 
         let idElementoProcurado = evento.detail;
-        let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
+        let elemento = this.view.elementos.find (elemento => elemento.id == idElementoProcurado);
 
-        let somaImportanciaOutros = this.tela.elementos.reduce ((valorAnterior, elementoAtual) => {
+        let somaImportanciaOutros = this.view.elementos.reduce ((valorAnterior, elementoAtual) => {
             if (elementoAtual.id != elemento.id){                        
                 return valorAnterior + elementoAtual.importancia;
             }else{
@@ -310,9 +276,9 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_MINIMIZAR elemento Treemap: ${evento.detail}`);
 
         let idElementoProcurado = evento.detail;
-        let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
+        let elemento = this.view.elementos.find (elemento => elemento.id == idElementoProcurado);
 
-        let menorImportancia = this.tela.elementos.reduce ((valorAnterior, elementoAtual) => {
+        let menorImportancia = this.view.elementos.reduce ((valorAnterior, elementoAtual) => {
             if (elementoAtual.importancia < valorAnterior){
                 return elementoAtual.importancia;
             }else{
@@ -335,13 +301,13 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_RESTAURAR elemento Treemap: ${evento.detail}`);                
 
         let idElementoProcurado = evento.detail;
-        let elemento = this.tela.elementos.find (elemento => elemento.id == idElementoProcurado);
+        let elemento = this.view.elementos.find (elemento => elemento.id == idElementoProcurado);
 
-        let somaImportancia = this.tela.elementos.reduce ((valorAnterior, elementoAtual) => {                    
+        let somaImportancia = this.view.elementos.reduce ((valorAnterior, elementoAtual) => {                    
             return valorAnterior + elementoAtual.importancia;                    
         },0);
         
-        const mediaImportancia = somaImportancia / this.tela.elementos.length || 0;
+        const mediaImportancia = somaImportancia / this.view.elementos.length || 0;
 
         elemento.importancia = mediaImportancia;
 
@@ -358,12 +324,12 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_FECHAR elemento Treemap: ${evento.detail}`);                
 
         let idElementoProcurado = evento.detail;
-        let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);
+        let indice = this.view.elementos.map(e => e.id).indexOf (idElementoProcurado);
 
         if (indice >= 0){
 
             //Remove o elemento da posição
-            let [elemento] = this.tela.elementos.splice(indice,1);                                        
+            let [elemento] = this.view.elementos.splice(indice,1);                                        
 
             this.renderizar();
             this.atualizouTreemap();                                                     
@@ -379,14 +345,14 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_IR_PARA_TRAS elemento Treemap: ${evento.detail}`);                
 
         let idElementoProcurado = evento.detail;
-        let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);
+        let indice = this.view.elementos.map(e => e.id).indexOf (idElementoProcurado);
 
         if (indice > 0){
 
             //Remove o elemento da posição
-            let [elemento] = this.tela.elementos.splice(indice,1);
+            let [elemento] = this.view.elementos.splice(indice,1);
             //O recoloca em uma posição anterior
-            this.tela.elementos.splice(indice-1,0,elemento);                                        
+            this.view.elementos.splice(indice-1,0,elemento);                                        
 
             this.renderizar();                    
             this.atualizouTreemap();            
@@ -402,14 +368,14 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_IR_PARA_FRENTE elemento Treemap: ${evento.detail}`);                
 
         let idElementoProcurado = evento.detail;
-        let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);
+        let indice = this.view.elementos.map(e => e.id).indexOf (idElementoProcurado);
         
-        if (indice < (this.tela.elementos.length-1)){
+        if (indice < (this.view.elementos.length-1)){
             
             //Remove o elemento da posição
-            let [elemento] = this.tela.elementos.splice(indice,1);                    
+            let [elemento] = this.view.elementos.splice(indice,1);                    
             //O recoloca em uma posição posterior
-            this.tela.elementos.splice(indice+1,0,elemento);                                        
+            this.view.elementos.splice(indice+1,0,elemento);                                        
 
             this.renderizar();   
             this.atualizouTreemap();                             
@@ -425,14 +391,14 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_IR_PARA_FIM elemento Treemap: ${evento.detail}`);                
         ;
         let idElementoProcurado = evento.detail;
-        let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);
+        let indice = this.view.elementos.map(e => e.id).indexOf (idElementoProcurado);
 
-        if (indice < (this.tela.elementos.length-1)){
+        if (indice < (this.view.elementos.length-1)){
 
             //Remove o elemento da posição
-            let [elemento] = this.tela.elementos.splice(indice,1);
+            let [elemento] = this.view.elementos.splice(indice,1);
             //O recoloca no final
-            this.tela.elementos.splice(this.tela.elementos.length,0,elemento);
+            this.view.elementos.splice(this.view.elementos.length,0,elemento);
                         
             this.renderizar(); 
             this.atualizouTreemap();            
@@ -448,14 +414,14 @@ export class ContainerTreeMap extends ComponenteBase{
         //console.info (`--------------------------------> EVENTO_IR_PARA_INICIO elemento Treemap: ${evento.detail}`);                
 
         let idElementoProcurado = evento.detail;
-        let indice = this.tela.elementos.map(e => e.id).indexOf (idElementoProcurado);
+        let indice = this.view.elementos.map(e => e.id).indexOf (idElementoProcurado);
 
         if (indice > 0){
 
             //Remove o elemento da posição
-            let [elemento] = this.tela.elementos.splice(indice,1);
+            let [elemento] = this.view.elementos.splice(indice,1);
             //O recoloca no inicio
-            this.tela.elementos.splice(0,0,elemento);                       
+            this.view.elementos.splice(0,0,elemento);                       
 
             this.renderizar(); 
             this.atualizouTreemap();                
@@ -464,20 +430,20 @@ export class ContainerTreeMap extends ComponenteBase{
 
 
 
-    atualizacaoDados(elementoTreemap) {
+    atualizacaoElemento(elementoTreemap) {
         
         let evento = d3.event;
 
         //Para a propagaçaõ do evento do componente
         evento.stopPropagation();
 
-        let elemento = this.tela.elementos.find(e => e.id == evento.detail.id);
+        let elemento = this.view.elementos.find(e => e.id == evento.detail.id);
 
         //Mantêm esta referência dos dados atualizada com a mudança
         elemento.dados = evento.detail.dados;
 
         //Cria um novo evento acrescentando o restante do elemento
-        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, 
+        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, 
             JSON.parse(JSON.stringify(elemento))
         );
         
@@ -494,7 +460,7 @@ export class ContainerTreeMap extends ComponenteBase{
         evento.stopPropagation();
 
         //Cria uma copia por valor para enviar de forma segura no evento
-        let elemento =  JSON.parse(JSON.stringify(this.tela.elementos.find(e => e.id == evento.detail.id_origem)));
+        let elemento =  JSON.parse(JSON.stringify(this.view.elementos.find(e => e.id == evento.detail.id_origem)));
 
         //Cria um novo evento indicando dados do componente
         let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO,{

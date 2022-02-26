@@ -30,7 +30,7 @@ export class UltimaView extends ComponenteBase{
                 
             this.adicionarComportamentoSelecaoObjetos();
 
-            this.adicionarComportamentoAtualizacaoDados();
+            this.adicionarComportamentoAtualizacaoDadosEComponente();
 
             this.adicionarComportamentoAtualizacaoTreemap();
             
@@ -61,20 +61,12 @@ export class UltimaView extends ComponenteBase{
     criarEIniciarControleNavegadorTreemap(){
         this.controleNavegador = this.noRaiz.querySelector("container-treemap");
 
-            //Primeiro carrega os componentes
-            UltimaDAO.getInstance().componentes().then( componentes => {                
+            UltimaDAO.getInstance().views().then (views => {
 
-                this.componentes = componentes;
-                this.controleNavegador.setAttribute("componentes", JSON.stringify(componentes));                                            
-
-                //Depois carrega as telas
-                UltimaDAO.getInstance().telas().then (telas => {
-
-                    //TODO: só está pegando a primeira tela
-                    this.tela  = telas[0];
-                    this.controleNavegador.tela = JSON.parse(JSON.stringify(this.tela));
-                });
-            });           
+                //TODO: só está pegando a primeira view
+                this.view  = views[0];
+                this.controleNavegador.view = JSON.parse(JSON.stringify(this.view));
+            });                          
     }
 
 
@@ -82,24 +74,24 @@ export class UltimaView extends ComponenteBase{
     adicionarComportamentoAtualizacaoTreemap(){
         this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, evento => {
             
-            this.tela = evento.detail.tela;
+            this.view = evento.detail.view;
 
             //Remove o elemento de configuracao para salvar (senão ficaria recursiva a configuracao)
-            let indice = this.tela.elementos.map(e => e.componentePadrao).indexOf ("configuracao-ultima");
+            let indice = this.view.elementos.map(e => e.componentePadrao).indexOf ("configuracao-ultima");
 
             if (indice >= 0){
-                this.tela.elementos.splice(indice,1);
+                this.view.elementos.splice(indice,1);
             }
 
 
-            UltimaDAO.getInstance().atualizarTela(this.tela);
+            UltimaDAO.getInstance().atualizarView(this.view);
         });
     }
 
 
 
-    adicionarComportamentoAtualizacaoDados(){
-        this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
+    adicionarComportamentoAtualizacaoElemento(){
+        this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, evento => {
 
             if (evento.detail.componente.padrao == "configuracao-ultima"){
 
@@ -108,7 +100,7 @@ export class UltimaView extends ComponenteBase{
             }else{
                 
                 let id_elemento = evento.detail.id;
-                let elemento = this.tela.elementos.find (elemento => elemento.id == id_elemento);
+                let elemento = this.view.elementos.find (elemento => elemento.id == id_elemento);
     
                 elemento.dados = evento.detail.dados;
                 elemento.componente = evento.detail.componente;
@@ -116,7 +108,27 @@ export class UltimaView extends ComponenteBase{
 
                 
 
-                UltimaDAO.getInstance().atualizarTela(this.tela); 
+                UltimaDAO.getInstance().atualizarView(this.view); 
+            }                               
+        });
+
+        this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_COMPONENTE, evento => {
+
+            if (evento.detail.componente.padrao == "configuracao-ultima"){
+
+                this.atualizarConfiguracao(evento.detail);
+
+            }else{
+                
+                let id_elemento = evento.detail.id;
+                let elemento = this.view.elementos.find (elemento => elemento.id == id_elemento);
+    
+                elemento.dados = evento.detail.dados;
+                elemento.componente = evento.detail.componente;
+                elemento.descricao = evento.detail.descricao;          
+                
+
+                UltimaDAO.getInstance().atualizarView(this.view); 
             }                               
         });
     }
@@ -208,10 +220,10 @@ export class UltimaView extends ComponenteBase{
     adicionarElemento(componentesCompativeis, componentePadrao, dados){
 
         let novoElemento = {                        
-            "id": this.proximoIdElemento(this.tela.elementos), 
-            "ordem": this.proximaOrdem(this.tela.elementos),
+            "id": this.proximoIdElemento(this.view.elementos), 
+            "ordem": this.proximaOrdem(this.view.elementos),
             "descricao": `Componente: ${componentePadrao}`,
-            "importancia": this.mediaImportancia(this.tela.elementos),
+            "importancia": this.mediaImportancia(this.view.elementos),
             "componente":{
                 "padrao": componentePadrao,
                 "compativeis": componentesCompativeis
@@ -222,8 +234,8 @@ export class UltimaView extends ComponenteBase{
         //Não persiste o elemento de configuração
         if (novoElemento.componente.padrao != "configuracao-ultima"){        
 
-            this.tela.elementos.push(novoElemento);                                                      
-            UltimaDAO.getInstance().atualizarTela(this.tela);
+            this.view.elementos.push(novoElemento);                                                      
+            UltimaDAO.getInstance().atualizarView(this.view);
         }
 
         this.controleNavegador.adicionarElemento(novoElemento);
@@ -233,7 +245,7 @@ export class UltimaView extends ComponenteBase{
 
     configuracao(){
 
-        let configuracaoUltima = this.tela.elementos.find (e => e.componente.nome == "configuracao-ultima");
+        let configuracaoUltima = this.view.elementos.find (e => e.componente.nome == "configuracao-ultima");
 
         if (configuracaoUltima){
             alert ("Já está aberta a configuração!");
@@ -241,7 +253,7 @@ export class UltimaView extends ComponenteBase{
             this.adicionarElemento (["configuracao-ultima"],"configuracao-ultima",                
                 {
                     componentes: JSON.parse(JSON.stringify(this.componentes)),
-                    tela: JSON.parse(JSON.stringify(this.tela))
+                    view: JSON.parse(JSON.stringify(this.view))
                 } 
             );   
         }
@@ -251,23 +263,25 @@ export class UltimaView extends ComponenteBase{
 
     carregarConfiguracao(configuracao){
 
-        UltimaDAO.getInstance().telas().then (telas => {
+        UltimaDAO.getInstance().views().then (views => {
 
-            //Caso não existam telas na base [1ª Vez]
-            if (telas.length == 0){
+            //Caso não existam views na base [1ª Vez]
+            if (views.length == 0){
 
                 this.componentes = configuracao.componentes;                        
-                this.tela = configuracao.tela;
+                this.elementos = configuracao.elementos;
+                this.views = configuracao.views[0];
 
                 Promise.all([
-                    UltimaDAO.getInstance().atualizarComponentes(this.componentes),
-                    UltimaDAO.getInstance().atualizarTela(this.tela)
+                    UltimaDAO.getInstance().atualizarElementos(this.componentes),
+                    UltimaDAO.getInstance().atualizarComponentes(this.elementos),
+                    UltimaDAO.getInstance().atualizarView(this.views)
                 ]).then (respostas => {        
                     this.configuracoesCarregadas = true;                            
                     this.renderizar();              
                 });
 
-            //Se existirem telas na base não recarrega
+            //Se existirem views na base não recarrega
             //TODO: precisa tratar mudança de versão, colocar versão no arquivo de configuração e fazer merge das configurações se for atualizado
             }else{
                 this.configuracoesCarregadas = true;        
@@ -282,25 +296,25 @@ export class UltimaView extends ComponenteBase{
 
     atualizarConfiguracao(elementoConfiguracao){
         
-        elementoConfiguracao.dados.tela.elementos.forEach(elemento_configuracao => {
+        elementoConfiguracao.dados.view.elementos.forEach(elemento_configuracao => {
 
             let elemento_atualizado = JSON.parse(JSON.stringify(elemento_configuracao));
 
-            //Encontra o índice do elemento da configuração aqui no array de elementos da tela
-            let indice = this.tela.elementos.map(e => e.id).indexOf (elemento_atualizado.id);                                    
+            //Encontra o índice do elemento da configuração aqui no array de elementos da view
+            let indice = this.view.elementos.map(e => e.id).indexOf (elemento_atualizado.id);                                    
 
-            //Remove o elemento atual da tela da posição
-            let [elemento_tela] = this.tela.elementos.splice(indice,1);
+            //Remove o elemento atual da view da posição
+            let [elemento_view] = this.view.elementos.splice(indice,1);
 
             //Coloca uma cópia atualizada em seu lugar
             
-            this.tela.elementos.splice(indice,0,elemento_atualizado);
+            this.view.elementos.splice(indice,0,elemento_atualizado);
 
             this.controleNavegador.atualizarElemento(elemento_atualizado);
         });
 
-        //Persiste a tela atualizada
-        UltimaDAO.getInstance().atualizarTela(this.tela);
+        //Persiste a view atualizada
+        UltimaDAO.getInstance().atualizarView(this.view);
     }
 }
 customElements.define('ultima-view', UltimaView);

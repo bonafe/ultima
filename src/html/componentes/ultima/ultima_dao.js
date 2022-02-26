@@ -59,10 +59,11 @@ export class UltimaDAO extends EventTarget{
 
         return new Promise ((resolve, reject) => {
 
-            this.limparObjectStore("componentes")
-                .then(() => this.limparObjectStore("telas"))
-                    .then(() => this.adicionarComponentesIniciais())
-                        .then(()=> resolve(true));
+            this.limparObjectStore("elementos")
+                .then(() => this.limparObjectStore("componentes"))
+                    .then(() => this.limparObjectStore("views"))
+                        .then(() => this.adicionarComponentesIniciais())
+                            .then(()=> resolve(true));
         
         });      
     }
@@ -70,13 +71,17 @@ export class UltimaDAO extends EventTarget{
     
 
     async componentes(){        
-        return this.lerTodosElementos("componentes");
+        return this.lerTodosRegistros("componentes");
     }
 
 
+    async elementos(){        
+        return this.lerTodosRegistros("elementos");
+    }
 
-    async telas(){        
-        return this.lerTodosElementos("telas");
+
+    async views(){        
+        return this.lerTodosRegistros("views");
     }
 
 
@@ -98,22 +103,15 @@ export class UltimaDAO extends EventTarget{
     }
 
 
-
-    async atualizarTela (tela){      
-        return this.atualizarRegistro (tela, "telas");    
+    async atualizarElemento (elemento){      
+        return this.atualizarRegistro (elemento, "elementos");    
     }
 
 
-
-    telaAtual(){
-        //Recuperar a tela atual do banco
+    async atualizarView (view){      
+        return this.atualizarRegistro (view, "views");    
     }
 
-
-
-    removerTela(tela){
-        //Remove a tela do banco        
-    }
 
 
 
@@ -171,8 +169,10 @@ export class UltimaDAO extends EventTarget{
 
         console.info ("Criando ObjectStores");
         
-        let object_store_telas = this.banco.createObjectStore("telas", { keyPath: "id", autoIncrement: true });                    
-        object_store_telas.createIndex("index_descricao_tela", "descricao", { unique: false});    
+        let object_store_views = this.banco.createObjectStore("views", { keyPath: "id", autoIncrement: true });                    
+        object_store_views.createIndex("index_descricao_views", "descricao", { unique: false});    
+
+        let object_store_elementos = this.banco.createObjectStore("elementos", { keyPath: "id", autoIncrement: true });                            
 
         let object_store_componentes = this.banco.createObjectStore("componentes", { keyPath: "id", autoIncrement: true });
         object_store_componentes.createIndex("index_nome_componente", "nome", { unique: false});
@@ -182,7 +182,7 @@ export class UltimaDAO extends EventTarget{
 
     adicionarComponentesIniciais(){
         return new Promise((resolve, reject) => {
-            let transacao = this.banco.transaction (["telas","componentes"], "readwrite")
+            let transacao = this.banco.transaction (["views","componentes"], "readwrite")
            
             let osComponentes = transacao.objectStore ("componentes");      
             BaseInicialUltima.base.componentes.forEach (componente => {
@@ -206,7 +206,7 @@ export class UltimaDAO extends EventTarget{
 
 
 
-    async lerTodosElementos (objectStore){        
+    async lerTodosRegistros (objectStore){        
 
         await this.aguardarBanco();
 
