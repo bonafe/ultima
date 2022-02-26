@@ -69,7 +69,9 @@ export class ElementoTreeMap extends ComponenteBase {
 
             }else{
 
-                import("/componentes/editor_json/editor_json.js").then(modulo => {
+                let url_editor_json = super.prefixoEndereco + "/componentes/editor_json/editor_json.js";                
+
+                import(url_editor_json).then(modulo => {
                     
                     this.editorDados = this.noRaiz.querySelector("#editorDados");
 
