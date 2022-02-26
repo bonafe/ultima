@@ -1,4 +1,5 @@
 import { UltimaDAO } from './componentes/ultima/ultima_dao.js';
+import { UltimaEvento } from './componentes/ultima/ultima_evento.js';
 import { UltimaView } from './componentes/ultima/ultima_view.js';
 window.onload = () => {
   
@@ -27,4 +28,8 @@ window.openFullscreen = () => {
       } else {
         document.exitFullscreen();
       }
+}
+
+function onYouTubeIframeAPIReady() {
+  window.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_PLAYER_YOUTUBE_CARREGADO,{}));
 }
