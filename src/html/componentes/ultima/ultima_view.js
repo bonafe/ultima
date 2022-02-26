@@ -31,8 +31,6 @@ export class UltimaView extends ComponenteBase{
             this.adicionarComportamentoSelecaoObjetos();
 
             this.adicionarComportamentoAtualizacaoElemento();
-
-            this.adicionarComportamentoAtualizacaoTreemap();
             
             this.renderizado = true;
         }         
@@ -64,7 +62,7 @@ export class UltimaView extends ComponenteBase{
             UltimaDAO.getInstance().views().then (views => {
                 
                 this.views  = views;
-                
+
                 //TODO: só está pegando a primeira view
                 this.controleNavegador.view = JSON.parse(JSON.stringify(this.views[0]));
             });                          
@@ -72,22 +70,7 @@ export class UltimaView extends ComponenteBase{
 
 
 
-    adicionarComportamentoAtualizacaoTreemap(){
-        this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, evento => {
-            
-            this.view = evento.detail.view;
-
-            //Remove o elemento de configuracao para salvar (senão ficaria recursiva a configuracao)
-            let indice = this.view.elementos.map(e => e.componentePadrao).indexOf ("configuracao-ultima");
-
-            if (indice >= 0){
-                this.view.elementos.splice(indice,1);
-            }
-
-
-            UltimaDAO.getInstance().atualizarView(this.view);
-        });
-    }
+  
 
 
 
@@ -99,26 +82,6 @@ export class UltimaView extends ComponenteBase{
                     this.atualizarConfiguracao(evento.detail);    
                 }
             });                                                       
-        });
-
-        this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_COMPONENTE, evento => {
-
-            if (evento.detail.componente.padrao == "configuracao-ultima"){
-
-                this.atualizarConfiguracao(evento.detail);
-
-            }else{
-                
-                let id_elemento = evento.detail.id;
-                let elemento = this.view.elementos.find (elemento => elemento.id == id_elemento);
-    
-                elemento.dados = evento.detail.dados;
-                elemento.componente = evento.detail.componente;
-                elemento.descricao = evento.detail.descricao;          
-                
-
-                UltimaDAO.getInstance().atualizarView(this.view); 
-            }                               
         });
     }
 
@@ -234,7 +197,7 @@ export class UltimaView extends ComponenteBase{
 
     configuracao(){
 
-        let configuracaoUltima = this.view.elementos.find (e => e.componente.nome == "configuracao-ultima");
+        let configuracaoUltima = this.views[0].elementos.find (e => e.componente.nome == "configuracao-ultima");
 
         if (configuracaoUltima){
             alert ("Já está aberta a configuração!");
@@ -242,7 +205,7 @@ export class UltimaView extends ComponenteBase{
             this.adicionarElemento (["configuracao-ultima"],"configuracao-ultima",                
                 {
                     componentes: JSON.parse(JSON.stringify(this.componentes)),
-                    view: JSON.parse(JSON.stringify(this.view))
+                    view: JSON.parse(JSON.stringify(this.views[0]))
                 } 
             );   
         }

@@ -195,7 +195,7 @@ export class UltimaDAO extends EventTarget{
                 console.info ("VERSÃO 3 - Apaga tudo e recria");
                 
                 //Apaga todas as ObjectStore do banco
-                Array.from(this.banco.objectStoreNames).forEach (objectStore => this.banco.deleteObjectStore("objectStore"));
+                Array.from(this.banco.objectStoreNames).forEach (objectStore => this.banco.deleteObjectStore(objectStore));
 
                 let object_store_componentes = this.banco.createObjectStore("componentes", { keyPath: "id", autoIncrement: true });
                 object_store_componentes.createIndex("index_nome_componente", "nome", { unique: false});
