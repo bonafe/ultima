@@ -224,10 +224,10 @@ export class UltimaDAO extends EventTarget{
 
 
     async lerTodosRegistros (objectStore){        
-        
-        return new Promise((resolve, reject) => {
+            
+        await this.aguardarBanco();
 
-            await this.aguardarBanco();
+        return new Promise((resolve, reject) => {
 
             let object_store = this.banco.transaction (objectStore, "readonly").objectStore (objectStore);
 
