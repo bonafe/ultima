@@ -62,10 +62,11 @@ export class UltimaView extends ComponenteBase{
         this.controleNavegador = this.noRaiz.querySelector("container-treemap");
 
             UltimaDAO.getInstance().views().then (views => {
-
+                
+                this.views  = views;
+                
                 //TODO: só está pegando a primeira view
-                this.view  = views[0];
-                this.controleNavegador.view = JSON.parse(JSON.stringify(this.view));
+                this.controleNavegador.view = JSON.parse(JSON.stringify(this.views[0]));
             });                          
     }
 

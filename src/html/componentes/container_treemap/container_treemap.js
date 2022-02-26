@@ -186,15 +186,6 @@ export class ContainerTreeMap extends ComponenteBase{
 
 
 
-    atualizouTreemap(){
-        //Cria um novo evento indicando dados do componente
-        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_TREEMAP, {                    
-           view: JSON.parse(JSON.stringify(this.view))
-       });
-   
-       this.dispatchEvent(eventoCompleto);   
-    }
-
 
 
     processarNovasDimensoes(largura, altura){
@@ -224,7 +215,7 @@ export class ContainerTreeMap extends ComponenteBase{
         }
         
         this.renderizar();                  
-        this.atualizouTreemap();
+        this.salvarView();
     }
 
 
@@ -241,7 +232,7 @@ export class ContainerTreeMap extends ComponenteBase{
         elemento.importancia *= 0.50;
         
         this.renderizar();   
-        this.atualizouTreemap();
+        this.salvarView();
     }
 
 
@@ -266,7 +257,7 @@ export class ContainerTreeMap extends ComponenteBase{
         elemento.importancia = somaImportanciaOutros;
 
         this.renderizar();
-        this.atualizouTreemap();          
+        this.salvarView();         
     }
 
 
@@ -291,7 +282,7 @@ export class ContainerTreeMap extends ComponenteBase{
         elemento.importancia = menorImportancia;
 
         this.renderizar();
-        this.atualizouTreemap();         
+        this.salvarView();        
     }
 
 
@@ -314,7 +305,7 @@ export class ContainerTreeMap extends ComponenteBase{
         elemento.importancia = mediaImportancia;
 
         this.renderizar();   
-        this.atualizouTreemap();        
+        this.salvarView();       
     }
 
 
@@ -334,7 +325,7 @@ export class ContainerTreeMap extends ComponenteBase{
             let [elemento] = this.view.elementos.splice(indice,1);                                        
 
             this.renderizar();
-            this.atualizouTreemap();                                                     
+            this.salvarView();                                                    
         }
     }
 
@@ -357,7 +348,7 @@ export class ContainerTreeMap extends ComponenteBase{
             this.view.elementos.splice(indice-1,0,elemento);                                        
 
             this.renderizar();                    
-            this.atualizouTreemap();            
+            this.salvarView();           
         }
     }
 
@@ -380,7 +371,7 @@ export class ContainerTreeMap extends ComponenteBase{
             this.view.elementos.splice(indice+1,0,elemento);                                        
 
             this.renderizar();   
-            this.atualizouTreemap();                             
+            this.salvarView();                            
         }
     }
 
@@ -403,7 +394,7 @@ export class ContainerTreeMap extends ComponenteBase{
             this.view.elementos.splice(this.view.elementos.length,0,elemento);
                         
             this.renderizar(); 
-            this.atualizouTreemap();            
+            this.salvarView();           
         }
     }
 
@@ -426,7 +417,7 @@ export class ContainerTreeMap extends ComponenteBase{
             this.view.elementos.splice(0,0,elemento);                       
 
             this.renderizar(); 
-            this.atualizouTreemap();                
+            this.salvarView();               
         }
     }
 
@@ -449,14 +440,17 @@ export class ContainerTreeMap extends ComponenteBase{
         //Coloca o elemento atualizado no lugar
         this.view.elementos.splice(indice,0,elemento_view_atualizado);  
 
-        UltimaDAO.getInstance().atualizarView(this.view).then(()=>{
-            //Cria um novo evento acrescentando o restante do elemento
-            this.dispararEventoAtualizouView();
-        })                                       
+        this.salvarView();                           
     }
 
-    dispararEventoAtualizouView(){
-        this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_VIEW,{id:this.view.id})); 
+
+
+    salvarView(){
+        UltimaDAO.getInstance().atualizarView(this.view).then(()=>{
+
+            //Cria um novo evento acrescentando o restante do elemento
+            this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_VIEW,{id:this.view.id})); 
+        });
     }
 
 
