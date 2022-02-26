@@ -73,23 +73,41 @@ export class UltimaDAO extends EventTarget{
     async componentes(){        
         return this.lerTodosRegistros("componentes");
     }
+    async componente(chave){        
+        return this.trazerRegistro(chave, "componentes", "index_nome_componente");
+    }
 
 
     async elementos(){        
         return this.lerTodosRegistros("elementos");
+    }
+    async elemento(chave){        
+        return this.trazerRegistro(chave, "elementos");
     }
 
 
     async views(){        
         return this.lerTodosRegistros("views");
     }
+    async elemento_view(chave, chave_elemento){        
+        return this.trazerRegistro(chave, "views").then(view => view.elementos.find(e => e.id == chave_elemento));
+    }
 
-
-
+    
     async atualizarComponentes (componentes){
         return new Promise((resolve, reject) => {
             this.limparObjectStore("componentes").then(()=>{
-                Promisse.all(componentes.map (componente => this.atualizarComponentes(componente))).then(retornos => {
+                Promise.all(componentes.map (componente => this.atualizarComponente(componente))).then(retornos => {
+                    resolve(true);
+                })
+            })
+        });
+    }
+
+    async atualizarElementos (elementos){
+        return new Promise((resolve, reject) => {
+            this.limparObjectStore("elementos").then(()=>{
+                Promise.all(elementos.map (elemento => this.atualizarElemento(elemento))).then(retornos => {
                     resolve(true);
                 })
             })
@@ -97,8 +115,7 @@ export class UltimaDAO extends EventTarget{
     }
 
 
-
-    async atualizarComponentes (componente){      
+    async atualizarComponente (componente){      
         return this.atualizarRegistro (componente, "componentes");    
     }
 
@@ -227,6 +244,30 @@ export class UltimaDAO extends EventTarget{
         });
     }
 
+    
+    async trazerRegistro (chave, objectStore, indice){
+              
+        await this.aguardarBanco();
+
+        let object_store = this.banco.transaction (objectStore, "readonly").objectStore (objectStore);
+
+        let elemento_requisicao = object_store;
+
+        if (indice){
+            elemento_requisicao = object_store.index(indice);
+        }
+
+        return new Promise((resolve, reject) => { 
+            
+            let request = elemento_requisicao.get(chave);
+            request.onsuccess = evento => {                
+                resolve(request.result);
+            };    
+            request.onerror = evento => {
+                reject("");
+            };
+        });    
+     }
 
 
     async atualizarRegistro (registro, objectStore){

@@ -30,7 +30,7 @@ export class UltimaView extends ComponenteBase{
                 
             this.adicionarComportamentoSelecaoObjetos();
 
-            this.adicionarComportamentoAtualizacaoDadosEComponente();
+            this.adicionarComportamentoAtualizacaoElemento();
 
             this.adicionarComportamentoAtualizacaoTreemap();
             
@@ -273,8 +273,8 @@ export class UltimaView extends ComponenteBase{
                 this.views = configuracao.views[0];
 
                 Promise.all([
-                    UltimaDAO.getInstance().atualizarElementos(this.componentes),
-                    UltimaDAO.getInstance().atualizarComponentes(this.elementos),
+                    UltimaDAO.getInstance().atualizarElementos(this.elementos),
+                    UltimaDAO.getInstance().atualizarComponentes(this.componentes),
                     UltimaDAO.getInstance().atualizarView(this.views)
                 ]).then (respostas => {        
                     this.configuracoesCarregadas = true;                            

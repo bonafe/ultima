@@ -1,6 +1,6 @@
 import { ComponenteBase } from '../componente_base.js';
 import { UltimaEvento } from '../ultima/ultima_evento.js';
-import { UltimaDAO } from "./ultima_dao.js";
+import { UltimaDAO } from "../ultima/ultima_dao.js";
 
 
 export class ElementoTreeMap extends ComponenteBase {
@@ -29,51 +29,30 @@ export class ElementoTreeMap extends ComponenteBase {
 
         this.addEventListener("carregou", () => {  
 
+            this.containerComponente = this.noRaiz.querySelector("#containerComponente");
+            this.containerConfiguracao = this.noRaiz.querySelector("#containerConfiguracao");
+            
+            //Estilos da configuração
+            this.noRaiz.querySelector("#voltar").style.display = "none";
+            this.containerComponente.style.display = "flex";
+            this.containerConfiguracao.style.display = "none";
 
-            //TODO: está importando sempre, deveria importar apenas quando fosse usar a configuração
-            import("/componentes/editor_json/editor_json.js").then(modulo => {
-
-                this.containerComponente = this.noRaiz.querySelector("#containerComponente");
-                this.containerConfiguracao = this.noRaiz.querySelector("#containerConfiguracao");
-                this.editorDados = this.noRaiz.querySelector("#editorDados");
-
-                this.editorDados.addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
-                    evento.stopPropagation();
-                    //Cria um novo evento indicando dados do componente
-                    let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, {                                              
-                    dados:evento.detail.novoValor,
-                        id: this._id,                    
-                    });                    
-                    this.dispatchEvent(eventoCompleto);      
-                });
-
-                this.noRaiz.querySelector("#voltar").style.display = "none";
-
-                this.containerComponente.style.display = "flex";
-                this.containerConfiguracao.style.display = "none";
-
-                this.adicionarComportamentoBotoesElementoTreemap();
+            //Comportamento navegação
+            this.adicionarComportamentoBotoesElementoTreemap();
 
 
-                if (this.componente && !this.carregandoComponente){
+            if (this.componente && !this.carregandoComponente){
 
-                    this.carregarComponente();
+                this.carregarComponente();
 
-                }else{
+            }else{
 
-                    this.renderizar(); 
-                }   
-            });                   
+                this.renderizar(); 
+            }                    
         });
     }
 
-    encontrarPai(elemento, tipoElementoProcurado){        
-        if (elemento.tagName.toLowerCase() == tipoElementoProcurado) {
-            return elemento;
-        }else{
-            return this.encontrarPai(elemento.parentElement, tipoElementoProcurado);
-        }
-    }
+
 
     configuracao(abrir){
 
@@ -84,7 +63,25 @@ export class ElementoTreeMap extends ComponenteBase {
             this.noRaiz.querySelector("#voltar").style.display = "block";
             this.noRaiz.querySelector("#configuracao").style.display = "none";
 
-            this.carregarComponentes();
+            if (!this.carregouEditorJSON){
+
+                import("/componentes/editor_json/editor_json.js").then(modulo => {
+                    
+                    this.editorDados = this.noRaiz.querySelector("#editorDados");
+
+                    this.editorDados.addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
+                        evento.stopPropagation();
+                        //Cria um novo evento indicando dados do componente
+                        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, {                                              
+                        dados:evento.detail.novoValor,
+                            id: this._id,                    
+                        });                    
+                        this.dispatchEvent(eventoCompleto);      
+                    });
+                });
+                this.carregarComponentes();
+                this.carregouEditorJSON = true;
+            }
 
         //FECHAR / ENCERRAR
         }else{
@@ -143,15 +140,23 @@ export class ElementoTreeMap extends ComponenteBase {
 
 
     static get observedAttributes() {
-        return ['id'];
+        return ['id','id_view'];
     }
 
 
 
     attributeChangedCallback(nomeAtributo, valorAntigo, novoValor) {
 
+
         if (nomeAtributo.localeCompare("id") == 0){
+
             this._id = Number(novoValor);
+            this.renderizar();
+
+
+        }else if (nomeAtributo.localeCompare("id_view") == 0){
+
+            this._id_view = Number(novoValor);
             this.renderizar();
         }
     }
@@ -160,10 +165,48 @@ export class ElementoTreeMap extends ComponenteBase {
 
     renderizar(){
 
-        if (this.instanciaComponente && this.carregado && this.dados){                                    
+        let elemento = undefined;
+        let elemento_view = undefined;
 
-            this.editorDados.setAttribute("dados", JSON.stringify(this.dados));
-            this.instanciaComponente.setAttribute("dados", JSON.stringify(this.dados));            
+        //Se possui o id do elemento e da View
+        if (this._id && this._id_view){
+
+            Promise.all([
+
+                //Recupera o elemento global
+                UltimaDAO.getInstance().elemento(this._id),
+
+                //Recupera detalhes do elemento na view
+                UltimaDAO.getInstance().elemento_view (this._id_view, this._id)
+
+            ]).then (retornos => {
+
+                [this.elemento, this.elemento_view] = [...retornos];
+                
+                //Recupera detalhes do componente HTML a ser renderizado
+                UltimaDAO.getInstance().componente (this.elemento_view.componente).then(componente => {
+
+                    let deveCarregar = true;
+
+                    if (this.componente){
+                        if (this.componente.nome == componente.nome){
+                            deveCarregar = false;
+                        }
+                    }
+                    if (deveCarregar && !this.carregandoComponente){
+                        this.componente = componente;
+                        this.carregarComponente();
+                    }
+                });                
+            });
+        }
+        
+        if (this.instanciaComponente &&  this.elemento){                                                
+            this.instanciaComponente.setAttribute("dados", JSON.stringify(this.elemento.dados));            
+        }
+
+        if (this.editorDados && this.elemento){
+            this.editorDados.setAttribute("dados", JSON.stringify(this.elemento.dados));
         }
     }
 

@@ -28,26 +28,30 @@
     "elementos": [
         {
             "id": 2,            
-            "descricao": "Componente: exibidor-iframe",            
-            "componente":"exibidor-iframe",
+            "descricao": "Componente: exibidor-iframe",                        
             "dados": {
                 "src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
             }
         },
         {
             "id": 3,            
-            "descricao": "Componente: exibidor-iframe",            
-            "componente":"exibidor-iframe",
+            "descricao": "Componente: exibidor-iframe",                        
             "dados": {
                 "src": "https://www.youtube.com/embed/RwBmiMb97HQ"
             }
         },
         {
             "id": 1,
-            "descricao": "Configuração Última",                        
-            "componente":"exibidor-imagem",
+            "descricao": "Configuração Última",                                    
             "dados": {
                 "src": "./imagens/hubble.jpg"
+            }
+        },
+        {
+            "id": 4,
+            "descricao": "Configuração Última",                                    
+            "dados": {
+                "src": "./imagens/cachorro_01.jpg"
             }
         }
     ],
@@ -59,18 +63,29 @@
                 {
                     "id": 2,
                     "ordem": 0,                    
-                    "importancia": 16                  
+                    "importancia": 16,
+                    "componente":"exibidor-iframe"
                 },
                 {
                     "id": 3,
                     "ordem": 1,
-                    "importancia": 16
+                    "importancia": 16,
+                    "componente":"exibidor-iframe"
                 },
+                               
                 {
                     "id": 1,                    
                     "ordem": 2,
-                    "importancia": 32
+                    "importancia": 32,
+                    "componente":"exibidor-imagem"
+                },
+                {
+                    "id": 4,                    
+                    "ordem": 2,
+                    "importancia": 32,
+                    "componente":"exibidor-imagem"
                 }
+                    
             ]
         }
     ]
