@@ -1,3 +1,4 @@
+import { UltimaDAO } from './componentes/ultima/ultima_dao.js';
 import { UltimaView } from './componentes/ultima/ultima_view.js';
 window.onload = () => {
   
@@ -11,7 +12,10 @@ window.onload = () => {
     });
     document.querySelector("#configuracao").addEventListener("click", () => {
       document.querySelector("ultima-view").configuracao();
-  });
+    });
+    document.querySelector("#ajuda").addEventListener("click", () => {
+      alert (`Última Versão: ${UltimaDAO.VERSAO}`);
+    });
 }
 
 window.openFullscreen = () => {

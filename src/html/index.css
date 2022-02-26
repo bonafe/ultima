@@ -24,6 +24,7 @@ html, body{
     flex-direction: row-reverse;
   }
 .controle_navegacao_principal{  
+    padding-left: 10px;
     transition: 0.3s;
     color: rgb(255, 123, 0);
     opacity: 0.5;
