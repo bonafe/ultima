@@ -63,25 +63,37 @@ export class ElementoTreeMap extends ComponenteBase {
             this.noRaiz.querySelector("#voltar").style.display = "block";
             this.noRaiz.querySelector("#configuracao").style.display = "none";
 
-            if (!this.carregouEditorJSON){
+            if (this.carregouComponentesConfiguracao){
+
+                this.renderizar();
+
+            }else{
 
                 import("/componentes/editor_json/editor_json.js").then(modulo => {
                     
                     this.editorDados = this.noRaiz.querySelector("#editorDados");
 
-                    this.editorDados.addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, evento => {
+                    this.editorDados.addEventListener("change", evento => {
                         evento.stopPropagation();
-                        //Cria um novo evento indicando dados do componente
-                        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, {                                              
-                        dados:evento.detail.novoValor,
-                            id: this._id,                    
-                        });                    
-                        this.dispatchEvent(eventoCompleto);      
+
+                        this.elemento.dados = evento.detail;
+
+                        UltimaDAO.getInstance().atualizarElemento(this.elemento).then(()=>{
+
+                            //Cria um novo evento indicando dados do componente
+                            let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, {                        
+                                id:this._id,
+                                id_view:this._id_view
+                            });                    
+                            this.dispatchEvent(eventoCompleto);      
+                        });
                     });
-                });
-                this.carregarComponentes();
-                this.carregouEditorJSON = true;
-            }
+
+                    this.montarSelectComponente();
+                    this.carregouComponentesConfiguracao = true;
+                    this.renderizar();                   
+                });                
+            }            
 
         //FECHAR / ENCERRAR
         }else{
@@ -94,7 +106,7 @@ export class ElementoTreeMap extends ComponenteBase {
         }
     }
 
-    carregarComponentes(){
+    montarSelectComponente(){
         UltimaDAO.getInstance().componentes().then(componentes => {
             
             this.componentes = componentes;
@@ -115,12 +127,24 @@ export class ElementoTreeMap extends ComponenteBase {
                 }
             });
 
-            select.addEventListener("change", evento => {           
+
+            try{
+                select.removeEventListenter("change", eventoSelecionouComponente.bind(this));
+            }catch(e){};
+
+            select.addEventListener("change", eventoSelecionouComponente.bind(this));
+
+            function eventoSelecionouComponente(evento){           
                 evento.stopPropagation();
                 this.componente = this.componentes.find(c => c.nome == this.noRaiz.querySelector("#selectComponente").value);
-                this.enviarEventoAtualizacaoElemento();
+                
+                this.elemento_view.componente = this.componente.nome;
+
+                //Cria um novo evento indicando dados do componente
+                let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_VIEW, this.elemento_view);                    
+                this.dispatchEvent(eventoCompleto);     
                                         
-            });
+            };
         });
     }
 
@@ -164,9 +188,6 @@ export class ElementoTreeMap extends ComponenteBase {
 
 
     renderizar(){
-
-        let elemento = undefined;
-        let elemento_view = undefined;
 
         //Se possui o id do elemento e da View
         if (this._id && this._id_view){

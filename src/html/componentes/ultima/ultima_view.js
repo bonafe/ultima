@@ -92,24 +92,12 @@ export class UltimaView extends ComponenteBase{
 
     adicionarComportamentoAtualizacaoElemento(){
         this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, evento => {
+            UltimaDAO.getInstance().elemento_view(evento.detail.id_view,evento.detail.id).then (elemento => {
+                if (elemento.componente == "configuracao-ultima"){
 
-            if (evento.detail.componente.padrao == "configuracao-ultima"){
-
-                this.atualizarConfiguracao(evento.detail);
-
-            }else{
-                
-                let id_elemento = evento.detail.id;
-                let elemento = this.view.elementos.find (elemento => elemento.id == id_elemento);
-    
-                elemento.dados = evento.detail.dados;
-                elemento.componente = evento.detail.componente;
-                elemento.descricao = evento.detail.descricao;          
-
-                
-
-                UltimaDAO.getInstance().atualizarView(this.view); 
-            }                               
+                    this.atualizarConfiguracao(evento.detail);    
+                }
+            });                                                       
         });
 
         this.noRaiz.querySelector("container-treemap").addEventListener(UltimaEvento.EVENTO_ATUALIZACAO_COMPONENTE, evento => {
@@ -271,6 +259,8 @@ export class UltimaView extends ComponenteBase{
                 this.componentes = configuracao.componentes;                        
                 this.elementos = configuracao.elementos;
                 this.views = configuracao.views[0];
+
+                console.log ("carregando configuracao do arquivo");
 
                 Promise.all([
                     UltimaDAO.getInstance().atualizarElementos(this.elementos),

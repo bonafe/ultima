@@ -1,6 +1,7 @@
 import { ComponenteBase } from '../componente_base.js';
 import { ElementoTreeMap } from './elemento_treemap.js';
 import { UltimaEvento } from '../ultima/ultima_evento.js';
+import { UltimaDAO } from '../ultima/ultima_dao.js';
 
 
 export class ContainerTreeMap extends ComponenteBase{
@@ -176,7 +177,7 @@ export class ContainerTreeMap extends ComponenteBase{
             {evento:ElementoTreeMap.EVENTO_IR_PARA_INICIO, funcao:this.irParaInicio},
             {evento:ElementoTreeMap.EVENTO_IR_PARA_FIM, funcao:this.irParaFim},            
             {evento:ElementoTreeMap.EVENTO_MUDAR_VISUALIZACAO, funcao:this.mudarVisualizacao},
-            {evento:UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, funcao:this.atualizacaoElemento},            
+            {evento:UltimaEvento.EVENTO_ATUALIZACAO_VIEW, funcao:this.atualizacaoElementoView},            
             {evento:UltimaEvento.EVENTO_SELECAO_OBJETO, funcao:this.selecaoObjeto},
         ].forEach (e => {
             novosNos.on (e.evento, e.funcao.bind(this));                
@@ -431,24 +432,31 @@ export class ContainerTreeMap extends ComponenteBase{
 
 
 
-    atualizacaoElemento(elementoTreemap) {
+    atualizacaoElementoView(elementoTreemap) {
         
         let evento = d3.event;
 
         //Para a propagaçaõ do evento do componente
         evento.stopPropagation();
 
-        let elemento = this.view.elementos.find(e => e.id == evento.detail.id);
+        let elemento_view_atualizado = evento.detail;
 
-        //Mantêm esta referência dos dados atualizada com a mudança
-        elemento.dados = evento.detail.dados;
+        let indice = this.view.elementos.map(e => e.id).indexOf (elemento_view_atualizado.id);
 
-        //Cria um novo evento acrescentando o restante do elemento
-        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, 
-            JSON.parse(JSON.stringify(elemento))
-        );
-        
-        this.dispatchEvent(eventoCompleto);                
+        //Remove o elemento da posição
+        let [elemento] = this.view.elementos.splice(indice,1);
+
+        //Coloca o elemento atualizado no lugar
+        this.view.elementos.splice(indice,0,elemento_view_atualizado);  
+
+        UltimaDAO.getInstance().atualizarView(this.view).then(()=>{
+            //Cria um novo evento acrescentando o restante do elemento
+            this.dispararEventoAtualizouView();
+        })                                       
+    }
+
+    dispararEventoAtualizouView(){
+        this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_VIEW,{id:this.view.id})); 
     }
 
 
