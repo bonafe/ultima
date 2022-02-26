@@ -24,13 +24,18 @@ export class UltimaView extends ComponenteBase{
         //TODO: Deve alterar a exibição caso um novo arquivo seja carregado
         if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
 
-            this.criarEIniciarControleNavegadorTreemap();
-
-            this.adicionarComportamentoMenu();
+            UltimaDAO.getInstance().views().then (views => {
                 
-            this.adicionarComportamentoSelecaoObjetos();
+                this.views  = views;
 
-            this.adicionarComportamentoAtualizacaoElemento();
+                this.criarEIniciarControleNavegadorTreemap();
+
+                this.criarEIniciarMenuDeAcoes();
+                    
+                this.adicionarComportamentoSelecaoObjetos();
+
+                this.adicionarComportamentoAtualizacaoElemento();
+            });
             
             this.renderizado = true;
         }         
@@ -58,14 +63,9 @@ export class UltimaView extends ComponenteBase{
     
     criarEIniciarControleNavegadorTreemap(){
         this.controleNavegador = this.noRaiz.querySelector("container-treemap");
-
-            UltimaDAO.getInstance().views().then (views => {
-                
-                this.views  = views;
-
-                //TODO: só está pegando a primeira view
-                this.controleNavegador.view = JSON.parse(JSON.stringify(this.views[0]));
-            });                          
+            
+        //TODO: só está pegando a primeira view
+        this.controleNavegador.view = JSON.parse(JSON.stringify(this.views[0]));
     }
 
 
@@ -102,22 +102,24 @@ export class UltimaView extends ComponenteBase{
 
 
 
-    adicionarComportamentoMenu(){
-        this.querySelector("#filmes").addEventListener("click", () => {
-            this.adicionarIFrame("https://www.youtube.com/embed/VyHV0BRtdxo");                                                                   
-        });
+    criarEIniciarMenuDeAcoes(){
 
-        this.querySelector("#saude").addEventListener("click", () => {
-            this.adicionarIFrame("https://www.youtube.com/embed/RwBmiMb97HQ");                                                                   
-        });
-        
-        this.querySelector("#agenda").addEventListener("click", () => {
-            this.adicionarIFrame("https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo");                                                                   
-        });              
-                        
-        this.querySelector("#musicas").addEventListener("click", () => {
-            this.adicionarIFrame("https://www.youtube.com/embed/KWZGAExj-es");                                                                   
-        }); 
+        let menuAcoes = this.noRaiz.querySelector("#menuAcoes");
+        menuAcoes.innerHTML = "";
+
+        Promise.all(this.views[0].acoes.map(idAcao => UltimaDAO.getInstance().acao(idAcao)))
+            .then (acoes => {
+                acoes.forEach (acao => {
+                    let a = document.createElement("a");
+                    a.href = "#";
+                    a.textContent = acao.nome;
+                    menuAcoes.appendChild(a);
+
+                    a.addEventListener("click", e => {
+                        this.adicionarElemento(acao.nome, acao.componente, acao.dados)
+                    });
+                });
+            });
 
         this.querySelector("#reiniciarBanco").addEventListener("click", () => {
             UltimaDAO.getInstance().reiniciarBase().then(() => {
@@ -163,34 +165,29 @@ export class UltimaView extends ComponenteBase{
 
 
 
-    adicionarIFrame(src){
-        this.adicionarElemento(["exibidor-iframe"],"exibidor-iframe", {"src":src});
-    }
+    adicionarElemento(nome_elemento, nome_componente, dados){
 
+        let id_novo_elemento = this.proximoIdElemento(this.views[0].elementos);
 
-
-    adicionarElemento(componentesCompativeis, componentePadrao, dados){
-
-        let novoElemento = {                        
-            "id": this.proximoIdElemento(this.view.elementos), 
-            "ordem": this.proximaOrdem(this.view.elementos),
-            "descricao": `Componente: ${componentePadrao}`,
-            "importancia": this.mediaImportancia(this.view.elementos),
-            "componente":{
-                "padrao": componentePadrao,
-                "compativeis": componentesCompativeis
-            },
+        let novo_elemento = {                        
+            "id": id_novo_elemento,
+            "nome": nome_elemento,            
             "dados": dados
         };
+        let novo_elemento_view = {
+            "id": id_novo_elemento,
+            "ordem": this.proximaOrdem(this.views[0].elementos),            
+            "importancia": this.mediaImportancia(this.views[0].elementos),
+            "componente": nome_componente
+        };
 
-        //Não persiste o elemento de configuração
-        if (novoElemento.componente.padrao != "configuracao-ultima"){        
+        this.views[0].elementos.push(novo_elemento_view);
 
-            this.view.elementos.push(novoElemento);                                                      
-            UltimaDAO.getInstance().atualizarView(this.view);
-        }
-
-        this.controleNavegador.adicionarElemento(novoElemento);
+        UltimaDAO.getInstance().atualizarElemento(novo_elemento).then( retorno => {
+            UltimaDAO.getInstance().atualizarView(this.views[0]).then( retorno => {
+                this.controleNavegador.adicionarElemento(novo_elemento_view);
+            });
+        })             
     }
 
 
@@ -201,11 +198,13 @@ export class UltimaView extends ComponenteBase{
 
         if (configuracaoUltima){
             alert ("Já está aberta a configuração!");
-        }else{
-            this.adicionarElemento (["configuracao-ultima"],"configuracao-ultima",                
+        }else{            
+            this.adicionarElemento ("Configuração Última","configuracao-ultima",
                 {
                     componentes: JSON.parse(JSON.stringify(this.componentes)),
-                    view: JSON.parse(JSON.stringify(this.views[0]))
+                    elementos: JSON.parse(JSON.stringify(this.elementos)),
+                    acoes: JSON.parse(JSON.stringify(this.acoes)),
+                    views: JSON.parse(JSON.stringify(this.views)),
                 } 
             );   
         }
@@ -222,14 +221,16 @@ export class UltimaView extends ComponenteBase{
 
                 this.componentes = configuracao.componentes;                        
                 this.elementos = configuracao.elementos;
-                this.views = configuracao.views[0];
+                this.acoes = configuracao.acoes;
+                this.views = configuracao.views;
 
                 console.log ("carregando configuracao do arquivo");
 
                 Promise.all([
                     UltimaDAO.getInstance().atualizarElementos(this.elementos),
                     UltimaDAO.getInstance().atualizarComponentes(this.componentes),
-                    UltimaDAO.getInstance().atualizarView(this.views)
+                    UltimaDAO.getInstance().atualizarAcoes(this.acoes),
+                    UltimaDAO.getInstance().atualizarView(this.views[0])
                 ]).then (respostas => {        
                     this.configuracoesCarregadas = true;                            
                     this.renderizar();              

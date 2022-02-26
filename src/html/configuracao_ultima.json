@@ -55,10 +55,45 @@
             }
         }
     ],
+    "acoes":[
+        {
+            "id":1,
+            "nome":"Saúde",
+            "componente":"exibidor-iframe",
+            "dados":{
+                "src":"https://www.youtube.com/embed/3cowjrMpAys"
+            }
+        },
+        {
+            "id":2,
+            "nome":"Cachorro 1",
+            "componente":"exibidor-imagem",
+            "dados":{
+                "src":"./imagens/cachorro_01.jpg"
+            }
+        },
+        {
+            "id":3,
+            "nome":"Cachorro 2",
+            "componente":"exibidor-imagem",
+            "dados":{
+                "src":"./imagens/cachorro_02.jpg"
+            }
+        },
+        {
+            "id":4,
+            "nome":"Feriados no Brasil",
+            "componente":"exibidor-iframe",
+            "dados":{
+                "src":"https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
+            }
+        }
+    ],
     "views":[
         {
             "id": 1,
-            "descricao": "Contatos de A a J",
+            "descricao": "Versão 4 com Ações",
+            "acoes":[1,2,3,4],
             "elementos": [
                 {
                     "id": 2,

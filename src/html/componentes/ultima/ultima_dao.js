@@ -11,7 +11,7 @@ export class UltimaDAO extends EventTarget{
 
     static instancia = undefined;
     static NOME_BANCO = "UltimaDB";
-    static VERSAO = 3;
+    static VERSAO = 4;
 
 
 
@@ -62,8 +62,9 @@ export class UltimaDAO extends EventTarget{
             this.limparObjectStore("elementos")
                 .then(() => this.limparObjectStore("componentes"))
                     .then(() => this.limparObjectStore("views"))
-                        .then(() => this.adicionarComponentesIniciais())
-                            .then(()=> resolve(true));
+                        .then(() => this.limparObjectStore("acoes"))
+                            .then(() => this.adicionarComponentesIniciais())
+                                .then(()=> resolve(true));
         
         });      
     }
@@ -83,6 +84,11 @@ export class UltimaDAO extends EventTarget{
     }
     async elemento(chave){        
         return this.trazerRegistro(chave, "elementos");
+    }
+
+
+    async acao(chave){        
+        return this.trazerRegistro(chave, "acoes");
     }
 
 
@@ -114,6 +120,16 @@ export class UltimaDAO extends EventTarget{
         });
     }
 
+    async atualizarAcoes (acoes){
+        return new Promise((resolve, reject) => {
+            this.limparObjectStore("acoes").then(()=>{
+                Promise.all(acoes.map (acao => this.atualizarAcao(acao))).then(retornos => {
+                    resolve(true);
+                })
+            })
+        });
+    }
+
 
     async atualizarComponente (componente){      
         return this.atualizarRegistro (componente, "componentes");    
@@ -124,6 +140,9 @@ export class UltimaDAO extends EventTarget{
         return this.atualizarRegistro (elemento, "elementos");    
     }
 
+    async atualizarAcao (acao){      
+        return this.atualizarRegistro (acao, "acoes");    
+    }
 
     async atualizarView (view){      
         return this.atualizarRegistro (view, "views");    
@@ -204,6 +223,13 @@ export class UltimaDAO extends EventTarget{
 
                 let object_store_views = this.banco.createObjectStore("views", { keyPath: "id", autoIncrement: true });                    
                 object_store_views.createIndex("index_descricao_views", "descricao", { unique: false});
+            },
+            () => {
+                console.info ("VERSÃO 4 - Object Store de Ações");
+                
+                let object_store_componentes = this.banco.createObjectStore("acoes", { keyPath: "id", autoIncrement: true });
+                object_store_componentes.createIndex("index_nome_acao", "nome", { unique: false});
+                object_store_componentes.createIndex("index_componente_acao", "componente", { unique: false});                
             }
 
         ].forEach((funcaoDeUpgradeVersao, versao) => {
