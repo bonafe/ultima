@@ -15,16 +15,15 @@ export class GrafoBases extends ComponenteBase {
             //import(`${super.prefixoEndereco}/bibliotecas/vis.js/vis.js`).then(modulo => {
 
                 this.vis = true;
-                this.gerarGrafoEquipe();                               
-            //});
-
-            this.noRaiz.querySelector("#adicionar").addEventListener("click", ()=>{
-                this.elementosGrafo.nodes.add({
-                    id:(Math.random()*1e7).toString(32),
-                    label: "novo nó"
-                })
-            });
+                this.renderizar();                               
+            //});           
         });
+    }
+
+    renderizar(){
+        if (this.vis && this.dados && !this.grafo && !this.gerandoGrafo){
+            this.gerarGrafo();
+        }
     }
 
 
@@ -47,19 +46,21 @@ export class GrafoBases extends ComponenteBase {
                     .then(retorno => retorno.json())
                     .then(json => {
                         this.dados = json;
-                        this.gerarGrafoEquipe();
+                        this.renderizar();
                     })
                     .catch (e => alert (e));
 
             }else{
                 this.dados = dados;
-                this.gerarGrafoEquipe();
+                this.renderizar();
             }
         }
     } 
 
 
-   gerarGrafoEquipe (){
+   gerarGrafo (){
+
+        this.gerandoGrafo = true;
 
         if (this.vis && this.dados){
 
@@ -91,12 +92,14 @@ export class GrafoBases extends ComponenteBase {
               }
 
             this.elementosGrafo = elementosGrafo;
-            let grafo = new vis.Network (this.noRaiz.querySelector("#divGrafo"), this.elementosGrafo, options);            
+            this.grafo = new vis.Network (this.noRaiz.querySelector("#divGrafo"), this.elementosGrafo, options);            
 
-            grafo.on ("click", parametros => {
+            this.grafo.on ("click", parametros => {
                 console.dir(parametros);
                 this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO, parametros));
             });
+
+            this.gerandoGrafo = false;
 
             //window.requestAnimationFrame(this.animarGrafo.bind(this));
         }
@@ -117,6 +120,8 @@ export class GrafoBases extends ComponenteBase {
 
 
     transformarDadosEmGrafo (){
+
+        console.log (this.dados);
 
         let sistemas_renderizados = {};
         let campos_renderizados = {};

@@ -25,6 +25,19 @@ export class BaseInicialUltima{
             {
                 "url": "/componentes/ultima/configuracao_ultima.js",
                 "nome": "configuracao-ultima"
+            },
+            ,
+            {
+                "url": "/componentes/dados/grafo_bases.js",
+                "nome": "grafo-bases"
+            },
+            {
+                "url": "/componentes/dados/grafo_indexeddb.js",
+                "nome": "grafo-indexeddb"
+            },
+            {
+                "url": "/componentes/equipe/grafo_equipe.js",
+                "nome": "grafo-equipe"
             }
         ]
     };

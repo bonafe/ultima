@@ -39,6 +39,11 @@
     ],
     "elementos": [
         {
+            "id": 10,            
+            "descricao": "Componente: grafo-indexeddb",                        
+            "dados": {}
+        },
+        {
             "id": 2,            
             "descricao": "Componente: exibidor-iframe",                        
             "dados": {
@@ -111,6 +116,11 @@
             "dados":{
                 "src":"https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
             }
+        },
+        {
+            "id":5,
+            "nome":"Grafo IndexedDB",
+            "componente":"grafo-indexeddb"
         }
     ],
     "views":[
@@ -128,10 +138,10 @@
                 },              
                 {
                     "id": 2, 
-                    "id_elemento":2,                   
+                    "id_elemento":10,                   
                     "ordem": 2,
                     "importancia": 32,
-                    "componente":"exibidor-iframe"
+                    "componente":"grafo-indexeddb"
                 }
                     
             ]

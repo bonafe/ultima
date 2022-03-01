@@ -176,6 +176,7 @@ export class UltimaView extends ComponenteBase{
         };
         let novo_elemento_view = {
             "id": id_novo_elemento,
+            "id_elemento": id_novo_elemento,
             "ordem": this.proximaOrdem(this.views[0].elementos),            
             "importancia": this.mediaImportancia(this.views[0].elementos),
             "componente": nome_componente

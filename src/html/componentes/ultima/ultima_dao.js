@@ -101,31 +101,25 @@ export class UltimaDAO extends EventTarget{
 
     
     async atualizarComponentes (componentes){
-        return new Promise((resolve, reject) => {
-            this.limparObjectStore("componentes").then(()=>{
-                Promise.all(componentes.map (componente => this.atualizarComponente(componente))).then(retornos => {
-                    resolve(true);
-                })
-            })
+        return new Promise((resolve, reject) => {            
+            Promise.all(componentes.map (componente => this.atualizarComponente(componente))).then(retornos => {
+                resolve(true);
+            });            
         });
     }
 
     async atualizarElementos (elementos){
-        return new Promise((resolve, reject) => {
-            this.limparObjectStore("elementos").then(()=>{
-                Promise.all(elementos.map (elemento => this.atualizarElemento(elemento))).then(retornos => {
-                    resolve(true);
-                })
-            })
+        return new Promise((resolve, reject) => {            
+            Promise.all(elementos.map (elemento => this.atualizarElemento(elemento))).then(retornos => {
+                resolve(true);
+            });            
         });
     }
 
     async atualizarAcoes (acoes){
-        return new Promise((resolve, reject) => {
-            this.limparObjectStore("acoes").then(()=>{
-                Promise.all(acoes.map (acao => this.atualizarAcao(acao))).then(retornos => {
-                    resolve(true);
-                })
+        return new Promise((resolve, reject) => {            
+            Promise.all(acoes.map (acao => this.atualizarAcao(acao))).then(retornos => {
+                resolve(true);                
             })
         });
     }
@@ -147,10 +141,9 @@ export class UltimaDAO extends EventTarget{
     async atualizarView (view){      
         return this.atualizarRegistro (view, "views");    
     }
+    
 
-
-
-
+    
     async abrirBanco(){
 
         let request = window.indexedDB.open(UltimaDAO.NOME_BANCO, UltimaDAO.VERSAO);
