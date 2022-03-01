@@ -193,34 +193,33 @@ export class ElementoTreeMap extends ComponenteBase {
 
         //Se possui o id do elemento e da View
         if (this._id && this._id_view){
+            
+            //Recupera detalhes do elemento na view
+            UltimaDAO.getInstance().elemento_view (this._id_view, this._id).then (elemento_view => {
 
-            Promise.all([
+                this.elemento_view = elemento_view;
 
                 //Recupera o elemento global
-                UltimaDAO.getInstance().elemento(this._id),
+                UltimaDAO.getInstance().elemento(this.elemento_view.id_elemento).then (elemento => {
 
-                //Recupera detalhes do elemento na view
-                UltimaDAO.getInstance().elemento_view (this._id_view, this._id)
+                    this.elemento = elemento;
+            
+                    //Recupera detalhes do componente HTML a ser renderizado
+                    UltimaDAO.getInstance().componente (this.elemento_view.componente).then(componente => {
 
-            ]).then (retornos => {
+                        let deveCarregar = true;
 
-                [this.elemento, this.elemento_view] = [...retornos];
-                
-                //Recupera detalhes do componente HTML a ser renderizado
-                UltimaDAO.getInstance().componente (this.elemento_view.componente).then(componente => {
-
-                    let deveCarregar = true;
-
-                    if (this.componente){
-                        if (this.componente.nome == componente.nome){
-                            deveCarregar = false;
+                        if (this.componente){
+                            if (this.componente.nome == componente.nome){
+                                deveCarregar = false;
+                            }
                         }
-                    }
-                    if (deveCarregar && !this.carregandoComponente){
-                        this.componente = componente;
-                        this.carregarComponente();
-                    }
-                });                
+                        if (deveCarregar && !this.carregandoComponente){
+                            this.componente = componente;
+                            this.carregarComponente();
+                        }
+                    });                
+                });
             });
         }
         

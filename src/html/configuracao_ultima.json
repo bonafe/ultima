@@ -27,6 +27,14 @@
         {
             "url": "/componentes/ultima/configuracao_ultima.js",
             "nome": "configuracao-ultima"
+        },
+        {
+            "url": "/componentes/equipe/grafo_equipe.js",
+            "nome": "grafo-equipe"
+        },
+        {
+            "url": "/componentes/dados/grafo_bases.js",
+            "nome": "grafo-bases"
         }
     ],
     "elementos": [
@@ -110,36 +118,20 @@
             "id": 1,
             "descricao": "Versão 4 com Ações",
             "acoes":[1,2,3,4],
-            "elementos": [
+            "elementos": [                           
                 {
-                    "id": 2,
-                    "ordem": 0,                    
-                    "importancia": 16,
-                    "componente":"exibidor-iframe"
-                },
+                    "id": 1, 
+                    "id_elemento":1,                   
+                    "ordem": 2,
+                    "importancia": 8,
+                    "componente":"exibidor-imagem"
+                },              
                 {
-                    "id": 3,
-                    "ordem": 1,
-                    "importancia": 16,
-                    "componente":"exibidor-iframe"
-                },
-                {
-                    "id": 5,
-                    "ordem": 1,
-                    "importancia": 30,
-                    "componente":"exibidor-video"
-                },            
-                {
-                    "id": 1,                    
+                    "id": 2, 
+                    "id_elemento":2,                   
                     "ordem": 2,
                     "importancia": 32,
-                    "componente":"exibidor-imagem"
-                },
-                {
-                    "id": 4,                    
-                    "ordem": 2,
-                    "importancia": 32,
-                    "componente":"exibidor-imagem"
+                    "componente":"exibidor-iframe"
                 }
                     
             ]

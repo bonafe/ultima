@@ -45,17 +45,27 @@ export class EditorJSON extends ComponenteBase {
         if (nomeAtributo.localeCompare("dados") == 0){
             this.dados = JSON.parse(novoValor);
 
-            if (this.dados.url){ 
-                this.url = this.dados.url;
+            //Se possui o atributo "src" e é um arquivo json
+            let efetuouDownload = false;
+            if (this.dados.src){ 
+                this.src = this.dados.src;
+                if (this.src.toLowerCase().endsWith("json")){                    
 
-                fetch(this.url)
-                    .then(retorno => retorno.json())
-                    .then(json => {
-                        this.dados = json;
-                        this.atualizarDadosEditor();
-                    })
-                    .catch (e => alert (e));
-            }else{
+                    //Carrega o arquivo json da url em "src"
+                    fetch(this.src)
+                        .then(retorno => retorno.json())
+                        .then(json => {
+                            this.dados = json;
+                            this.atualizarDadosEditor();
+                        })
+                        .catch (e => alert (e));
+                    
+                        efetuouDownload = true;
+                }
+            }
+
+            //Caso contrário exibe os dados recebidos para edição
+            if (!efetuouDownload){
                 this.atualizarDadosEditor();
             }
         }
