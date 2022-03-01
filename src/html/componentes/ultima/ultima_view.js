@@ -107,6 +107,13 @@ export class UltimaView extends ComponenteBase{
         let menuAcoes = this.noRaiz.querySelector("#menuAcoes");
         menuAcoes.innerHTML = "";
 
+        this.querySelector("#reiniciarBanco").addEventListener("click", () => {
+            UltimaDAO.getInstance().reiniciarBase().then(() => {
+                //TODO: está recarregando tudo
+                document.location.reload(true);
+            });                
+        });
+
         Promise.all(this.views[0].acoes.map(idAcao => UltimaDAO.getInstance().acao(idAcao)))
             .then (acoes => {
                 acoes.forEach (acao => {
@@ -119,14 +126,7 @@ export class UltimaView extends ComponenteBase{
                         this.adicionarElemento(acao.nome, acao.componente, acao.dados)
                     });
                 });
-            });
-
-        this.querySelector("#reiniciarBanco").addEventListener("click", () => {
-            UltimaDAO.getInstance().reiniciarBase().then(() => {
-                //TODO: está recarregando tudo
-                document.location.reload(true);
-            });                
-        });
+            });        
     }
 
 
