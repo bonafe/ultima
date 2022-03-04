@@ -20,6 +20,7 @@ export class UltimaView extends ComponenteBase{
     }
 
 
+    
     renderizar(){
 
         //TODO: Deve alterar a exibição caso um novo arquivo seja carregado
@@ -38,6 +39,8 @@ export class UltimaView extends ComponenteBase{
         }         
     }
 
+
+
     static get observedAttributes() {
         return ['src'];
     }
@@ -55,6 +58,40 @@ export class UltimaView extends ComponenteBase{
                 .then(configuracao => this.carregarConfiguracao(configuracao));                     
         }      
     }
+
+
+
+    carregarConfiguracao(configuracao){
+
+        UltimaDBReader.getInstance().views().then (views => {
+
+            //Caso não existam views na base [1ª Vez]
+            if (views.length == 0){
+
+                this.views = configuracao.views;
+
+                console.log ("carregando configuracao do arquivo");
+
+                Promise.all([
+                    UltimaDBWriter.getInstance().atualizarElementos(configuracao.elementos),
+                    UltimaDBWriter.getInstance().atualizarComponentes(configuracao.componentes),
+                    UltimaDBWriter.getInstance().atualizarAcoes(configuracao.acoes),
+                    UltimaDBWriter.getInstance().atualizarView(this.views[0])
+                ]).then (respostas => {        
+                    this.configuracoesCarregadas = true;                            
+                    this.renderizar();              
+                });
+
+            //Se existirem views na base não recarrega
+            //TODO: precisa tratar mudança de versão, colocar versão no arquivo de configuração e fazer merge das configurações se for atualizado
+            }else{
+
+                this.configuracoesCarregadas = true;        
+                this.renderizar();
+            }
+        });        
+    }
+
 
 
     
@@ -165,6 +202,40 @@ export class UltimaView extends ComponenteBase{
 
 
 
+
+
+
+
+
+
+
+
+    adicionarElemento(nome_elemento, nome_componente, dados){
+
+        let id_novo_elemento = this.proximoIdElemento(this.views[0].elementos);
+
+        let novo_elemento = {                        
+            "id": id_novo_elemento,
+            "nome": nome_elemento,            
+            "dados": dados
+        };
+        let novo_elemento_view = {
+            "id": id_novo_elemento,
+            "id_elemento": id_novo_elemento,
+            "ordem": this.proximaOrdem(this.views[0].elementos),            
+            "importancia": this.mediaImportancia(this.views[0].elementos),
+            "componente": nome_componente
+        };
+
+        this.views[0].elementos.push(novo_elemento_view);
+
+        UltimaDBWriter.getInstance().atualizarElemento(novo_elemento).then( retorno => {
+            UltimaDBWriter.getInstance().atualizarView(this.views[0]).then( retorno => {
+                this.controleNavegador.adicionarElemento(novo_elemento_view);
+            });
+        })             
+    }
+
     mediaImportancia(elementos){
         const soma = elementos.reduce((valorAnterior, elementoAtual) => valorAnterior + elementoAtual.importancia, 0);
         const media = (soma / elementos.length) || 0;
@@ -199,31 +270,14 @@ export class UltimaView extends ComponenteBase{
 
 
 
-    adicionarElemento(nome_elemento, nome_componente, dados){
 
-        let id_novo_elemento = this.proximoIdElemento(this.views[0].elementos);
 
-        let novo_elemento = {                        
-            "id": id_novo_elemento,
-            "nome": nome_elemento,            
-            "dados": dados
-        };
-        let novo_elemento_view = {
-            "id": id_novo_elemento,
-            "id_elemento": id_novo_elemento,
-            "ordem": this.proximaOrdem(this.views[0].elementos),            
-            "importancia": this.mediaImportancia(this.views[0].elementos),
-            "componente": nome_componente
-        };
 
-        this.views[0].elementos.push(novo_elemento_view);
 
-        UltimaDBWriter.getInstance().atualizarElemento(novo_elemento).then( retorno => {
-            UltimaDBWriter.getInstance().atualizarView(this.views[0]).then( retorno => {
-                this.controleNavegador.adicionarElemento(novo_elemento_view);
-            });
-        })             
-    }
+
+
+
+
 
 
 
@@ -233,54 +287,31 @@ export class UltimaView extends ComponenteBase{
 
         if (configuracaoUltima){
             alert ("Já está aberta a configuração!");
-        }else{            
-            this.adicionarElemento ("Configuração Última","configuracao-ultima",
-                {
-                    componentes: JSON.parse(JSON.stringify(this.componentes)),
-                    elementos: JSON.parse(JSON.stringify(this.elementos)),
-                    acoes: JSON.parse(JSON.stringify(this.acoes)),
-                    views: JSON.parse(JSON.stringify(this.views)),
-                } 
-            );   
+        }else{  
+
+            Promise.all([
+                UltimaDBReader.getInstance().componentes(),
+                UltimaDBReader.getInstance().acoes(),    
+                UltimaDBReader.getInstance().elementos(),
+                UltimaDBReader.getInstance().views()])
+            .then(retornos => {
+
+                const [componentes, acoes, elementos, views] = retornos;
+
+                this.adicionarElemento ("Configuração Última","configuracao-ultima",
+                {                    
+                    componentes: JSON.parse(JSON.stringify(componentes)),                  
+                    acoes: JSON.parse(JSON.stringify(acoes)),                    
+                    elementos: JSON.parse(JSON.stringify(elementos)),                    
+                    views: JSON.parse(JSON.stringify(views))                    
+                });
+            });                                  
         }
     }
 
 
 
-    carregarConfiguracao(configuracao){
-
-        UltimaDBReader.getInstance().views().then (views => {
-
-            //Caso não existam views na base [1ª Vez]
-            if (views.length == 0){
-
-                this.componentes = configuracao.componentes;                        
-                this.elementos = configuracao.elementos;
-                this.acoes = configuracao.acoes;
-                this.views = configuracao.views;
-
-                console.log ("carregando configuracao do arquivo");
-
-                Promise.all([
-                    UltimaDBWriter.getInstance().atualizarElementos(this.elementos),
-                    UltimaDBWriter.getInstance().atualizarComponentes(this.componentes),
-                    UltimaDBWriter.getInstance().atualizarAcoes(this.acoes),
-                    UltimaDBWriter.getInstance().atualizarView(this.views[0])
-                ]).then (respostas => {        
-                    this.configuracoesCarregadas = true;                            
-                    this.renderizar();              
-                });
-
-            //Se existirem views na base não recarrega
-            //TODO: precisa tratar mudança de versão, colocar versão no arquivo de configuração e fazer merge das configurações se for atualizado
-            }else{
-                this.configuracoesCarregadas = true;        
-                this.renderizar();
-            }
-        });
-
-        
-    }
+    
 
 
 

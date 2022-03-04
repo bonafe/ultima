@@ -48,6 +48,11 @@ export class UltimaDBReader extends UltimaDB{
         return this.trazerRegistro(chave, "acoes");
     }
 
+    async acoes(){        
+        return this.lerTodosRegistros("acoes");
+    }
+
+
 
 
     async views(){        

@@ -2,155 +2,244 @@
     "componentes": [
         {
             "url": "/componentes/data/seletor_meses.js",
-            "nome": "seletor-meses"
+            "nome": "seletor-meses",
+            "id": 145
         },
         {
             "url": "/componentes/editor_json/editor_json.js",
-            "nome": "editor-json"
+            "nome": "editor-json",
+            "id": 146
         },
         {
             "url": "/componentes/iframe/exibidor_iframe.js",
-            "nome": "exibidor-iframe"
+            "nome": "exibidor-iframe",
+            "id": 147
         },
         {
             "url": "/componentes/imagem/exibidor_imagem.js",
-            "nome": "exibidor-imagem"
-        },
-        {
-            "url": "/componentes/video/exibidor_video.js",
-            "nome": "exibidor-video"
+            "nome": "exibidor-imagem",
+            "id": 148
         },
         {
             "url": "/componentes/contatos/contatos_view.js",
-            "nome": "contatos-view"
+            "nome": "contatos-view",
+            "id": 149
         },
         {
             "url": "/componentes/ultima/configuracao_ultima.js",
-            "nome": "configuracao-ultima"
-        },
-        {
-            "url": "/componentes/equipe/grafo_equipe.js",
-            "nome": "grafo-equipe"
+            "nome": "configuracao-ultima",
+            "id": 150
         },
         {
             "url": "/componentes/dados/grafo_bases.js",
-            "nome": "grafo-bases"
+            "nome": "grafo-bases",
+            "id": 151
+        },
+        {
+            "url": "/componentes/dados/grafo_indexeddb.js",
+            "nome": "grafo-indexeddb",
+            "id": 152
+        },
+        {
+            "url": "/componentes/equipe/grafo_equipe.js",
+            "nome": "grafo-equipe",
+            "id": 153
+        },
+        {
+            "url": "/componentes/data/seletor_meses.js",
+            "nome": "seletor-meses",
+            "id": 154
+        },
+        {
+            "url": "/componentes/editor_json/editor_json.js",
+            "nome": "editor-json",
+            "id": 155
+        },
+        {
+            "url": "/componentes/iframe/exibidor_iframe.js",
+            "nome": "exibidor-iframe",
+            "id": 156
+        },
+        {
+            "url": "/componentes/imagem/exibidor_imagem.js",
+            "nome": "exibidor-imagem",
+            "id": 157
+        },
+        {
+            "url": "/componentes/video/exibidor_video.js",
+            "nome": "exibidor-video",
+            "id": 158
+        },
+        {
+            "url": "/componentes/contatos/contatos_view.js",
+            "nome": "contatos-view",
+            "id": 159
+        },
+        {
+            "url": "/componentes/ultima/configuracao_ultima.js",
+            "nome": "configuracao-ultima",
+            "id": 160
+        },
+        {
+            "url": "/componentes/equipe/grafo_equipe.js",
+            "nome": "grafo-equipe",
+            "id": 161
+        },
+        {
+            "url": "/componentes/dados/grafo_bases.js",
+            "nome": "grafo-bases",
+            "id": 162
         }
     ],
-    "elementos": [
-        {
-            "id": 10,            
-            "descricao": "Componente: grafo-indexeddb",                        
-            "dados": {}
-        },
-        {
-            "id": 2,            
-            "descricao": "Componente: exibidor-iframe",                        
-            "dados": {
-                "src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
-            }
-        },
-        {
-            "id": 3,            
-            "descricao": "Componente: exibidor-iframe",                        
-            "dados": {
-                "src": "https://www.youtube.com/embed/RwBmiMb97HQ"
-            }
-        },
+    "acoes": [
         {
             "id": 1,
-            "descricao": "Configuração Última",                                    
+            "nome": "Saúde",
+            "componente": "exibidor-iframe",
             "dados": {
-                "src": "./imagens/hubble.jpg"
+                "src": "https://www.youtube.com/embed/3cowjrMpAys"
             }
         },
         {
-            "id": 4,
-            "descricao": "Configuração Última",                                    
+            "id": 2,
+            "nome": "Cachorro 1",
+            "componente": "exibidor-imagem",
             "dados": {
                 "src": "./imagens/cachorro_01.jpg"
             }
         },
         {
+            "id": 3,
+            "nome": "Cachorro 2",
+            "componente": "exibidor-imagem",
+            "dados": {
+                "src": "./imagens/cachorro_02.jpeg"
+            }
+        },
+        {
+            "id": 4,
+            "nome": "Feriados no Brasil",
+            "componente": "exibidor-iframe",
+            "dados": {
+                "src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
+            }
+        },
+        {
             "id": 5,
-            "descricao": "Video do Youtube sobre CSS",
-            "dados":{
-                "src":"yMEjLBKyvEg",
-                "acoes":[
-                    {"tempo": 1, "descricao":"abrir outro elemento"},
-                    {"tempo": 5, "descricao":"fechar elemento"},
-                    {"tempo": 10, "descricao":"mudar de lugar"}
-                ]
-            }
+            "nome": "Grafo IndexedDB",
+            "componente": "grafo-indexeddb"
         }
     ],
-    "acoes":[
+    "elementos": [
         {
-            "id":1,
-            "nome":"Saúde",
-            "componente":"exibidor-iframe",
-            "dados":{
-                "src":"https://www.youtube.com/embed/3cowjrMpAys"
+            "id": 1,
+            "descricao": "Configuração Última",
+            "dados": {
+                "src": "./imagens/hubble.jpg"
             }
         },
         {
-            "id":2,
-            "nome":"Cachorro 1",
-            "componente":"exibidor-imagem",
-            "dados":{
-                "src":"./imagens/cachorro_01.jpg"
+            "id": 2,
+            "descricao": "Componente: exibidor-iframe",
+            "dados": {
+                "src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
             }
         },
         {
-            "id":3,
-            "nome":"Cachorro 2",
-            "componente":"exibidor-imagem",
-            "dados":{
-                "src":"./imagens/cachorro_02.jpeg"
+            "id": 3,
+            "descricao": "Componente: exibidor-iframe",
+            "dados": {
+                "src": "https://www.youtube.com/embed/RwBmiMb97HQ"
             }
         },
         {
-            "id":4,
-            "nome":"Feriados no Brasil",
-            "componente":"exibidor-iframe",
-            "dados":{
-                "src":"https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
+            "id": 4,
+            "nome": "Saúde",
+            "dados": {
+                "src": "https://www.youtube.com/embed/3cowjrMpAys"
             }
         },
         {
-            "id":5,
-            "nome":"Grafo IndexedDB",
-            "componente":"grafo-indexeddb"
+            "id": 5,
+            "nome": "Cachorro 1",
+            "dados": {
+                "src": "./imagens/cachorro_01.jpg"
+            }
+        },
+        {
+            "id": 6,
+            "nome": "Cachorro 2",
+            "dados": {
+                "src": "./imagens/cachorro_02.jpeg"
+            }
+        },
+        {
+            "id": 7,
+            "nome": "Feriados no Brasil",
+            "dados": {
+                "src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
+            }
+        },
+        {
+            "id": 10,
+            "descricao": "Componente: grafo-indexeddb",
+            "dados": {}
         }
     ],
-    "views":[
+    "views": [
         {
             "id": 1,
             "descricao": "Versão 4 com Ações",
-            "acoes":[1,2,3,4],
-            "elementos": [                           
+            "acoes": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "elementos": [
                 {
-                    "id": 1, 
-                    "id_elemento":1,                   
-                    "ordem": 2,
-                    "importancia": 8,
-                    "componente":"exibidor-imagem"
-                },              
-                {
-                    "id": 2, 
-                    "id_elemento":10,                   
-                    "ordem": 2,
-                    "importancia": 32,
-                    "componente":"grafo-indexeddb"
+                    "id": 4,
+                    "id_elemento": 4,
+                    "ordem": 0,
+                    "importancia": 24,
+                    "componente": "exibidor-iframe"
                 },
                 {
-                    "id": 3, 
-                    "id_elemento":5,                   
+                    "id": 1,
+                    "id_elemento": 1,
+                    "ordem": 1,
+                    "importancia": 37.333333333333336,
+                    "componente": "exibidor-imagem"
+                },
+                {
+                    "id": 7,
+                    "id_elemento": 7,
                     "ordem": 2,
-                    "importancia": 32,
-                    "componente":"exibidor-video"
+                    "importancia": 36,
+                    "componente": "exibidor-iframe"
+                },
+                {
+                    "id": 2,
+                    "id_elemento": 10,
+                    "ordem": 3,
+                    "importancia": 221.33333333333334,
+                    "componente": "grafo-indexeddb"
+                },
+                {
+                    "id": 5,
+                    "id_elemento": 5,
+                    "ordem": 4,
+                    "importancia": 36,
+                    "componente": "exibidor-imagem"
+                },
+                {
+                    "id": 6,
+                    "id_elemento": 6,
+                    "ordem": 5,
+                    "importancia": 36,
+                    "componente": "exibidor-imagem"
                 }
-                    
             ]
         }
     ]
