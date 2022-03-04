@@ -27,8 +27,7 @@ export class GrafoIndexedDB extends GrafoBases{
         return new Promise ((resolve_carregado) => {
             this.carregando = true;
 
-            window.indexedDB.databases().then(databases => {
-                console.dir(databases);
+            window.indexedDB.databases().then(databases => {                
 
                 Promise.all(databases.map(database => {
                 
@@ -41,7 +40,7 @@ export class GrafoIndexedDB extends GrafoBases{
                         request.onsuccess = evento => {
                             let banco = request.result;
 
-                            console.log (`Banco: ${database.name}`);
+                            //console.log (`Banco: ${database.name}`);
 
                             Promise.all(
                                 Array.from(banco.objectStoreNames).map (objectStore => {
@@ -53,7 +52,7 @@ export class GrafoIndexedDB extends GrafoBases{
                                             "campos": []
                                         };
 
-                                        console.log (`---- ObjectStore: ${objectStore}`);
+                                        //console.log (`---- ObjectStore: ${objectStore}`);
                                         this.lerTodosRegistros(banco, objectStore).then(registros => {
                                             let dicionario_registros = {};
                                             registros.forEach(registro => {

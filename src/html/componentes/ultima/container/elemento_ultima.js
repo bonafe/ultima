@@ -1,29 +1,12 @@
-import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima_evento.js';
-import { UltimaDAO } from "../ultima/ultima_dao.js";
+import { ComponenteBase } from '../../componente_base.js';
+import { UltimaEvento } from '../ultima_evento.js';
+import { UltimaDBReader } from "../db/ultima_db_reader.js";
 
 
-export class ElementoTreeMap extends ComponenteBase {
-
-
-
-    static EVENTO_AUMENTAR = 'EVENTO_AUMENTAR';
-    static EVENTO_DIMINUIR = 'EVENTO_DIMINUIR';
-    static EVENTO_IR_PARA_TRAS = 'EVENTO_IR_PARA_TRAS';
-    static EVENTO_IR_PARA_FRENTE = 'EVENTO_IR_PARA_FRENTE';    
-    static EVENTO_IR_PARA_INICIO = 'EVENTO_IR_PARA_INICIO';
-    static EVENTO_IR_PARA_FIM = 'EVENTO_IR_PARA_FIM'; 
-    static EVENTO_MAXIMIZAR = 'EVENTO_MAXIMIZAR'; 
-    static EVENTO_MINIMIZAR = 'EVENTO_MINIMIZAR';
-    static EVENTO_RESTAURAR = 'EVENTO_RESTAURAR';
-    static EVENTO_MUDAR_VISUALIZACAO = 'EVENTO_MUDAR_VISUALIZACAO';
-    static EVENTO_FECHAR = 'EVENTO_FECHAR';
-    
-
-
+export class ElementoUltima extends ComponenteBase {
 
     constructor(){
-        super({templateURL:"/componentes/container_treemap/elemento_treemap.html", shadowDOM:true});
+        super({templateURL:"/componentes/ultima/container/elemento_ultima.html", shadowDOM:true});
 
         this.dados = null;
 
@@ -80,15 +63,15 @@ export class ElementoTreeMap extends ComponenteBase {
 
                         this.elemento.dados = evento.detail;
 
-                        UltimaDAO.getInstance().atualizarElemento(this.elemento).then(()=>{
+                        //TODO: Não deveria já renderizar pois o dado mudou?
+                        //Talvez ficasse lento... teria que ter um término da mudança, ou confirmação?
 
-                            //Cria um novo evento indicando dados do componente
-                            let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, {                        
-                                id:this._id,
-                                id_view:this._id_view
-                            });                    
-                            this.dispatchEvent(eventoCompleto);      
-                        });
+                        //Cria um novo evento indicando dados do componente
+                        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, {                        
+                            id_elemento:this._id,
+                            id_container:this._id_view
+                        });                    
+                        this.dispatchEvent(eventoCompleto);      
                     });
 
                     this.montarSelectComponente();
@@ -109,7 +92,7 @@ export class ElementoTreeMap extends ComponenteBase {
     }
 
     montarSelectComponente(){
-        UltimaDAO.getInstance().componentes().then(componentes => {
+        UltimaDBReader.getInstance().componentes().then(componentes => {
             
             this.componentes = componentes;
 
@@ -195,17 +178,17 @@ export class ElementoTreeMap extends ComponenteBase {
         if (this._id && this._id_view){
             
             //Recupera detalhes do elemento na view
-            UltimaDAO.getInstance().elemento_view (this._id_view, this._id).then (elemento_view => {
+            UltimaDBReader.getInstance().elemento_view (this._id_view, this._id).then (elemento_view => {
 
                 this.elemento_view = elemento_view;
 
                 //Recupera o elemento global
-                UltimaDAO.getInstance().elemento(this.elemento_view.id_elemento).then (elemento => {
+                UltimaDBReader.getInstance().elemento(this.elemento_view.id_elemento).then (elemento => {
 
                     this.elemento = elemento;
             
                     //Recupera detalhes do componente HTML a ser renderizado
-                    UltimaDAO.getInstance().componente (this.elemento_view.componente).then(componente => {
+                    UltimaDBReader.getInstance().componente (this.elemento_view.componente).then(componente => {
 
                         let deveCarregar = true;
 
@@ -298,35 +281,34 @@ export class ElementoTreeMap extends ComponenteBase {
             this.configuracao(false);
         });
         this.noRaiz.querySelector("#aumentar").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_AUMENTAR, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_AUMENTAR, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#diminuir").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_DIMINUIR, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_DIMINUIR, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#irParaTras").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_TRAS, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_IR_PARA_TRAS, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#irParaFrente").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_FRENTE, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_IR_PARA_FRENTE, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#irParaInicio").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_INICIO, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_IR_PARA_INICIO, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#irParaFim").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_IR_PARA_FIM, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_IR_PARA_FIM, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#maximizar").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MAXIMIZAR, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_MAXIMIZAR, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#restaurar").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_RESTAURAR, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_RESTAURAR, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#minimizar").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_MINIMIZAR, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_MINIMIZAR, {"id_elemento_container":this._id}));
         });
         this.noRaiz.querySelector("#fechar").addEventListener("click", ()=>{
-            this.dispatchEvent (new CustomEvent(ElementoTreeMap.EVENTO_FECHAR, {detail:this._id}));
+            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_FECHAR, {"id_elemento_container":this._id}));
         });                    
     }
 }
-customElements.define('elemento-treemap', ElementoTreeMap);

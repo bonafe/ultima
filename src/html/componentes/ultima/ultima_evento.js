@@ -10,6 +10,20 @@ export class UltimaEvento extends CustomEvent{
 
     static EVENTO_PLAYER_YOUTUBE_CARREGADO = 'EVENTO_PLAYER_YOUTUBE_CARREGADO';
 
+
+    static EVENTO_AUMENTAR = 'EVENTO_AUMENTAR';
+    static EVENTO_DIMINUIR = 'EVENTO_DIMINUIR';
+    static EVENTO_IR_PARA_TRAS = 'EVENTO_IR_PARA_TRAS';
+    static EVENTO_IR_PARA_FRENTE = 'EVENTO_IR_PARA_FRENTE';    
+    static EVENTO_IR_PARA_INICIO = 'EVENTO_IR_PARA_INICIO';
+    static EVENTO_IR_PARA_FIM = 'EVENTO_IR_PARA_FIM'; 
+    static EVENTO_MAXIMIZAR = 'EVENTO_MAXIMIZAR'; 
+    static EVENTO_MINIMIZAR = 'EVENTO_MINIMIZAR';
+    static EVENTO_RESTAURAR = 'EVENTO_RESTAURAR';
+    static EVENTO_MUDAR_VISUALIZACAO = 'EVENTO_MUDAR_VISUALIZACAO';
+    static EVENTO_FECHAR = 'EVENTO_FECHAR';
+    
+
     constructor(evento, objetoDeDados){
         super(evento, {'detail':objetoDeDados, 'bubbles': true, 'composed':true});
     }

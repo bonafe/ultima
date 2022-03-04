@@ -121,8 +121,6 @@ export class GrafoBases extends ComponenteBase {
 
     transformarDadosEmGrafo (){
 
-        console.log (this.dados);
-
         let sistemas_renderizados = {};
         let campos_renderizados = {};
 
@@ -160,8 +158,7 @@ export class GrafoBases extends ComponenteBase {
                     color:"#ffffff"
                 },
                 group: base.nome,
-                shape: "dot",
-                mass: 0
+                shape: "dot",                
             };
             elementosGrafo.nodes.add(no_base);
 
@@ -183,8 +180,7 @@ export class GrafoBases extends ComponenteBase {
                             color: "#ffffff"
                         },
                         group:base.nome,
-                        shape: "dot",
-                        mass: 0
+                        shape: "dot",                        
                     };
                     elementosGrafo.nodes.add(no_campo);
                     campos_renderizados[campo.nome] = true;
@@ -195,8 +191,7 @@ export class GrafoBases extends ComponenteBase {
                     let no_nuvem_palavras = {                        
                         id:`${no_base.id}-${campo.nome}-nuvem_palavras`,
                         shape:"circularImage",
-                        image: `dados/imagens/${campo.arquivo}`,
-                        mass: 0,
+                        image: `dados/imagens/${campo.arquivo}`,                    
                         size: 30,
                         group: base.nome                    
                     }

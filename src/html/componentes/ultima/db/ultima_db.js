@@ -1,9 +1,9 @@
-import { BaseInicialUltima } from "./base_inicial_ultima.js";
+import { BaseInicialUltima } from "../base_inicial_ultima.js";
 
 
 
 
-export class UltimaDAO extends EventTarget{
+export class UltimaDB extends EventTarget{
 
 
 
@@ -17,10 +17,10 @@ export class UltimaDAO extends EventTarget{
 
     static getInstance(){
 
-        if (!UltimaDAO.instancia){
-            UltimaDAO.instancia = new UltimaDAO();
+        if (!UltimaDB.instancia){
+            UltimaDB.instancia = new UltimaDB();
         }
-        return UltimaDAO.instancia;
+        return UltimaDB.instancia;
     }
 
 
@@ -45,7 +45,7 @@ export class UltimaDAO extends EventTarget{
             if (this.carregado){
                 resolve (true);
             }else{
-                this.addEventListener(UltimaDAO.EVENTO_BANCO_CARREGADO, ()=>{                    
+                this.addEventListener(UltimaDB.EVENTO_BANCO_CARREGADO, ()=>{                    
                     resolve(true);
                 });
             }
@@ -53,115 +53,25 @@ export class UltimaDAO extends EventTarget{
     }
 
 
-    async reiniciarBase(){
 
-        await this.aguardarBanco();
-
-        return new Promise ((resolve, reject) => {
-
-            this.limparObjectStore("elementos")
-                .then(() => this.limparObjectStore("componentes"))
-                    .then(() => this.limparObjectStore("views"))
-                        .then(() => this.limparObjectStore("acoes"))
-                            .then(() => this.adicionarComponentesIniciais())
-                                .then(()=> resolve(true));
-        
-        });      
-    }
-
-    
-
-    async componentes(){        
-        return this.lerTodosRegistros("componentes");
-    }
-    async componente(chave){        
-        return this.trazerRegistro(chave, "componentes", "index_nome_componente");
-    }
-
-
-    async elementos(){        
-        return this.lerTodosRegistros("elementos");
-    }
-    async elemento(chave){        
-        return this.trazerRegistro(chave, "elementos");
-    }
-
-
-    async acao(chave){        
-        return this.trazerRegistro(chave, "acoes");
-    }
-
-
-    async views(){        
-        return this.lerTodosRegistros("views");
-    }
-    async elemento_view(chave, chave_elemento){        
-        return this.trazerRegistro(chave, "views").then(view => view.elementos.find(e => e.id == chave_elemento));
-    }
-
-    
-    async atualizarComponentes (componentes){
-        return new Promise((resolve, reject) => {            
-            Promise.all(componentes.map (componente => this.atualizarComponente(componente))).then(retornos => {
-                resolve(true);
-            });            
-        });
-    }
-
-    async atualizarElementos (elementos){
-        return new Promise((resolve, reject) => {            
-            Promise.all(elementos.map (elemento => this.atualizarElemento(elemento))).then(retornos => {
-                resolve(true);
-            });            
-        });
-    }
-
-    async atualizarAcoes (acoes){
-        return new Promise((resolve, reject) => {            
-            Promise.all(acoes.map (acao => this.atualizarAcao(acao))).then(retornos => {
-                resolve(true);                
-            })
-        });
-    }
-
-
-    async atualizarComponente (componente){      
-        return this.atualizarRegistro (componente, "componentes");    
-    }
-
-
-    async atualizarElemento (elemento){      
-        return this.atualizarRegistro (elemento, "elementos");    
-    }
-
-    async atualizarAcao (acao){      
-        return this.atualizarRegistro (acao, "acoes");    
-    }
-
-    async atualizarView (view){      
-        return this.atualizarRegistro (view, "views");    
-    }
-    
-
-    
     async abrirBanco(){
 
-        let request = window.indexedDB.open(UltimaDAO.NOME_BANCO, UltimaDAO.VERSAO);
+        let request = window.indexedDB.open(UltimaDB.NOME_BANCO, UltimaDB.VERSAO);
 
 
         request.onerror = evento => {
-            console.error(`Erro ao abrir banco: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO}): ${evento.target.errorCode}`);
+            console.error(`Erro ao abrir banco: ${UltimaDB.NOME_BANCO} (versão: ${UltimaDB.VERSAO}): ${evento.target.errorCode}`);
             return;
         };
 
 
         request.onsuccess = evento => {
 
-            console.info(`Banco aberto: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
+            console.info(`Banco aberto: ${UltimaDB.NOME_BANCO} (versão: ${UltimaDB.VERSAO})`);
             this.banco = request.result;
 
             this.banco.onerror = evento => {                
-                console.error(`Erro no banco: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO}): ${evento.target.errorCode}`);
+                console.error(`Erro no banco: ${UltimaDB.NOME_BANCO} (versão: ${UltimaDB.VERSAO}): ${evento.target.errorCode}`);
             };
 
             if (!this.atualizandoBanco){
@@ -171,7 +81,7 @@ export class UltimaDAO extends EventTarget{
                 //Rodou a função de upgrade, ainda estamos em processo de inicialização do banco
                 //Adiciona os componentes iniciais para funcionamento mínimo do sistema Ultima
                 this.adicionarComponentesIniciais().then ( retorno => {
-                    console.info (`Dados do banco foram inicializados: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
+                    console.info (`Dados do banco foram inicializados: ${UltimaDB.NOME_BANCO} (versão: ${UltimaDB.VERSAO})`);
                     this.atualizandoBanco = false;
                     this.bancoCarregado();
                 });
@@ -185,7 +95,7 @@ export class UltimaDAO extends EventTarget{
 
             this.atualizandoBanco = true;
 
-            console.info (`Função de upgrade do banco: ${UltimaDAO.NOME_BANCO} (versão: ${UltimaDAO.VERSAO})`);
+            console.info (`Função de upgrade do banco: ${UltimaDB.NOME_BANCO} (versão: ${UltimaDB.VERSAO})`);
             this.banco = request.result;                        
 
             this.atualizacaoVersao(evento.oldVersion);                        
@@ -258,7 +168,7 @@ export class UltimaDAO extends EventTarget{
 
     bancoCarregado(){
         this.carregado = true;
-        this.dispatchEvent (new Event(UltimaDAO.EVENTO_BANCO_CARREGADO));
+        this.dispatchEvent (new Event(UltimaDB.EVENTO_BANCO_CARREGADO));
     }
 
 

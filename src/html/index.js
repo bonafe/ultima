@@ -1,4 +1,4 @@
-import { UltimaDAO } from './componentes/ultima/ultima_dao.js';
+import { UltimaDB } from './componentes/ultima/db/ultima_db.js';
 import { UltimaEvento } from './componentes/ultima/ultima_evento.js';
 import { UltimaView } from './componentes/ultima/ultima_view.js';
 window.onload = () => {

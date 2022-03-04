@@ -77,9 +77,9 @@
             "dados":{
                 "src":"yMEjLBKyvEg",
                 "acoes":[
-                    {"descricao":"abrir outro elemento"},
-                    {"descricao":"fechar elemento"},
-                    {"descricao":"mudar de lugar"}
+                    {"tempo": 1, "descricao":"abrir outro elemento"},
+                    {"tempo": 5, "descricao":"fechar elemento"},
+                    {"tempo": 10, "descricao":"mudar de lugar"}
                 ]
             }
         }
@@ -106,7 +106,7 @@
             "nome":"Cachorro 2",
             "componente":"exibidor-imagem",
             "dados":{
-                "src":"./imagens/cachorro_02.jpg"
+                "src":"./imagens/cachorro_02.jpeg"
             }
         },
         {
@@ -142,6 +142,13 @@
                     "ordem": 2,
                     "importancia": 32,
                     "componente":"grafo-indexeddb"
+                },
+                {
+                    "id": 3, 
+                    "id_elemento":5,                   
+                    "ordem": 2,
+                    "importancia": 32,
+                    "componente":"exibidor-video"
                 }
                     
             ]
