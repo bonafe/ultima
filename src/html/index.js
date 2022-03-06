@@ -1,6 +1,7 @@
 import { UltimaDB } from './componentes/ultima/db/ultima_db.js';
 import { UltimaEvento } from './componentes/ultima/ultima_evento.js';
-import { UltimaView } from './componentes/ultima/ultima_view.js';
+import { UltimaJS } from './componentes/ultima/ultima_js.js';
+
 window.onload = () => {
   
     const supportsContainerQueries = "container" in document.documentElement.style;
@@ -12,7 +13,7 @@ window.onload = () => {
         window.openFullscreen();
     });
     document.querySelector("#configuracao").addEventListener("click", () => {
-      document.querySelector("ultima-view").configuracao();
+      document.querySelector("ultima-js").configuracao();
     });
     document.querySelector("#ajuda").addEventListener("click", () => {
       alert (`Última Versão: ${UltimaDAO.VERSAO}`);
@@ -20,7 +21,7 @@ window.onload = () => {
 }
 
 window.openFullscreen = () => {
-    let elemento = document.querySelector("ultima-view");
+    let elemento = document.querySelector("ultima-js");
     if (!document.fullscreenElement) {
         elemento.requestFullscreen().catch(err => {
           alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);

@@ -1,9 +1,12 @@
 import { ComponenteBase } from '../../componente_base.js';
 import { UltimaEvento } from '../ultima_evento.js';
+import { UltimaDBReader } from "../db/ultima_db_reader.js";
+
 
 
 export class ContainerUltima extends ComponenteBase{
 
+    
 
     constructor(){
         super({templateURL:"/componentes/ultima/container/container_ultima.html", shadowDOM:false});        
@@ -12,7 +15,7 @@ export class ContainerUltima extends ComponenteBase{
 
         this.addEventListener("carregou", () => {
 
-            this.container = this.noRaiz.querySelector(".container_treemap");
+            this.container = this.noRaiz.querySelector(".componente_navegacao_view");
 
             this.atualizarDimensoes();            
 
@@ -21,16 +24,61 @@ export class ContainerUltima extends ComponenteBase{
     }
 
     atualizarDimensoes(){
-        this.marginTreemap = {top: 0, right: 0, bottom: 0, left: 0};
-        this.widthTreemap = this.container.clientWidth - this.marginTreemap.left - this.marginTreemap.right;
-        this.heightTreemap = this.container.clientHeight - this.marginTreemap.top - this.marginTreemap.bottom;
-        this.colorTreemap = d3.scaleOrdinal().range(d3.schemeCategory20c);
+        if (this.container){
+            this.marginTreemap = {top: 0, right: 0, bottom: 0, left: 0};
+            this.widthTreemap = this.container.clientWidth - this.marginTreemap.left - this.marginTreemap.right;
+            this.heightTreemap = this.container.clientHeight - this.marginTreemap.top - this.marginTreemap.bottom;
+            this.colorTreemap = d3.scaleOrdinal().range(d3.schemeCategory20c);
+        }
     }
 
 
     renderizar() {      
-    }
+
+        if (this.carregado && !this.renderizado && this._view){
+            this.criarEIniciarMenuDeAcoes();
+            this.renderizado = true;
+        }
+    }    
+
+
     
+    criarEIniciarMenuDeAcoes(){
+
+        let menuAcoes = this.noRaiz.querySelector("#menuAcoes");
+        menuAcoes.innerHTML = "";
+
+        this.querySelector("#reiniciar").addEventListener("click", () => {
+            UltimaDBWriter.getInstance().reiniciarBase().then(() => {
+                //TODO: está recarregando tudo
+                document.location.reload(true);
+            });                
+        });
+
+        Promise.all(this._view.acoes.map(idAcao => UltimaDBReader.getInstance().acao(idAcao)))
+            .then (acoes => {
+                acoes.forEach (acao => {
+                    let a = document.createElement("a");
+                    a.href = "#";
+                    a.textContent = acao.nome;
+                    menuAcoes.appendChild(a);
+
+                    a.addEventListener("click", e => {
+                        this.dispatchEvent(
+                            new UltimaEvento(
+                                UltimaEvento.EVENTO_ADICIONAR_ELEMENTO,
+                                {
+                                    nome_elemento:acao.nome,
+                                    nome_componente:acao.componente,
+                                    dados:acao.dados
+                                }
+                            )
+                        );                        
+                    });
+                });
+            });        
+    }
+
 
 
     adicionarElemento(elemento){                                          

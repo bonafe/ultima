@@ -52,6 +52,7 @@ export class ElementoUltima extends ComponenteBase {
 
             }else{
 
+                
                 let url_editor_json = super.prefixoEndereco + "/componentes/editor_json/editor_json.js";                
 
                 import(url_editor_json).then(modulo => {
@@ -206,12 +207,16 @@ export class ElementoUltima extends ComponenteBase {
             });
         }
         
-        if (this.instanciaComponente &&  this.elemento){                                                
-            this.instanciaComponente.setAttribute("dados", JSON.stringify(this.elemento.dados));            
+        if (this.instanciaComponente &&  this.elemento){  
+            if (this.elemento.dados){                                              
+                this.instanciaComponente.setAttribute("dados", JSON.stringify(this.elemento.dados));            
+            }
         }
 
         if (this.editorDados && this.elemento){
-            this.editorDados.setAttribute("dados", JSON.stringify(this.elemento.dados));
+            if (this.elemento.dados){                                              
+                this.editorDados.setAttribute("dados", JSON.stringify(this.elemento.dados));
+            }
         }
     }
 

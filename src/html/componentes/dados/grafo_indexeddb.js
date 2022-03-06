@@ -15,8 +15,10 @@ export class GrafoIndexedDB extends GrafoBases{
     }
 
     renderizar(){        
-        if (Object.entries(this.dados).length > 0){
-            super.renderizar();
+        if (this.dados){
+            if (Object.entries(this.dados).length > 0){
+                super.renderizar();
+            }
         }
     }
 

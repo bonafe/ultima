@@ -4,12 +4,14 @@ import { UltimaDBWriter } from "./db/ultima_db_writer.js";
 import { UltimaDBReader } from "./db/ultima_db_reader.js";
 import { ContainerTreeMap } from "./container/treemap/container_treemap.js";
 
-export class UltimaView extends ComponenteBase{    
+
+
+export class UltimaJS extends ComponenteBase{    
 
 
 
     constructor(){        
-        super({templateURL:"/componentes/ultima/ultima_view.html", shadowDOM:false});
+        super({templateURL:"/componentes/ultima/ultima_js.html", shadowDOM:false});
         
         this.configuracoesCarregadas = false;
 
@@ -31,8 +33,6 @@ export class UltimaView extends ComponenteBase{
                 this.views  = views;
 
                 this.criarEIniciarControleNavegadorTreemap();
-
-                this.criarEIniciarMenuDeAcoes();                    
             });
             
             this.renderizado = true;
@@ -118,9 +118,10 @@ export class UltimaView extends ComponenteBase{
             {evento:UltimaEvento.EVENTO_ATUALIZACAO_VIEW, funcao:this.atualizarView.bind(this)},            
 
             //Eventos tratados diretamente pelo ultima-view            
-            {evento:UltimaEvento.EVENTO_EXECUTAR_ACAO, funcao:this.executarAcao},
-            {evento:UltimaEvento.EVENTO_SELECAO_OBJETO, funcao:this.seleciouObjeto},
-            {evento:UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, funcao:this.atualizacaoElemento}
+            {evento:UltimaEvento.EVENTO_EXECUTAR_ACAO, funcao:this.executarAcao.bind(this)},
+            {evento:UltimaEvento.EVENTO_SELECAO_OBJETO, funcao:this.selecionouObjeto.bind(this)},
+            {evento:UltimaEvento.EVENTO_ADICIONAR_ELEMENTO, funcao:this.adicionarElemento.bind(this)},
+            {evento:UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, funcao:this.atualizacaoElemento.bind(this)}
         ].forEach (e => {
             
             this.addEventListener (e.evento, evento => e.funcao(evento.detail));
@@ -138,19 +139,22 @@ export class UltimaView extends ComponenteBase{
 
     executarAcao(ultimaEvento){
         console.log (`evento EXECUTAR AÇÃO!!!!!!!!!!`);
-        console.dir (ultimaEvento.detail);
-        this.adicionarElemento("Adicionado","exibidor-iframe",{src:"https://www.youtube.com/embed/YkgkThdzX-8"});
+        console.dir (ultimaEvento.detail);        
+        this.adicionarElemento ({
+            nome_elemento:"Adicionado",
+            nome_componente:"exibidor-iframe",
+            dados:{src:"https://www.youtube.com/embed/YkgkThdzX-8"}
+        });
     }
 
 
 
-    selecionouObjeto(ultimaEvento){
-        this.adicionarElemento (
-            //Componente
-            ultimaEvento.detail.elemento_origem.componente,
-            //Dados
-            ultimaEvento.detail.dados
-        );
+    selecionouObjeto(ultimaEvento){        
+        this.adicionarElemento ({
+            nome_elemento:"Novo a partir de seleção",
+            nome_componente:ultimaEvento.detail.elemento_origem.componente,
+            dados:ultimaEvento.detail.dados
+        });
     }                                                                   
 
 
@@ -173,32 +177,7 @@ export class UltimaView extends ComponenteBase{
 
 
 
-    criarEIniciarMenuDeAcoes(){
-
-        let menuAcoes = this.noRaiz.querySelector("#menuAcoes");
-        menuAcoes.innerHTML = "";
-
-        this.querySelector("#reiniciarBanco").addEventListener("click", () => {
-            UltimaDBWriter.getInstance().reiniciarBase().then(() => {
-                //TODO: está recarregando tudo
-                document.location.reload(true);
-            });                
-        });
-
-        Promise.all(this.views[0].acoes.map(idAcao => UltimaDBReader.getInstance().acao(idAcao)))
-            .then (acoes => {
-                acoes.forEach (acao => {
-                    let a = document.createElement("a");
-                    a.href = "#";
-                    a.textContent = acao.nome;
-                    menuAcoes.appendChild(a);
-
-                    a.addEventListener("click", e => {
-                        this.adicionarElemento(acao.nome, acao.componente, acao.dados)
-                    });
-                });
-            });        
-    }
+   
 
 
 
@@ -210,21 +189,21 @@ export class UltimaView extends ComponenteBase{
 
 
 
-    adicionarElemento(nome_elemento, nome_componente, dados){
+    adicionarElemento(detalhe){
 
         let id_novo_elemento = this.proximoIdElemento(this.views[0].elementos);
 
         let novo_elemento = {                        
             "id": id_novo_elemento,
-            "nome": nome_elemento,            
-            "dados": dados
+            "nome": detalhe.nome_elemento,            
+            "dados": detalhe.dados
         };
         let novo_elemento_view = {
             "id": id_novo_elemento,
             "id_elemento": id_novo_elemento,
             "ordem": this.proximaOrdem(this.views[0].elementos),            
             "importancia": this.mediaImportancia(this.views[0].elementos),
-            "componente": nome_componente
+            "componente": detalhe.nome_componente
         };
 
         this.views[0].elementos.push(novo_elemento_view);
@@ -298,12 +277,15 @@ export class UltimaView extends ComponenteBase{
 
                 const [componentes, acoes, elementos, views] = retornos;
 
-                this.adicionarElemento ("Configuração Última","configuracao-ultima",
-                {                    
-                    componentes: JSON.parse(JSON.stringify(componentes)),                  
-                    acoes: JSON.parse(JSON.stringify(acoes)),                    
-                    elementos: JSON.parse(JSON.stringify(elementos)),                    
-                    views: JSON.parse(JSON.stringify(views))                    
+                this.adicionarElemento ({
+                    nome_elemento:"Configuração Última",
+                    nome_componente:"configuracao-ultima",
+                    dados:{                    
+                        componentes: JSON.parse(JSON.stringify(componentes)),                  
+                        acoes: JSON.parse(JSON.stringify(acoes)),                    
+                        elementos: JSON.parse(JSON.stringify(elementos)),                    
+                        views: JSON.parse(JSON.stringify(views))                    
+                    }
                 });
             });                                  
         }
@@ -338,4 +320,4 @@ export class UltimaView extends ComponenteBase{
         UltimaDBWriter.getInstance().atualizarView(this.view);
     }
 }
-customElements.define('ultima-view', UltimaView);
+customElements.define('ultima-js', UltimaJS);

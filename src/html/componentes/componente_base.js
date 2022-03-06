@@ -52,7 +52,10 @@ export class ComponenteBase extends HTMLElement{
         });
             
         //Irá observar o primeiro elemento div
-        this.resizeObserver.observe(this.noRaiz.querySelector("div"));      
+        let elemento_observado = this.noRaiz.querySelector(".observado");
+        if (elemento_observado){        
+            this.resizeObserver.observe(elemento_observado);      
+        }
     }    
 
 

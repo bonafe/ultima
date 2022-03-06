@@ -11,7 +11,7 @@ export class ContainerTreeMap extends ContainerUltima{
         super();        
         this.addEventListener("carregou", () => {
 
-            this.container = this.noRaiz.querySelector(".container_treemap");
+            this.container = this.noRaiz.querySelector(".componente_navegacao_view");
 
             this.renderizar();
         });        
