@@ -1,0 +1,16 @@
+#containerPagina{
+	display: flex;
+	width: 1000;
+}
+
+.array{
+	border: 5px solid red;	
+}
+
+.array>ul{
+	list-style-type: none;
+}
+
+.objeto{
+	border: 2px solid blue;	
+}
