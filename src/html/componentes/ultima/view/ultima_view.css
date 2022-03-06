@@ -1,0 +1,124 @@
+/**********************************************************/
+/*                CONTAINER PAI                           */
+/**********************************************************/
+.secao_principal_view{    
+    width: 100%;
+    height: 100%;
+    background: rgba(76, 175, 80, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+/**********************************************************/
+/*                CABEÇALHO                               */
+/**********************************************************/
+.cabecalho_principal_view{    
+    background-color: rgb(100, 28, 167);
+    border: 2px solid rgb(48, 2, 66);
+    color: rgb(189, 144, 226);        
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}    
+
+
+
+/**********************************************************/
+/*                NAVEGAÇÃO                               */
+/**********************************************************/
+.navegacao_view{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.navegacao_view a{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+    color: #ffe600;
+    text-decoration: none;    
+    opacity: 0.6;
+    transition: 0.3s;
+    margin-left: 25px;
+}
+
+.navegacao_view a:hover{    
+    color: orange;
+    text-decoration: none;
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+
+
+/**********************************************************/
+/*                CONTEÚDO PRINCIPAL                      */
+/**********************************************************/
+.secao_componente_navegacao_view{
+    width: 100%;
+    height: 100%;        
+}
+
+.componente_navegacao_view{
+    width: 100%;
+    height: 100%;        
+}
+
+
+
+/**********************************************************/
+/*                     RODAPÉ                             */
+/**********************************************************/
+.rodape_principal_view{
+    background-color: rgb(43, 11, 73);
+    color: rgb(188, 118, 192);      
+}
+
+
+
+
+
+/**********************************************************/
+/*                     ELEMENTOS TREEMAP D3JS             */
+/**********************************************************/
+.node {
+    border: solid 1px rgb(0, 0, 0);
+    font: 10px sans-serif;
+    line-height: 12px;
+    overflow: auto;
+    position: absolute;
+    text-indent: 2px;
+  }
+  
+  .container {
+      opacity: 0;      
+      height: 100%;
+      width: 100%;
+      animation: opacityOn .52s normal forwards step-end;
+      animation-delay: 0s;
+  }
+  @keyframes opacityOn {
+      0% {
+          opacity: 0.15;
+      }
+      25%{
+          opacity: 0.25;
+      }
+      50%{
+          opacity: 0.5;
+      }
+      75%{
+          opacity: 0.75;
+      }
+      100% {
+          opacity: 1;
+      }
+  }
+
+
+  

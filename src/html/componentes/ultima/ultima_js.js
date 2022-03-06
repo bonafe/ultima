@@ -2,7 +2,7 @@ import { ComponenteBase } from "../componente_base.js";
 import { UltimaEvento } from "./ultima_evento.js";
 import { UltimaDBWriter } from "./db/ultima_db_writer.js";
 import { UltimaDBReader } from "./db/ultima_db_reader.js";
-import { ContainerTreeMap } from "./container/treemap/container_treemap.js";
+import { UltimaTreemapView } from "./view/treemap/ultima_treemap_view.js";
 
 
 
@@ -96,7 +96,7 @@ export class UltimaJS extends ComponenteBase{
 
     
     criarEIniciarControleNavegadorTreemap(){
-        this.controleNavegador = this.noRaiz.querySelector("container-treemap");
+        this.controleNavegador = this.noRaiz.querySelector("ultima-treemap-view");
             
         //TODO: só está pegando a primeira view
         this.controleNavegador.view = JSON.parse(JSON.stringify(this.views[0]));

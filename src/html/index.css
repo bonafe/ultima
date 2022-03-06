@@ -1,34 +1,85 @@
+/**********************************************************/
+/*                CONTAINER PAI                           */
+/**********************************************************/
 html, body{
-    height: 100%;
-    min-height: 100% !important;
-  }
-  body {      
-    background-color: rgb(0, 0, 0);
-    box-sizing: content-box;
-  }
-  .cabecalho_principal{    
-    width: 100%;
-    background-color: blueviolet;
-    color: rgb(220, 190, 245);            
-    padding: 5px;
-    display: flex;
-  }    
-  .area-logo{  
-    display: flex;      
-    width: 70%;    
-  }
-  .area-navegacao{        
-    width: 30%;
-    padding-right: 10px;
-    display: flex;
-    flex-direction: row-reverse;
-  }
-.controle_navegacao_principal{  
-    padding-left: 10px;
-    transition: 0.3s;
-    color: rgb(255, 123, 0);
-    opacity: 0.5;
+  height: 100%;
+  min-height: 100% !important;
 }
+
+body {      
+  background-color: rgb(0, 0, 0);
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/**********************************************************/
+/*                CABEÇALHO                               */
+/**********************************************************/
+.cabecalho_principal{    
+  width: 100%;
+  background-color: blueviolet;
+  color: rgb(220, 190, 245);            
+  padding: 5px;
+  display: flex;
+}    
+
+.area-logo{  
+  display: flex;      
+  width: 70%;    
+}
+
+.container_logo{     
+  align-self: flex-end;        
+  padding-right: 10px;     
+}
+
+.logo_icone_u{                   
+  color: orange;
+}  
+
+.logo_icone_js{                   
+  color: orange;      
+}
+
+.ultima_titulo{
+  align-self: flex-end;
+  display: flex;
+  align-items: flex-start;
+
+}
+
+.ultima_nome{
+  font-family: Tahoma, sans-serif;      
+}
+
+.ultima_descricao{
+  font-family: Tahoma, sans-serif;
+  font-size: xx-small;
+  padding: 5px;
+}
+
+
+
+/**********************************************************/
+/*                NAVEGAÇÃO                               */
+/**********************************************************/
+.area-navegacao{        
+  width: 30%;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.controle_navegacao_principal{  
+  padding-left: 10px;
+  transition: 0.3s;
+  color: rgb(255, 123, 0);
+  opacity: 0.5;
+}
+
 .controle_navegacao_principal:hover{  
   opacity: 1;
   transform: scale(2);
@@ -36,47 +87,28 @@ html, body{
 
 
 
+/**********************************************************/
+/*                CONTEÚDO PRINCIPAL                      */
+/**********************************************************/
+.secao_principal{
+  width: 100%;
+  height: 80%;
+}
 
-  .rodape_principal{
-    background-color: rgb(61, 20, 100);
-    color: rgb(250, 205, 252);      
-  }
+ultima-view {
+  width: 100%;
+  height: 100%;
+}
 
-  .secao_principal{
-      width: 100%;
-      height: 80%;
-  }
 
-  ultima-view {
-      width: 100%;
-      height: 100%;
-  }
 
-  .container_logo{     
-    align-self: flex-end;        
-    padding-right: 10px;     
-  }
- 
-  .logo_icone_u{                   
-    color: orange;
-  }    
-  .logo_icone_js{                   
-    color: orange;      
-  }
+/**********************************************************/
+/*                     RODAPÉ                             */
+/**********************************************************/
+.rodape_principal{
+  background-color: rgb(61, 20, 100);
+  color: rgb(250, 205, 252);      
+}
 
-  .ultima_titulo{
-    align-self: flex-end;
-    display: flex;
-    align-items: flex-start;
 
-  }
 
-  .ultima_nome{
-    font-family: Tahoma, sans-serif;      
-  }
-
-  .ultima_descricao{
-    font-family: Tahoma, sans-serif;
-    font-size: xx-small;
-    padding: 5px;
-  }

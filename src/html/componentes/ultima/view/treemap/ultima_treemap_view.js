@@ -1,10 +1,10 @@
-import { ContainerUltima } from '../container_ultima.js';
+import { UltimaView } from '../ultima_view.js';
 
-import { ElementoTreeMap } from './elemento_treemap.js';
+import { UltimaTreemapElemento } from './ultima_treemap_elemento.js';
 import { UltimaEvento } from '../../ultima_evento.js';
 
 
-export class ContainerTreeMap extends ContainerUltima{
+export class UltimaTreemapView extends UltimaView{
 
 
     constructor(){
@@ -87,7 +87,7 @@ export class ContainerTreeMap extends ContainerUltima{
         let novosNos = this.node
             //ENTER
             .enter()
-                .append("elemento-treemap")                    
+                .append("ultima-treemap-elemento")                    
                     .attr("class", "node container")
                     .attr("id",(d) => JSON.stringify(d.data.id))
                     .attr("id_view", (d) => JSON.stringify(this._view.id))                    
@@ -357,4 +357,4 @@ export class ContainerTreeMap extends ContainerUltima{
     }
 }
 
-customElements.define('container-treemap', ContainerTreeMap);
+customElements.define('ultima-treemap-view', UltimaTreemapView);

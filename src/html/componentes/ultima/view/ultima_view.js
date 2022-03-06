@@ -4,12 +4,12 @@ import { UltimaDBReader } from "../db/ultima_db_reader.js";
 
 
 
-export class ContainerUltima extends ComponenteBase{
+export class UltimaView extends ComponenteBase{
 
     
 
     constructor(){
-        super({templateURL:"/componentes/ultima/container/container_ultima.html", shadowDOM:false});        
+        super({templateURL:"/componentes/ultima/view/ultima_view.html", shadowDOM:false});        
 
         this._view = undefined;
 

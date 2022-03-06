@@ -3,10 +3,10 @@ import { UltimaEvento } from '../ultima_evento.js';
 import { UltimaDBReader } from "../db/ultima_db_reader.js";
 
 
-export class ElementoUltima extends ComponenteBase {
+export class UltimaElemento extends ComponenteBase {
 
     constructor(){
-        super({templateURL:"/componentes/ultima/container/elemento_ultima.html", shadowDOM:true});
+        super({templateURL:"/componentes/ultima/view/ultima_elemento.html", shadowDOM:true});
 
         this.dados = null;
 
