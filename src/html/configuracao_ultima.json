@@ -94,40 +94,52 @@
     "acoes": [
         {
             "id": 1,
-            "nome": "Saúde",
-            "componente": "exibidor-iframe",
+            "titulo": "Saúde",
+            "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
-                "src": "https://www.youtube.com/embed/3cowjrMpAys"
+                "nome_elemento": "video_shiatsu_01",
+                "nome_componente": "exibidor-iframe",
+                "dados":{"src": "https://www.youtube.com/embed/3cowjrMpAys"}
             }
         },
         {
             "id": 2,
-            "nome": "Cachorro 1",
-            "componente": "exibidor-imagem",
+            "titulo": "Cachorro 1",
+            "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
-                "src": "./imagens/cachorro_01.jpg"
+                "nome_elemento": "imagem_cachorro_amarelo",
+                "nome_componente": "exibidor-imagem",
+                "dados":{"src": "./imagens/cachorro_01.jpg"}
             }
-        },
+        }, 
         {
             "id": 3,
-            "nome": "Cachorro 2",
-            "componente": "exibidor-imagem",
+            "titulo": "Cachorro 2",
+            "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
-                "src": "./imagens/cachorro_02.jpeg"
+                "nome_elemento": "imagem_cachorro_tranquilo",
+                "nome_componente": "exibidor-imagem",
+                "dados":{"src": "./imagens/cachorro_02.jpeg"}
             }
         },
         {
             "id": 4,
-            "nome": "Feriados no Brasil",
-            "componente": "exibidor-iframe",
+            "titulo": "Feriados no Brasil",
+            "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
-                "src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
+                "nome_elemento": "feriados_brasil_google",
+                "nome_componente": "exibidor-iframe",
+                "dados":{"src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"}
             }
-        },
+        },  
         {
             "id": 5,
-            "nome": "Grafo IndexedDB",
-            "componente": "grafo-indexeddb"
+            "titulo": "Grafo IndexedDB",
+            "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
+            "dados": {
+                "nome_elemento": "grafo_indexeddb",
+                "nome_componente": "grafo-indexeddb"                
+            }
         }
     ],
     "elementos": [

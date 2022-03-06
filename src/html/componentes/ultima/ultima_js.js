@@ -101,26 +101,15 @@ export class UltimaJS extends ComponenteBase{
         //TODO: só está pegando a primeira view
         this.controleNavegador.view = JSON.parse(JSON.stringify(this.views[0]));
                                     
-        [            
+        [   
+            {evento:UltimaEvento.EXECUTAR_ACAO, funcao:this.executarAcao.bind(this)},
+
             //Eventos direcionados para o controle navegador
-            //TODO: poder ter vários controladores de containeres de navegação
-            {evento:UltimaEvento.EVENTO_AUMENTAR, funcao:this.controleNavegador.aumentar.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_DIMINUIR, funcao:this.controleNavegador.diminuir.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_MAXIMIZAR, funcao:this.controleNavegador.maximizar.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_MINIMIZAR, funcao:this.controleNavegador.minimizar.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_RESTAURAR, funcao:this.controleNavegador.restaurar.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_FECHAR, funcao:this.controleNavegador.fechar.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_IR_PARA_TRAS, funcao:this.controleNavegador.irParaTras.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_IR_PARA_FRENTE, funcao:this.controleNavegador.irParaFrente.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_IR_PARA_INICIO, funcao:this.controleNavegador.irParaInicio.bind(this.controleNavegador)},
-            {evento:UltimaEvento.EVENTO_IR_PARA_FIM, funcao:this.controleNavegador.irParaFim.bind(this.controleNavegador)},            
-            {evento:UltimaEvento.EVENTO_MUDAR_VISUALIZACAO, funcao:this.controleNavegador.mudarVisualizacao.bind(this.controleNavegador)},
+            //TODO: poder ter vários controladores de containeres de navegação            
             {evento:UltimaEvento.EVENTO_ATUALIZACAO_VIEW, funcao:this.atualizarView.bind(this)},            
 
-            //Eventos tratados diretamente pelo ultima-view            
-            {evento:UltimaEvento.EVENTO_EXECUTAR_ACAO, funcao:this.executarAcao.bind(this)},
-            {evento:UltimaEvento.EVENTO_SELECAO_OBJETO, funcao:this.selecionouObjeto.bind(this)},
-            {evento:UltimaEvento.EVENTO_ADICIONAR_ELEMENTO, funcao:this.adicionarElemento.bind(this)},
+            //Eventos tratados diretamente pelo ultima-view                        
+            {evento:UltimaEvento.EVENTO_SELECAO_OBJETO, funcao:this.selecionouObjeto.bind(this)},            
             {evento:UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, funcao:this.atualizacaoElemento.bind(this)}
         ].forEach (e => {
             
@@ -128,22 +117,43 @@ export class UltimaJS extends ComponenteBase{
         });                                   
     }
     
+
+    executarAcao(acao){
+
+        //Cria um dicionário com as ações disponíveis e as respectivas funções que as executam
+        let relacao_acao_funcao = {        
+            [UltimaEvento.ACAO_REINICIAR.nome]:this.reiniciar.bind(this),
+            [UltimaEvento.ACAO_ADICIONAR_ELEMENTO.nome]:this.adicionarElemento.bind(this),
+            [UltimaEvento.ACAO_AUMENTAR_ELEMENTO.nome]:this.controleNavegador.aumentar.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_DIMINUIR_ELEMENTO.nome]:this.controleNavegador.diminuir.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_MAXIMIZAR_ELEMENTO.nome]:this.controleNavegador.maximizar.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_MINIMIZAR_ELEMENTO.nome]:this.controleNavegador.minimizar.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_RESTAURAR_ELEMENTO.nome]:this.controleNavegador.restaurar.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_FECHAR_ELEMENTO.nome]:this.controleNavegador.fechar.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_IR_PARA_TRAS_ELEMENTO.nome]:this.controleNavegador.irParaTras.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_IR_PARA_FRENTE_ELEMENTO.nome]:this.controleNavegador.irParaFrente.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_IR_PARA_INICIO_ELEMENTO.nome]:this.controleNavegador.irParaInicio.bind(this.controleNavegador),
+            [UltimaEvento.ACAO_IR_PARA_FIM_ELEMENTO.nome]:this.controleNavegador.irParaFim.bind(this.controleNavegador)
+        };
+
+        //Chava a função correspondente a ação passando os parâmetros dela
+        relacao_acao_funcao[acao.nome](acao.parametros);        
+    }
+
+
+    reiniciar(){
+        UltimaDBWriter.getInstance().reiniciarBase().then(() => {
+            //TODO: está recarregando tudo
+            document.location.reload(true);
+        });                
+    }
+
     atualizarView(detalhes){        
         let id_container = detalhes.id_container;
 
         //TODO: considerando apenas um container (nome antigo: view)
         UltimaDBWriter.getInstance().atualizarView(this.controleNavegador.view).then(()=>{
             //Persistiu a atualização na base
-        });
-    }
-
-    executarAcao(ultimaEvento){
-        console.log (`evento EXECUTAR AÇÃO!!!!!!!!!!`);
-        console.dir (ultimaEvento.detail);        
-        this.adicionarElemento ({
-            nome_elemento:"Adicionado",
-            nome_componente:"exibidor-iframe",
-            dados:{src:"https://www.youtube.com/embed/YkgkThdzX-8"}
         });
     }
 

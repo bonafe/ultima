@@ -52,10 +52,7 @@ export class UltimaView extends ComponenteBase{
         menuAcoes.innerHTML = "";
 
         this.querySelector("#reiniciar").addEventListener("click", () => {
-            UltimaDBWriter.getInstance().reiniciarBase().then(() => {
-                //TODO: está recarregando tudo
-                document.location.reload(true);
-            });                
+            UltimaEvento.dispararEventoExecutarAcao(this, UltimaEvento.ACAO_REINICIAR.nome);               
         });
 
         Promise.all(this._view.acoes.map(idAcao => UltimaDBReader.getInstance().acao(idAcao)))
@@ -63,20 +60,17 @@ export class UltimaView extends ComponenteBase{
                 acoes.forEach (acao => {
                     let a = document.createElement("a");
                     a.href = "#";
-                    a.textContent = acao.nome;
+                    a.textContent = acao.titulo;
                     menuAcoes.appendChild(a);
 
                     a.addEventListener("click", e => {
-                        this.dispatchEvent(
-                            new UltimaEvento(
-                                UltimaEvento.EVENTO_ADICIONAR_ELEMENTO,
-                                {
-                                    nome_elemento:acao.nome,
-                                    nome_componente:acao.componente,
-                                    dados:acao.dados
-                                }
-                            )
-                        );                        
+                        UltimaEvento.dispararEventoExecutarAcao(this, 
+                            acao.nome_acao, 
+                            {
+                                nome_elemento:acao.dados.nome_elemento,
+                                nome_componente:acao.dados.nome_componente,
+                                dados:acao.dados.dados
+                            });                         
                     });
                 });
             });        

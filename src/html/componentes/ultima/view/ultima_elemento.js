@@ -285,35 +285,55 @@ export class UltimaElemento extends ComponenteBase {
         this.noRaiz.querySelector("#voltar").addEventListener("click", ()=>{
             this.configuracao(false);
         });
+
         this.noRaiz.querySelector("#aumentar").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_AUMENTAR, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_AUMENTAR_ELEMENTO.nome, {"id_elemento_container":this._id});            
         });
+
         this.noRaiz.querySelector("#diminuir").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_DIMINUIR, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_DIMINUIR_ELEMENTO.nome, {"id_elemento_container":this._id});            
         });
+
         this.noRaiz.querySelector("#irParaTras").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_IR_PARA_TRAS, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_IR_PARA_TRAS_ELEMENTO.nome, {"id_elemento_container":this._id});             
         });
+
         this.noRaiz.querySelector("#irParaFrente").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_IR_PARA_FRENTE, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_IR_PARA_FRENTE_ELEMENTO.nome, {"id_elemento_container":this._id});            
         });
+
         this.noRaiz.querySelector("#irParaInicio").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_IR_PARA_INICIO, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_IR_PARA_INICIO_ELEMENTO.nome, {"id_elemento_container":this._id});            
         });
+
         this.noRaiz.querySelector("#irParaFim").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_IR_PARA_FIM, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_IR_PARA_FIM_ELEMENTO.nome, {"id_elemento_container":this._id});              
         });
+
         this.noRaiz.querySelector("#maximizar").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_MAXIMIZAR, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_MAXIMIZAR_ELEMENTO.nome, {"id_elemento_container":this._id}); 
         });
+
         this.noRaiz.querySelector("#restaurar").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_RESTAURAR, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_RESTAURAR_ELEMENTO.nome, {"id_elemento_container":this._id});
         });
+
         this.noRaiz.querySelector("#minimizar").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_MINIMIZAR, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_MINIMIZAR_ELEMENTO.nome, {"id_elemento_container":this._id});
         });
+
         this.noRaiz.querySelector("#fechar").addEventListener("click", ()=>{
-            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_FECHAR, {"id_elemento_container":this._id}));
+            UltimaEvento.dispararEventoExecutarAcao(this, 
+                UltimaEvento.ACAO_FECHAR_ELEMENTO.nome, {"id_elemento_container":this._id});
         });                    
     }
 }
