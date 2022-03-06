@@ -23,6 +23,8 @@ export class UltimaView extends ComponenteBase{
         });        
     }
 
+
+
     atualizarDimensoes(){
         if (this.container){
             this.marginTreemap = {top: 0, right: 0, bottom: 0, left: 0};
@@ -31,6 +33,7 @@ export class UltimaView extends ComponenteBase{
             this.colorTreemap = d3.scaleOrdinal().range(d3.schemeCategory20c);
         }
     }
+
 
 
     renderizar() {      
@@ -88,7 +91,9 @@ export class UltimaView extends ComponenteBase{
         this.renderizar();    
     }
 
-     set view(novaview){        
+
+
+    set view(novaview){        
         this._view = JSON.parse(JSON.stringify(novaview));
         this.renderizar();
     }
@@ -119,10 +124,6 @@ export class UltimaView extends ComponenteBase{
 
 
 
-
-
-
-
     processarNovasDimensoes(largura, altura){
 
         //console.info (`--------------------------------> ATUALIZOU DIMENSÕES DO CONTAINER TREEMAP`);
@@ -133,7 +134,6 @@ export class UltimaView extends ComponenteBase{
 
 
 
-   
     substituirElementoContainer(elementoContainer) {
         
         let evento = d3.event;

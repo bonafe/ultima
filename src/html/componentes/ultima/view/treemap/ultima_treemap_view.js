@@ -2,6 +2,7 @@ import { UltimaView } from '../ultima_view.js';
 
 import { UltimaTreemapElemento } from './ultima_treemap_elemento.js';
 import { UltimaEvento } from '../../ultima_evento.js';
+import { ComponenteBase } from '../../../componente_base.js';
 
 
 export class UltimaTreemapView extends UltimaView{
@@ -9,11 +10,18 @@ export class UltimaTreemapView extends UltimaView{
 
     constructor(){
         super();        
-        this.addEventListener("carregou", () => {
+
+        this.cssCarregado = false;
+
+        this.addEventListener("carregou", () => {            
 
             this.container = this.noRaiz.querySelector(".componente_navegacao_view");
 
-            this.renderizar();
+            ComponenteBase.carregarCSS(this.noRaiz, "/componentes/ultima/view/treemap/ultima_treemap_view.css")
+                .then(()=>{
+                    this.cssCarregado = true;
+                    this.renderizar();
+                });            
         });        
     }
 
@@ -21,7 +29,7 @@ export class UltimaTreemapView extends UltimaView{
 
     renderizar() {
 
-        if (this.container && this._view){
+        if (this.container && this._view && this.cssCarregado){
 
             //Atualiza o atributo ordem do elemento
             this._view.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
@@ -79,7 +87,7 @@ export class UltimaTreemapView extends UltimaView{
         
         //console.log (root.children.map(e => `[id:${e.data.id} descricao:${e.data.descricao} ordem:${e.data.ordem} importancia:${e.data.importancia}]`).join("\n"));
 
-        this.node = this.divD3.selectAll(".node").data(this.treemap(root).leaves(), d => d.data.id);                                      
+        this.node = this.divD3.selectAll(".node_treemap_d3js").data(this.treemap(root).leaves(), d => d.data.id);                                      
 
         //EXIT
         this.node.exit().remove();
@@ -88,7 +96,7 @@ export class UltimaTreemapView extends UltimaView{
             //ENTER
             .enter()
                 .append("ultima-treemap-elemento")                    
-                    .attr("class", "node container")
+                    .attr("class", "node_treemap_d3js container_treemap_d3js")
                     .attr("id",(d) => JSON.stringify(d.data.id))
                     .attr("id_view", (d) => JSON.stringify(this._view.id))                    
                     .style("left", (d) => d.x0 + "px")

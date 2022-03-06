@@ -1,6 +1,9 @@
 import { UltimaElemento } from '../ultima_elemento.js';
 
+
+
 export class UltimaTreemapElemento extends UltimaElemento {
+
 
 
     constructor(){
@@ -11,6 +14,7 @@ export class UltimaTreemapElemento extends UltimaElemento {
     }
 
    
+    
     renderizar(){
         super.renderizar();
     }

@@ -72,4 +72,18 @@ export class ComponenteBase extends HTMLElement{
 
     adoptedCallback() {
     }
+
+    static carregarCSS (no, endereco_css){        
+        return new Promise ((resolve, reject) => {
+            let link  = document.createElement('link');            
+            link.rel  = 'stylesheet';
+            link.type = 'text/css';
+            link.href = endereco_css;
+            link.media = 'all';
+            link.onload = () => {
+                resolve(true);
+            };
+            no.appendChild(link);        
+        });
+    }
 }
