@@ -16,7 +16,7 @@ window.onload = () => {
       document.querySelector("ultima-js").configuracao();
     });
     document.querySelector("#ajuda").addEventListener("click", () => {
-      alert (`Última Versão: ${UltimaDAO.VERSAO}`);
+      alert (`Última Versão: ${UltimaDB.VERSAO}`);
     });
 }
 
