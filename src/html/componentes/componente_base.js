@@ -115,9 +115,15 @@ export class ComponenteBase extends HTMLElement{
             link.href = (url_filho? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco));            
 
             link.media = 'all';
-            link.onload = () => {
+            link.addEventListener("load", () => {
                 resolve(true);
-            };
+            });
+
+            link.addEventListener("error", (e) => {
+                console.log (`Erro ao carregar estilo: ${link.href}`);
+                console.dir(e);
+                reject();
+            });
             this.noRaiz.appendChild(link);        
         });
     }
