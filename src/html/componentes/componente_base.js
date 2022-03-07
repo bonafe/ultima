@@ -106,19 +106,47 @@ export class ComponenteBase extends HTMLElement{
     adoptedCallback() {
     }
 
-    static carregarCSS (no, endereco_css, url_componente){        
+    carregarCSS (endereco, url_filho){        
         return new Promise ((resolve, reject) => {
 
             let link  = document.createElement('link');            
             link.rel  = 'stylesheet';
             link.type = 'text/css';
-            link.href = ComponenteBase.resolverEndereco(endereco_css, ComponenteBase.extrairCaminhoURL(url_componente));            
+            link.href = (url_filho? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco));            
 
             link.media = 'all';
             link.onload = () => {
                 resolve(true);
             };
-            no.appendChild(link);        
+            this.noRaiz.appendChild(link);        
+        });
+    }
+
+    carregarScript (endereco, url_filho, hash_integridade){         
+        return new Promise ((resolve, reject) => {
+
+            let script  = document.createElement('script');            
+            script.setAttribute("async", "");
+            script.src = (url_filho? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco));
+
+            //TODO: VERIFICAR não está funcionando eu acho, não está sendo usado ainda
+            if (hash_integridade){
+                script.integrity = hash_integridade;
+                //TODO: verificar se precisa mesmo desse anonymous, copiado do bootstrap
+                script.crossorigin="anonymous";
+            }
+            
+            script.addEventListener("load", () => {
+                resolve(true);
+            });
+
+            script.addEventListener("error", (e) => {
+                console.log (`Erro ao carregar script: ${script.src}`);
+                console.dir(e);
+                reject();
+            });
+
+            this.noRaiz.appendChild(script);        
         });
     }
 }
