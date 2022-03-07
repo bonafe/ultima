@@ -227,13 +227,9 @@ export class UltimaElemento extends ComponenteBase {
         if (this.carregado){
 
             this.carregandoComponente = true;
-
-            //Se é uma URL relativa, usa o prefixo de endereço preenchido pelo ComponenteBase
-            //Caso contrário usa a própria url
-            let url = (this.componente.url.startsWith('/') ? (super.prefixoEndereco + this.componente.url) : this.componente.url);
-            
+      
             //Carrega dinamicamente o componente
-            import(url).then(modulo => {
+            import(ComponenteBase.resolverEndereco(this.componente.url)).then(modulo => {
 
                 this.instanciaComponente = document.createElement(this.componente.nome);
                 this.noRaiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);
