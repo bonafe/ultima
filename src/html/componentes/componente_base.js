@@ -4,7 +4,7 @@ export class ComponenteBase extends HTMLElement{
     constructor(propriedades){
         super();
         
-        this.carregado = false;
+        this.carregado = false;        
 
         //TODO: como fazer se o componente está hospedado em outro domínio?
         this._prefixoEndereco = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
@@ -14,6 +14,8 @@ export class ComponenteBase extends HTMLElement{
         }else{
             this.noRaiz = this;
         }
+        console.log ("IMPORT META");
+        console.dir(new URL(import.meta.url));
         this.carregarTemplate(propriedades.templateURL);
     }
 
@@ -37,7 +39,7 @@ export class ComponenteBase extends HTMLElement{
         setTimeout(()=>this.observar());
 
         this.carregado = true;
-        this.dispatchEvent(new Event("carregou"));
+        this.dispatchEvent(new Event("carregou"));        
     }
 
 
