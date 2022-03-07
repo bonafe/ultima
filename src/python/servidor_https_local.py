@@ -15,7 +15,7 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         SimpleHTTPRequestHandler.end_headers(self)
 
-os.chdir("../html")
+os.chdir("../html/")
 
 httpd = http.server.HTTPServer(('127.0.0.1', 8123), CORSRequestHandler)
 httpd.socket = ssl.wrap_socket (httpd.socket, certfile='../python/server.pem', server_side=True)
