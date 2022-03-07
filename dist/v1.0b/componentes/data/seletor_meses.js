@@ -7,7 +7,7 @@ export class SeletorMeses extends ComponenteBase {
     
 
     constructor(){
-        super({templateURL:"/componentes/data/seletor_meses.html", shadowDOM:true});
+        super({templateURL:"./seletor_meses.html", shadowDOM:true}, import.meta.url);
         
         this.addEventListener("carregou", () => {
         

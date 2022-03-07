@@ -17,7 +17,7 @@ export class UltimaTreemapView extends UltimaView{
 
             this.container = this.noRaiz.querySelector(".componente_navegacao_view");
 
-            ComponenteBase.carregarCSS(this.noRaiz, "/componentes/ultima/view/treemap/ultima_treemap_view.css")
+            ComponenteBase.carregarCSS(this.noRaiz, "./ultima_treemap_view.css", import.meta.url)
                 .then(()=>{
                     this.cssCarregado = true;
                     this.renderizar();

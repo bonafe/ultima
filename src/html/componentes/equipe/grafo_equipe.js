@@ -6,7 +6,7 @@ export class GrafoEquipe extends ComponenteBase {
     
 
     constructor(){
-        super({templateURL:"/componentes/equipe/grafo_equipe.html", shadowDOM:true});
+        super({templateURL:"./grafo_equipe.html", shadowDOM:true}, import.meta.url);
         
         this.addEventListener("carregou", () => {
         

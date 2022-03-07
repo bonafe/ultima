@@ -9,7 +9,7 @@ export class UltimaView extends ComponenteBase{
     
 
     constructor(){
-        super({templateURL:"/componentes/ultima/view/ultima_view.html", shadowDOM:false});        
+        super({templateURL:"./ultima_view.html", shadowDOM:false}, import.meta.url);        
 
         this._view = undefined;
 

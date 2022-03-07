@@ -5,7 +5,7 @@ import { UltimaEvento } from '../ultima/ultima_evento.js';
 export class ExibidorIframe extends ComponenteBase {
 
     constructor(){
-        super({templateURL:"/componentes/iframe/exibidor_iframe.html", shadowDOM:true});
+        super({templateURL:"./exibidor_iframe.html", shadowDOM:true}, import.meta.url);
 
         this._dados = undefined;
 

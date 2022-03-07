@@ -1,9 +1,13 @@
 export class ComponenteBase extends HTMLElement{
 
 
-    constructor(propriedades){
+    constructor(propriedades, url_herdeiro){
         super();
-        
+                
+        this.url_herdeiro = url_herdeiro;
+        this.url_base = ComponenteBase.extrairCaminhoURL(this.url_herdeiro);
+
+
         this.carregado = false;        
 
         if (propriedades.shadowDOM){
@@ -15,57 +19,49 @@ export class ComponenteBase extends HTMLElement{
         this.carregarTemplate(propriedades.templateURL);
     }
 
-
-    
-    get prefixoEndereco(){
-        return this._prefixoEndereco;
+    //TODO: usar tag A com href para fazer parse no endereço e extrair o caminho
+    static extrairCaminhoURL(url){
+        return url.split(0, url.lastIndexOf("/")+1);
     }
 
 
-    //TODO: MELHORAR A RESOLUÇÃO DE ENDEREÇOS
-    static resolverEndereco(endereco){
+
+    //TODO: MELHORAR A RESOLUÇÃO DE ENDEREÇOS    
+    static resolverEndereco(endereco, url_base){
 
         let url = undefined;
 
         try{
 
             //Apenas conseguirá carregar o endereço se for uma URL absoluta
-            url = new URL (endereco);
+           return new URL (endereco);
 
-        }catch(e){
+        }catch(e){       
 
-            //No caso de URLs relativas, são todas consideradas a partir da localização do ComponenteBase (este arquivo)
-            //Meta informação deste arquivo (pois está usando classes/módulos)
-            let url_deste_arquivo = new URL(import.meta.url);
-            //Este arquivo fica por padrão, relativo a raiz, na pasta /componentes
-            
-            let partes_url_deste_arquivo = url_deste_arquivo.pathname.split("/");
-                        
-            let indice_encontrado = partes_url_deste_arquivo.lastIndexOf("componentes");                
-
-            let inicio_url = partes_url_deste_arquivo.slice(0,indice_encontrado).join("/")
-            
-            endereco = inicio_url + endereco;            
-
-            return new URL(endereco, url_deste_arquivo.origin); 
+            //Trata URLs relativas a url do herdeiro de ComponenteBase
+            return new URL(endereco, url_base); 
         }
     }
 
+
+
+    resolverEndereco(endereco){
+        return ComponenteBase.resolverEndereco(endereco, this.url_base);
+    }
+
+
+
     async carregarTemplate(templateURL){       
               
-        let resposta = await fetch(ComponenteBase.resolverEndereco(templateURL));
+        let resposta = await fetch(this.resolverEndereco(templateURL));
         let textoPagina = await resposta.text();
         let template = document.createElement("template");
         template.innerHTML = textoPagina;
         let elemento = template.content.cloneNode(true);
 
         elemento.querySelectorAll("link").forEach(elemento => {
-            //Os endereços dos CSS dos templates são carregados em relação ao window.location
-            let indice_location_origin = elemento.href.indexOf(window.location.origin);
-            //Tiramos o window.location do endereço para ter o endereço relativo
-            let novoEnderecoCSS = elemento.href.slice(indice_location_origin + window.location.origin.length);
-            //Usamos a função de resolução de endereço para corrigir o endereço do CSS
-            elemento.href = ComponenteBase.resolverEndereco(novoEnderecoCSS)
+            
+            elemento.href = this.resolverEndereco(elemento.getAttribute("href"));
         });
 
         this.noRaiz.appendChild(elemento);
@@ -110,13 +106,13 @@ export class ComponenteBase extends HTMLElement{
     adoptedCallback() {
     }
 
-    static carregarCSS (no, endereco_css){        
+    static carregarCSS (no, endereco_css, url_componente){        
         return new Promise ((resolve, reject) => {
 
             let link  = document.createElement('link');            
             link.rel  = 'stylesheet';
             link.type = 'text/css';
-            link.href = ComponenteBase.resolverEndereco(endereco_css);            
+            link.href = ComponenteBase.resolverEndereco(endereco_css, ComponenteBase.extrairCaminhoURL(url_componente));            
 
             link.media = 'all';
             link.onload = () => {

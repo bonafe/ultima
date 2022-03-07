@@ -5,7 +5,7 @@ import { UltimaEvento } from '../ultima/ultima_evento.js';
 export class ExibidorVideo extends ComponenteBase {
 
     constructor(){
-        super({templateURL:"/componentes/video/exibidor_video.html", shadowDOM:false});
+        super({templateURL:"./exibidor_video.html", shadowDOM:false}, import.meta.url);
 
         this._dados = undefined;
         this.ultimoTempo = 0;

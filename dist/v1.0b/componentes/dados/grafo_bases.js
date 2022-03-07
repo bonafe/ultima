@@ -6,7 +6,7 @@ export class GrafoBases extends ComponenteBase {
     
 
     constructor(){
-        super({templateURL:"/componentes/dados/grafo_bases.html", shadowDOM:true});
+        super({templateURL:"./grafo_bases.html", shadowDOM:true}, import.meta.url);
         
         this.addEventListener("carregou", () => {
         

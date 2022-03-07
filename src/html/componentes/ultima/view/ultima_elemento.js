@@ -6,7 +6,7 @@ import { UltimaDBReader } from "../db/ultima_db_reader.js";
 export class UltimaElemento extends ComponenteBase {
 
     constructor(){
-        super({templateURL:"/componentes/ultima/view/ultima_elemento.html", shadowDOM:true});
+        super({templateURL:"./ultima_elemento.html", shadowDOM:true}, import.meta.url);
 
         this.dados = null;
 
@@ -228,8 +228,12 @@ export class UltimaElemento extends ComponenteBase {
 
             this.carregandoComponente = true;
       
+            //Componentes com URL Relativa são carregados a partir do diretório raiz do Ultima
+            //O diretório raiz é calculado partindo-se de está esta classe UltimaElemento
+            let url_raiz_ultima =  new URL("../../../",ComponenteBase.extrairCaminhoURL(import.meta.url));
+
             //Carrega dinamicamente o componente
-            import(ComponenteBase.resolverEndereco(this.componente.url)).then(modulo => {
+            import(ComponenteBase.resolverEndereco(this.componente.url, url_raiz_ultima.href)).then(modulo => {
 
                 this.instanciaComponente = document.createElement(this.componente.nome);
                 this.noRaiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);

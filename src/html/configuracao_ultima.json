@@ -1,92 +1,92 @@
 {
     "componentes": [
         {
-            "url": "/componentes/data/seletor_meses.js",
+            "url": "./componentes/data/seletor_meses.js",
             "nome": "seletor-meses",
             "id": 145
         },
         {
-            "url": "/componentes/editor_json/editor_json.js",
+            "url": "./componentes/editor_json/editor_json.js",
             "nome": "editor-json",
             "id": 146
         },
         {
-            "url": "/componentes/iframe/exibidor_iframe.js",
+            "url": "./componentes/iframe/exibidor_iframe.js",
             "nome": "exibidor-iframe",
             "id": 147
         },
         {
-            "url": "/componentes/imagem/exibidor_imagem.js",
+            "url": "./componentes/imagem/exibidor_imagem.js",
             "nome": "exibidor-imagem",
             "id": 148
         },
         {
-            "url": "/componentes/contatos/contatos_view.js",
+            "url": "./componentes/contatos/contatos_view.js",
             "nome": "contatos-view",
             "id": 149
         },
         {
-            "url": "/componentes/ultima/configuracao_ultima.js",
+            "url": "./componentes/ultima/configuracao_ultima.js",
             "nome": "configuracao-ultima",
             "id": 150
         },
         {
-            "url": "/componentes/dados/grafo_bases.js",
+            "url": "./componentes/dados/grafo_bases.js",
             "nome": "grafo-bases",
             "id": 151
         },
         {
-            "url": "/componentes/dados/grafo_indexeddb.js",
+            "url": "./componentes/dados/grafo_indexeddb.js",
             "nome": "grafo-indexeddb",
             "id": 152
         },
         {
-            "url": "/componentes/equipe/grafo_equipe.js",
+            "url": "./componentes/equipe/grafo_equipe.js",
             "nome": "grafo-equipe",
             "id": 153
         },
         {
-            "url": "/componentes/data/seletor_meses.js",
+            "url": "./componentes/data/seletor_meses.js",
             "nome": "seletor-meses",
             "id": 154
         },
         {
-            "url": "/componentes/editor_json/editor_json.js",
+            "url": "./componentes/editor_json/editor_json.js",
             "nome": "editor-json",
             "id": 155
         },
         {
-            "url": "/componentes/iframe/exibidor_iframe.js",
+            "url": "./componentes/iframe/exibidor_iframe.js",
             "nome": "exibidor-iframe",
             "id": 156
         },
         {
-            "url": "/componentes/imagem/exibidor_imagem.js",
+            "url": "./componentes/imagem/exibidor_imagem.js",
             "nome": "exibidor-imagem",
             "id": 157
         },
         {
-            "url": "/componentes/video/exibidor_video.js",
+            "url": "./componentes/video/exibidor_video.js",
             "nome": "exibidor-video",
             "id": 158
         },
         {
-            "url": "/componentes/contatos/contatos_view.js",
+            "url": "./componentes/contatos/contatos_view.js",
             "nome": "contatos-view",
             "id": 159
         },
         {
-            "url": "/componentes/ultima/configuracao_ultima.js",
+            "url": "./componentes/ultima/configuracao_ultima.js",
             "nome": "configuracao-ultima",
             "id": 160
         },
         {
-            "url": "/componentes/equipe/grafo_equipe.js",
+            "url": "./componentes/equipe/grafo_equipe.js",
             "nome": "grafo-equipe",
             "id": 161
         },
         {
-            "url": "/componentes/dados/grafo_bases.js",
+            "url": "./componentes/dados/grafo_bases.js",
             "nome": "grafo-bases",
             "id": 162
         }

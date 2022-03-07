@@ -5,7 +5,7 @@ import { UltimaEvento } from '../ultima/ultima_evento.js';
 export class EditorJSON extends ComponenteBase {
 
     constructor(){
-        super({templateURL:"/componentes/editor_json/editor_json.html", shadowDOM:true});
+        super({templateURL:"./editor_json.html", shadowDOM:true}, import.meta.url);
 
         this._dados = undefined;
 
