@@ -51,9 +51,20 @@ export class ComponenteBase extends HTMLElement{
 
 
 
-    async carregarTemplate(templateURL){       
-              
-        let resposta = await fetch(this.resolverEndereco(templateURL));
+    async carregarTemplate(url_template, tentativas){       
+        
+        console.log (`Carregando template: ${url_template} (TENTAVIAS: ${tentativas})`);
+
+        if (tentativas == undefined){
+            tentativas = 0;
+        }
+        tentativas++;
+        if (tentativas > 3){
+            console.log (`Erro ao carregar template: ${url_template} NÚMERO DE TENTATIVAS EXCEDIDO (${tentativas})`);
+            return false;
+        }
+
+        let resposta = await fetch(this.resolverEndereco(url_template));
         let textoPagina = await resposta.text();
         let template = document.createElement("template");
         template.innerHTML = textoPagina;
@@ -64,13 +75,31 @@ export class ComponenteBase extends HTMLElement{
             elemento.href = this.resolverEndereco(elemento.getAttribute("href"));
         });
 
-        this.noRaiz.appendChild(elemento);
-        
-        //Observa no próximo laço de eventos
-        setTimeout(()=>this.observar());
+        try{
+            this.noRaiz.appendChild(elemento);
 
-        this.carregado = true;
-        this.dispatchEvent(new Event("carregou"));        
+            elemento.addEventListener("load", () => {
+                console.log (`************ LOAD ao carregar template: ${url_template}`);
+            });
+
+            elemento.addEventListener("error", (e) => {
+                console.log (`************** ERROR ao carregar template: ${url_template}`);
+            });
+        
+            //Observa no próximo laço de eventos
+            setTimeout(()=>{
+                this.observar();
+                this.carregado = true;
+                this.dispatchEvent(new Event("carregou")); 
+            },5000);
+
+            
+            
+
+        }catch(e){
+            console.log (`Erro ao carregar template: ${url_template} Tentando novamente (TENTAVIAS: ${tentativas})`);
+            this.carregarTemplate(url_template, tentativas);
+        }
     }
 
 
@@ -106,13 +135,28 @@ export class ComponenteBase extends HTMLElement{
     adoptedCallback() {
     }
 
-    carregarCSS (endereco, url_filho){        
+    carregarCSS (endereco, url_filho, tentativas){     
+        
+        let url_css = (url_filho? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco)); 
+
+        console.log (`Carregando CSS: ${url_css} (TENTAVIAS: ${tentativas})`);
+        
+        if (tentativas == undefined){
+            tentativas = 0;
+        }
+        tentativas++;        
+
         return new Promise ((resolve, reject) => {
+
+            if (tentativas > 3){
+                console.log (`Erro ao carregar CSS: ${url_css} NÚMERO DE TENTATIVAS EXCEDIDO (${tentativas})`);
+                return reject();
+            }
 
             let link  = document.createElement('link');            
             link.rel  = 'stylesheet';
             link.type = 'text/css';
-            link.href = (url_filho? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco));            
+            link.href = url_css;
 
             link.media = 'all';
             link.addEventListener("load", () => {
@@ -120,9 +164,11 @@ export class ComponenteBase extends HTMLElement{
             });
 
             link.addEventListener("error", (e) => {
-                console.log (`Erro ao carregar estilo: ${link.href}`);
+                console.log (`Erro ao carregar CSS: ${link.href}`);
                 console.dir(e);
-                reject();
+                setTimeout(() => {
+                    return this.carregarCSS(endereco, url_filho, tentativas);
+                }, 1000);
             });
             this.noRaiz.appendChild(link);        
         });
