@@ -17,6 +17,6 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
 
 os.chdir("../html");
 
-httpd = http.server.HTTPServer(('127.0.0.1', 8123), CORSRequestHandler)
+httpd = http.server.HTTPServer(('127.0.0.1', 8124), CORSRequestHandler)
 httpd.socket = ssl.wrap_socket (httpd.socket, certfile='../python/server.pem', server_side=True)
 httpd.serve_forever()

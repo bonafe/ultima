@@ -7,14 +7,14 @@
     --cor-link-hover-cabecalho:rgb(0, 255, 85);
 
     /*NAVEGAÇÃO*/
-    --cor-fundo-navegacao: rgb(255, 0, 0);
+    --cor-fundo-navegacao: rgb(0, 0, 0);
     --cor-link-navegacao:rgb(0, 255, 64);
     --cor-link-hover-navegacao:rgb(0, 119, 255);
     /*CONTEÚDO*/
     --cor-fundo-conteudo:rgb(40, 0, 56);
 
     /*RODAPÉ*/
-    --cor-fundo-rodape: rgb(255, 255, 255);
+    --cor-fundo-rodape: rgb(0, 255, 55);
     --cor-texto-rodape: rgb(255, 230, 0);
     --cor-link-rodape:rgb(117, 0, 252);
     --cor-link-hover-rodape:rgb(0, 98, 209);
