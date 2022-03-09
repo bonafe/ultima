@@ -157,7 +157,9 @@ export class ComponenteBase extends HTMLElement{
             }
 
             fetch(url_css)
-                .then(response => response.text())
+                .then(response => {
+                    return response.text();
+                })
                 .then(texto => {
 
                     let style  = document.createElement('style');            

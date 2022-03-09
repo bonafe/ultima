@@ -48,6 +48,7 @@ export class UltimaJS extends ComponenteBase{
 
 
     carregarEstilos(){
+        console.log ("Carregando variáveis externas de estilos................");
         this.carregarCSS(this.estilos).then(()=>{
             console.log ("Variáveis externas de estilos foram carregas com éxito!");
         });
@@ -56,7 +57,7 @@ export class UltimaJS extends ComponenteBase{
 
 
     static get observedAttributes() {
-        return ['src', 'estilos'];
+        return ['src', 'estilos', 'endereco'];
     }
 
 
@@ -76,8 +77,12 @@ export class UltimaJS extends ComponenteBase{
 
             this.estilosCarregados = false;
             this.estilos = novoValor;
-            this.renderizar();            
-        }      
+            this.renderizar();        
+
+        }else  if (nomeAtributo.localeCompare("endereco") == 0){     
+            this.endereco = novoValor;
+            console.log (`Endereco: ${this.endereco}`);
+        }
     }
 
 
