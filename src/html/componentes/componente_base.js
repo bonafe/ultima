@@ -70,38 +70,36 @@ export class ComponenteBase extends HTMLElement{
         template.innerHTML = textoPagina;
         let elemento = template.content.cloneNode(true);
 
-        elemento.querySelectorAll("link").forEach(elemento => {
-            
-            elemento.href = this.resolverEndereco(elemento.getAttribute("href"));
-        });
+        let hrefLinks = this.removerTagsLinkETrazerHRef(elemento);
 
-        try{
-            this.noRaiz.appendChild(elemento);
+        //Carrega todos os CSS do template
+        Promise.all(hrefLinks.map( url_css => this.carregarCSS (url_css)))
+            .then(resultados => {
 
-            elemento.addEventListener("load", () => {
-                console.log (`************ LOAD ao carregar template: ${url_template}`);
-            });
-
-            elemento.addEventListener("error", (e) => {
-                console.log (`************** ERROR ao carregar template: ${url_template}`);
-            });
-        
-            //Observa no próximo laço de eventos
-            setTimeout(()=>{
+                //Depois de carregar todos os CSS;
+                this.noRaiz.appendChild(elemento);
                 this.observar();
                 this.carregado = true;
-                this.dispatchEvent(new Event("carregou")); 
-            },5000);
-
-            
-            
-
-        }catch(e){
-            console.log (`Erro ao carregar template: ${url_template} Tentando novamente (TENTAVIAS: ${tentativas})`);
-            this.carregarTemplate(url_template, tentativas);
-        }
+                this.dispatchEvent(new Event("carregou"));
+            });
     }
 
+
+
+    removerTagsLinkETrazerHRef(elemento){
+
+        //Para todos os links do elemento
+        return Array.from(elemento.querySelectorAll("link")).map(elementoLink => {
+            
+            //Extrai a URL (href) do link
+            let url_css = elementoLink.getAttribute("href");
+
+            //Remove o elemento link
+            elementoLink.remove();
+            
+            return url_css;
+        });       
+    }
 
 
     observar(){
@@ -148,29 +146,36 @@ export class ComponenteBase extends HTMLElement{
 
         return new Promise ((resolve, reject) => {
 
+            //TODO: AVANÇAR NO TRATAMENTO DE ERRO. O que acontece quando o recurso está indisponível?
+            //1. Guardar em cache, se não conseguiu pegar o externo, pega o do cache
+            //2. Pode pegar o do cache antes e nem ir atrás do externo, economiza recursos de rede
+            //3. Como saber quando procurar por atualizações? Poderia receber mensagens falando que deve atualizar o recurso.
+            //4. Quando o usuário edita a estrutura, componentes, recursos da aplicação do lado do cliente, como as atualizações ficam compatíveis com isso? Podem existir diferentes versões do mesmo componente? Se estiver dentro do ShadowDOM funciona?            
             if (tentativas > 3){
                 console.log (`Erro ao carregar CSS: ${url_css} NÚMERO DE TENTATIVAS EXCEDIDO (${tentativas})`);
                 return reject();
             }
 
-            let link  = document.createElement('link');            
-            link.rel  = 'stylesheet';
-            link.type = 'text/css';
-            link.href = url_css;
+            fetch(url_css)
+                .then(response => response.text())
+                .then(texto => {
 
-            link.media = 'all';
-            link.addEventListener("load", () => {
-                resolve(true);
-            });
+                    let style  = document.createElement('style');            
+                    style.innerHTML = texto;
+                    
+                    style.addEventListener("load", () => {
+                        resolve(true);
+                    });
 
-            link.addEventListener("error", (e) => {
-                console.log (`Erro ao carregar CSS: ${link.href}`);
-                console.dir(e);
-                setTimeout(() => {
-                    return this.carregarCSS(endereco, url_filho, tentativas);
-                }, 1000);
-            });
-            this.noRaiz.appendChild(link);        
+                    style.addEventListener("error", (e) => {
+                        reject();
+                    });
+                    this.noRaiz.appendChild(style);
+                })
+                .catch(function(error) {
+                    console.log(`Não foi possível fazer download do CSS ${url_css}`);
+                    reject();
+                });      
         });
     }
 
