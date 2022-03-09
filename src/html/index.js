@@ -22,7 +22,7 @@ window.onload = () => {
       alert (`Última Versão: ${UltimaDB.VERSAO}`);
     });
 
-    document.querySelector("ultima-js").setAttribute("estilos", ComponenteBase.resolverEndereco("./variaveis_estilo_ultima.css"), ComponenteBase.extrairCaminhoURL(import.meta.url));
+    document.querySelector("ultima-js").setAttribute("estilos", ComponenteBase.resolverEndereco("./variaveis_estilo_ultima.css", ComponenteBase.extrairCaminhoURL(import.meta.url)));
 }
 
 window.openFullscreen = () => {

@@ -15,8 +15,7 @@
 /*                CABEÇALHO                               */
 /**********************************************************/
 .cabecalho_principal_view{    
-    background-color: var(--cor-fundo-navegacao-ultima);
-    border: 2px solid rgb(48, 2, 66);
+    background-color: var(--cor-fundo-navegacao-ultima);    
     color: var(--cor-texto-cabecalho-ultima);      
     display: flex;
     align-items: center;
