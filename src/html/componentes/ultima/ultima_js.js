@@ -11,7 +11,7 @@ export class UltimaJS extends ComponenteBase{
 
 
     constructor(){        
-        super({templateURL:"./ultima_js.html", shadowDOM:false}, import.meta.url);        
+        super({templateURL:"./ultima_js.html", shadowDOM:true}, import.meta.url);        
 
         this.configuracoesCarregadas = false;
 
@@ -25,8 +25,11 @@ export class UltimaJS extends ComponenteBase{
     
     renderizar(){
 
+        if (this.renderizado && (!this.estilosCarregados) && (this.estilos)){
+            this.carregarEstilos();
+        
         //TODO: Deve alterar a exibição caso um novo arquivo seja carregado
-        if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
+        }else if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
 
             UltimaDBReader.getInstance().views().then (views => {
                 
@@ -35,14 +38,25 @@ export class UltimaJS extends ComponenteBase{
                 this.criarEIniciarControleNavegadorTreemap();
             });
             
+            if (this.estilos){
+                this.carregarEstilos();
+            }
+
             this.renderizado = true;
-        }         
+        }       
     }
 
 
+    carregarEstilos(){
+        this.carregarCSS(this.estilos).then(()=>{
+            console.log ("Variáveis externas de estilos foram carregas com éxito!");
+        });
+        this.estilosCarregados = true;        
+    }
+
 
     static get observedAttributes() {
-        return ['src'];
+        return ['src', 'estilos'];
     }
 
 
@@ -56,6 +70,13 @@ export class UltimaJS extends ComponenteBase{
             fetch(this._src)
                 .then (response => response.json())
                 .then(configuracao => this.carregarConfiguracao(configuracao));                     
+
+
+        }else  if (nomeAtributo.localeCompare("estilos") == 0){
+
+            this.estilosCarregados = false;
+            this.estilos = novoValor;
+            this.renderizar();            
         }      
     }
 

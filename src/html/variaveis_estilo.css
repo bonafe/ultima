@@ -1,0 +1,21 @@
+:root{    
+    /*CABEÇALHO*/
+    --cor-fundo-cabecalho: rgb(81, 0, 97);
+    --cor-logo-cabecalho: rgb(255, 115, 0);
+    --cor-texto-cabecalho: rgb(236, 195, 255);
+    --cor-link-cabecalho:rgb(0, 181, 252);
+    --cor-link-hover-cabecalho:rgb(0, 255, 85);
+
+    /*NAVEGAÇÃO*/
+    --cor-fundo-navegacao: rgb(97, 0, 0);
+    --cor-link-navegacao:rgb(0, 252, 42);
+    --cor-link-hover-navegacao:rgb(0, 209, 181);
+    /*CONTEÚDO*/
+    --cor-fundo-conteudo:rgb(40, 0, 56);
+
+    /*RODAPÉ*/
+    --cor-fundo-rodape: rgb(0, 0, 0);
+    --cor-texto-rodape: rgb(255, 0, 0);
+    --cor-link-rodape:rgb(0, 118, 252);
+    --cor-link-hover-rodape:rgb(164, 207, 255);
+}

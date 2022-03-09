@@ -4,7 +4,7 @@
 .secao_principal_view{    
     width: 100%;
     height: 100%;
-    background: rgba(76, 175, 80, 0.5);
+    background: var(--cor-fundo-conteudo);
     display: flex;
     flex-direction: column;
 }
@@ -15,7 +15,7 @@
 /*                CABEÇALHO                               */
 /**********************************************************/
 .cabecalho_principal_view{    
-    background-color: rgb(100, 28, 167);
+    background-color: var(--cor-fundo-navegacao);
     border: 2px solid rgb(48, 2, 66);
     color: rgb(189, 144, 226);        
     display: flex;
@@ -40,7 +40,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;    
-    color: #ffe600;
+    color: var(--cor-link-navegacao);
     text-decoration: none;    
     opacity: 0.6;
     transition: 0.3s;
@@ -48,7 +48,7 @@
 }
 
 .navegacao_view a:hover{    
-    color: orange;
+    color: var(--cor-link-hover-navegacao);
     text-decoration: none;
     opacity: 1;
     transform: scale(1.05);
@@ -75,6 +75,25 @@
 /*                     RODAPÉ                             */
 /**********************************************************/
 .rodape_principal_view{
-    background-color: rgb(43, 11, 73);
-    color: rgb(188, 118, 192);      
+    background-color: var(--cor-fundo-rodape);
+    color: var(--cor-texto-rodape);      
 }
+
+.rodape_principal_view a{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+    color: var(--cor-link-rodape);
+    text-decoration: none;    
+    opacity: 0.6;
+    transition: 0.3s;
+    margin-left: 25px;
+}
+
+.rodape_principal_view a:hover{    
+    color: var(--cor-link-hover-rodape);
+    text-decoration: none;
+    opacity: 1;
+    transform: scale(1.05);
+}
+

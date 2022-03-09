@@ -1,0 +1,21 @@
+:host{    
+    /*CABEÇALHO*/
+    --cor-fundo-cabecalho: rgb(66, 0, 97);
+    --cor-logo-cabecalho: rgb(255, 217, 0);
+    --cor-texto-cabecalho: rgb(66, 0, 97);
+    --cor-link-cabecalho:rgb(0, 181, 252);
+    --cor-link-hover-cabecalho:rgb(0, 255, 85);
+
+    /*NAVEGAÇÃO*/
+    --cor-fundo-navegacao: rgb(255, 0, 0);
+    --cor-link-navegacao:rgb(0, 255, 64);
+    --cor-link-hover-navegacao:rgb(0, 119, 255);
+    /*CONTEÚDO*/
+    --cor-fundo-conteudo:rgb(40, 0, 56);
+
+    /*RODAPÉ*/
+    --cor-fundo-rodape: rgb(255, 255, 255);
+    --cor-texto-rodape: rgb(255, 230, 0);
+    --cor-link-rodape:rgb(117, 0, 252);
+    --cor-link-hover-rodape:rgb(0, 98, 209);
+}
