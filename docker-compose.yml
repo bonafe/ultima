@@ -13,7 +13,7 @@ services:
     image: haproxy:2.3
     restart: on-failure
     volumes:
-      - ./src/resources/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      - ./src/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
       #### Para conseguir rodar https, precisei mandar para dentro da VM o certificado do localhost
       - ./src/resources/certificadoDigital/ultima.selfsigned.pem:/etc/ssl/certs/certificado-aplicacao.pem
       - ./src/resources/certificadoDigital/trusted.pem:/etc/ssl/certs/trusted.pem
