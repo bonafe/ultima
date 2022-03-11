@@ -2,10 +2,11 @@ version: "3"
 services:
   ultima:
     image: ultima
-    volumes:
-      - carga_anexos:/opt/gaa/carga/anexo
+    #volumes:
+    # 
     ports:
       - "80"
+      - "443"
  
   #proxy reverso de baixa latência. Usado em substituição ao nginx
   haproxy:
