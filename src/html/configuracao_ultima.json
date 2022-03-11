@@ -1,96 +1,5 @@
 {
-    "componentes": [
-        {
-            "url": "./componentes/data/seletor_meses.js",
-            "nome": "seletor-meses",
-            "id": 145
-        },
-        {
-            "url": "./componentes/editor_json/editor_json.js",
-            "nome": "editor-json",
-            "id": 146
-        },
-        {
-            "url": "./componentes/iframe/exibidor_iframe.js",
-            "nome": "exibidor-iframe",
-            "id": 147
-        },
-        {
-            "url": "./componentes/imagem/exibidor_imagem.js",
-            "nome": "exibidor-imagem",
-            "id": 148
-        },
-        {
-            "url": "./componentes/contatos/contatos_view.js",
-            "nome": "contatos-view",
-            "id": 149
-        },
-        {
-            "url": "./componentes/ultima/configuracao_ultima.js",
-            "nome": "configuracao-ultima",
-            "id": 150
-        },
-        {
-            "url": "./componentes/dados/grafo_bases.js",
-            "nome": "grafo-bases",
-            "id": 151
-        },
-        {
-            "url": "./componentes/dados/grafo_indexeddb.js",
-            "nome": "grafo-indexeddb",
-            "id": 152
-        },
-        {
-            "url": "./componentes/equipe/grafo_equipe.js",
-            "nome": "grafo-equipe",
-            "id": 153
-        },
-        {
-            "url": "./componentes/data/seletor_meses.js",
-            "nome": "seletor-meses",
-            "id": 154
-        },
-        {
-            "url": "./componentes/editor_json/editor_json.js",
-            "nome": "editor-json",
-            "id": 155
-        },
-        {
-            "url": "./componentes/iframe/exibidor_iframe.js",
-            "nome": "exibidor-iframe",
-            "id": 156
-        },
-        {
-            "url": "./componentes/imagem/exibidor_imagem.js",
-            "nome": "exibidor-imagem",
-            "id": 157
-        },
-        {
-            "url": "./componentes/video/exibidor_video.js",
-            "nome": "exibidor-video",
-            "id": 158
-        },
-        {
-            "url": "./componentes/contatos/contatos_view.js",
-            "nome": "contatos-view",
-            "id": 159
-        },
-        {
-            "url": "./componentes/ultima/configuracao_ultima.js",
-            "nome": "configuracao-ultima",
-            "id": 160
-        },
-        {
-            "url": "./componentes/equipe/grafo_equipe.js",
-            "nome": "grafo-equipe",
-            "id": 161
-        },
-        {
-            "url": "./componentes/dados/grafo_bases.js",
-            "nome": "grafo-bases",
-            "id": 162
-        }
-    ],
+    "componentes": [],
     "acoes": [
         {
             "id": 1,
@@ -196,6 +105,11 @@
             "id": 10,
             "descricao": "Componente: grafo-indexeddb",
             "dados": {}
+        },
+        {
+            "id": 11,
+            "descricao": "Gerador Animado de UUID",
+            "dados": {}
         }
     ],
     "views": [
@@ -211,32 +125,18 @@
             ],
             "elementos": [
                 {
-                    "id": 4,
-                    "id_elemento": 4,
-                    "ordem": 0,
-                    "importancia": 24,
-                    "componente": "exibidor-iframe"
-                },
-                {
-                    "id": 1,
-                    "id_elemento": 1,
-                    "ordem": 1,
-                    "importancia": 37.333333333333336,
-                    "componente": "exibidor-imagem"
-                },
-                {
-                    "id": 7,
-                    "id_elemento": 7,
-                    "ordem": 2,
-                    "importancia": 36,
-                    "componente": "exibidor-iframe"
-                },
-                {
                     "id": 2,
                     "id_elemento": 10,
                     "ordem": 3,
                     "importancia": 221.33333333333334,
                     "componente": "grafo-indexeddb"
+                },
+                {
+                    "id": 7,
+                    "id_elemento": 11,
+                    "ordem": 3,
+                    "importancia": 700,
+                    "componente": "gerador-uuid"
                 },
                 {
                     "id": 5,

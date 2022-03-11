@@ -1,5 +1,5 @@
 import { GrafoBases } from "./grafo_bases.js";
-import { UltimaEvento } from "../ultima/ultima_evento.js";
+import { UltimaEvento } from "../../ultima/ultima_evento.js";
 
 export class GrafoIndexedDB extends GrafoBases{
 

@@ -3,8 +3,8 @@ body{
     --cor-fundo-cabecalho: rgb(81, 0, 97);
     --cor-logo-cabecalho: rgb(255, 115, 0);
     --cor-texto-cabecalho: rgb(236, 195, 255);
-    --cor-link-cabecalho:rgb(0, 181, 252);
-    --cor-link-hover-cabecalho:rgb(0, 255, 85);
+    --cor-link-cabecalho:rgb(255, 115, 0);
+    --cor-link-hover-cabecalho:rgb(255, 238, 0);
 
     /*NAVEGAÇÃO*/
     --cor-fundo-navegacao: rgb(97, 0, 0);
@@ -14,8 +14,8 @@ body{
     --cor-fundo-conteudo:rgb(40, 0, 56);
 
     /*RODAPÉ*/
-    --cor-fundo-rodape: rgb(0, 0, 0);
-    --cor-texto-rodape: rgb(255, 0, 0);
-    --cor-link-rodape:rgb(0, 118, 252);
-    --cor-link-hover-rodape:rgb(164, 207, 255);
+    --cor-fundo-rodape: rgb(42, 0, 51);
+    --cor-texto-rodape: rgb(236, 195, 255);
+    --cor-link-rodape:rgb(255, 115, 0);
+    --cor-link-hover-rodape:rgb(255, 238, 0);
 }

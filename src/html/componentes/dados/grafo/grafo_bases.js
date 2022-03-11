@@ -1,5 +1,5 @@
-import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima_evento.js';
+import { ComponenteBase } from '../../componente_base.js';
+import { UltimaEvento } from '../../ultima/ultima_evento.js';
 
 
 export class GrafoBases extends ComponenteBase {

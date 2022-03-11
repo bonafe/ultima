@@ -28,16 +28,20 @@ export class BaseInicialUltima{
             },
             ,
             {
-                "url": "./componentes/dados/grafo_bases.js",
+                "url": "./componentes/dados/grafo/grafo_bases.js",
                 "nome": "grafo-bases"
             },
             {
-                "url": "./componentes/dados/grafo_indexeddb.js",
+                "url": "./componentes/dados/grafo/grafo_indexeddb.js",
                 "nome": "grafo-indexeddb"
             },
             {
-                "url": "./componentes/equipe/grafo_equipe.js",
+                "url": "./componentes/equipe/grafo/grafo_equipe.js",
                 "nome": "grafo-equipe"
+            },
+            {
+                "url": "./componentes/dados/uuid/gerador_uuid.js",
+                "nome": "gerador-uuid"
             }
         ]
     };
