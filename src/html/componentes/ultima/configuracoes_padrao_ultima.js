@@ -1,4 +1,4 @@
-export class ComponentesPadraoUltima{
+export class ConfiguracoesPadraoUltima{
 
     static base = {
         "componentes":[
@@ -55,6 +55,16 @@ export class ComponentesPadraoUltima{
                 "url": "./componentes/dispositivo/exibidor_dispositivo.js",
                 "nome": "exibidor-dispositivo"
             },
+        ],
+        "controladores":[
+            {
+                "url": "./componentes/ultima/controlador_ultima.js",
+                "nome_classe": "ControladorUltima"
+            },
+            {
+                "url": "./componentes/dispositivo/controlador_dispositivos.js",
+                "nome_classe": "ControladorDispositivos"
+            }
         ]
     };
 }

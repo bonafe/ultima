@@ -1,45 +1,26 @@
-.container_camera{
+.container_dispositivo{
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    color: aliceblue;
 }
 
-.container_camera nav {
+.grupo_dados{    
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: aliceblue;
-    background-color: rgba(22, 17, 49, 0.582); 
+    flex-direction: column;    
 }
-.container_camera nav:first-child {
-    padding-left: 20px;
-}
-.container_camera nav > * {
+
+.grupo_dados label{
+    font-weight: bold;
     margin-right: 10px;
 }
 
-.controle_camera{  
+.grupo_dados a{  
     text-decoration: none;
     transition: 0.3s;
     color: rgb(73, 219, 255);
 }
-.controle_camera:hover{  
-  color: rgb(250, 226, 12);
-  transform: scale(1.25);
-}
-
-.desabilitado{    
-    display:none;     
-}
-
-.componente_video{
-    width: 100%;
-    height: 100%;
-    background-color: rgb(253, 228, 0);
-}
-
-#video{
-    width: 100%;
-    height: 100%;
+.grupo_dados a:hover{  
+  color: rgb(250, 226, 12);  
 }

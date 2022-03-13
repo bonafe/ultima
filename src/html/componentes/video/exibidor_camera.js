@@ -21,7 +21,7 @@ export class ExibidorCamera extends ComponenteBase {
 
             this.cameras.addEventListener("change", ()=>{
                 this.iniciarCamera();
-                this.salvarEstado();
+                this.mudouEstado();
             });
 
             this.btnGravacao.addEventListener("click", () =>{                
@@ -179,7 +179,7 @@ export class ExibidorCamera extends ComponenteBase {
     }
 
 
-    salvarEstado(){
+    mudouEstado(){
         console.log(`Salvando câmera: ${this.cameras.value}`);
         this.dados = {deviceId: this.cameras.value};
         this.dispatchEvent(new CustomEvent("change", {detail:this.dados}));

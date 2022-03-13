@@ -2,7 +2,7 @@
     "componentes": [],
     "acoes": [
         {
-            "id": 1,
+            "uuid": "6cc4c0e9-4d0b-4fc3-b45a-3e7d9efaf922",
             "titulo": "Saúde",
             "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
@@ -12,7 +12,7 @@
             }
         },
         {
-            "id": 2,
+            "uuid": "e35fc7e1-8068-4842-8e2f-52724bf3a37f",
             "titulo": "Cachorro 1",
             "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
@@ -22,7 +22,7 @@
             }
         }, 
         {
-            "id": 3,
+            "uuid": "8af1b049-2968-4ae4-a487-bdaa62385933",
             "titulo": "Cachorro 2",
             "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
@@ -32,7 +32,7 @@
             }
         },
         {
-            "id": 4,
+            "uuid": "5422a45e-f2a5-4a20-a5a6-666096df2af6",
             "titulo": "Feriados no Brasil",
             "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
@@ -42,7 +42,7 @@
             }
         },  
         {
-            "id": 5,
+            "uuid": "1ddd0836-27b3-421a-8c83-e9140f988592",
             "titulo": "Grafo IndexedDB",
             "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
@@ -51,7 +51,7 @@
             }
         },
         {
-            "id": 6,
+            "uuid": "3f2ca7ad-224d-4c68-8f85-c715d81b6c05",
             "titulo": "Câmera",
             "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
             "dados": {
@@ -62,129 +62,35 @@
     ],
     "elementos": [
         {
-            "id": 1,
-            "descricao": "Configuração Última",
-            "dados": {
-                "src": "./imagens/hubble.jpg"
-            }
-        },
-        {
-            "id": 2,
-            "descricao": "Componente: exibidor-iframe",
-            "dados": {
-                "src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
-            }
-        },
-        {
-            "id": 3,
-            "descricao": "Componente: exibidor-iframe",
-            "dados": {
-                "src": "https://www.youtube.com/embed/RwBmiMb97HQ"
-            }
-        },
-        {
-            "id": 4,
-            "nome": "Saúde",
-            "dados": {
-                "src": "https://www.youtube.com/embed/3cowjrMpAys"
-            }
-        },
-        {
-            "id": 5,
-            "nome": "Cachorro 1",
-            "dados": {
-                "src": "./imagens/cachorro_01.jpg"
-            }
-        },
-        {
-            "id": 6,
-            "nome": "Cachorro 2",
-            "dados": {
-                "src": "./imagens/cachorro_02.jpeg"
-            }
-        },
-        {
-            "id": 7,
-            "nome": "Feriados no Brasil",
-            "dados": {
-                "src": "https://calendar.google.com/calendar/embed?src=en.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
-            }
-        },
-        {
-            "id": 10,
-            "descricao": "Componente: grafo-indexeddb",
-            "dados": {}
-        },
-        {
-            "id": 11,
-            "descricao": "Gerador Animado de UUID",
-            "dados": ""
-        },
-        {
-            "id": 12,
+            "uuid": "d523c3ad-19ba-4ea1-bff0-62d950be4c11",
             "descricao": "Exibição de Câmeras",
             "dados": {}
         },
         {
-            "id": 13,
+            "uuid": "d1c4a9d1-2a7e-42bd-a1e2-d5580f96918d",
             "descricao": "Exibição de Dispositivos",
             "dados": {}
         }
     ],
     "views": [
         {
-            "id": 1,
+            "uuid": "c1cddd49-4a7f-4395-a723-5eb4b2c90baf",
             "descricao": "Versão 4 com Ações",
             "acoes": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6
+                "3f2ca7ad-224d-4c68-8f85-c715d81b6c05"
             ],
             "elementos": [
                 {
-                    "id": 2,
-                    "id_elemento": 10,
-                    "ordem": 3,
+                    "uuid": "4ed31e93-4c4f-4898-a323-0b935303d59c",
+                    "uuid_elemento": "d523c3ad-19ba-4ea1-bff0-62d950be4c11",                    
                     "importancia": 221.33333333333334,
-                    "componente": "grafo-indexeddb"
-                },
-                {
-                    "id": 7,
-                    "id_elemento": 11,
-                    "ordem": 3,
-                    "importancia": 200,
-                    "componente": "gerador-uuid"
-                },
-                {
-                    "id": 8,
-                    "id_elemento": 12,
-                    "ordem": 3,
-                    "importancia": 200,
                     "componente": "exibidor-camera"
                 },
                 {
-                    "id": 9,
-                    "id_elemento": 12,
-                    "ordem": 3,
-                    "importancia": 700,
+                    "uuid": "49e30cd4-a287-4b23-b4af-452b56e9faf8",
+                    "uuid_elemento": "d1c4a9d1-2a7e-42bd-a1e2-d5580f96918d",                    
+                    "importancia": 200,
                     "componente": "exibidor-dispositivos"
-                },
-                {
-                    "id": 5,
-                    "id_elemento": 5,
-                    "ordem": 4,
-                    "importancia": 36,
-                    "componente": "exibidor-imagem"
-                },
-                {
-                    "id": 6,
-                    "id_elemento": 6,
-                    "ordem": 5,
-                    "importancia": 36,
-                    "componente": "exibidor-imagem"
                 }
             ]
         }

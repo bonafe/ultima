@@ -162,11 +162,13 @@ export class DBBase extends EventTarget{
 
 
     async atualizarRegistro (registro, objectStore){
-      
+              
         //Garante que o que será persistido é uma cópia
         let copia_registro = JSON.parse(JSON.stringify(registro));        
 
         await this.aguardarBanco();
+
+        console.info (`Object Store: ${objectStore} --- %o`, registro);
 
         let object_store = this.banco.transaction (objectStore, "readwrite").objectStore (objectStore);
                 

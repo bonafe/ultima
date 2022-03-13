@@ -14,10 +14,40 @@ export class ExibidorDispositivo extends ComponenteBase {
 
         this.addEventListener("carregou", () => {            
         
+            this.descricao = this.noRaiz.querySelector("#descricao");
+
+            this.descricao.addEventListener("change", ()=>{
+                this.mudouEstado();                
+            });
+
+
+            this.noRaiz.querySelector("#exibir").addEventListener("click", ()=>{
+                this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO, 
+                    {
+                        deviceId:this.dados.dadosMediaAPI.deviceId, 
+                        kind:this.dados.dadosMediaAPI.kind
+                    })
+                );
+            });
+
             this.renderizar();
         });
     }
 
+
+    get dados(){
+        return this._dados;
+    }
+
+    set dados (novoValor){
+        this._dados = novoValor;
+        this.renderizar();
+    }
+
+    mudouEstado(){
+        this._dados.descricao = this.descricao.value;             
+        this.dispatchEvent(new CustomEvent("change", {detail:this._dados, 'bubbles': true, 'composed':true}));
+    }
 
 
     static get observedAttributes() {
@@ -31,7 +61,8 @@ export class ExibidorDispositivo extends ComponenteBase {
     
         if (nomeAtributo.localeCompare("dados") == 0){
 
-            this.dados = JSON.parse(novoValor);         
+            this._dados = JSON.parse(novoValor);         
+            this.renderizar();
         }
     }
 
@@ -39,9 +70,19 @@ export class ExibidorDispositivo extends ComponenteBase {
 
     renderizar(){
         
-        if (this.carregado && !this.renderizado){
-
+        if (this.carregado){
+            this.atualizarCampos();
         }        
+    }
+
+    atualizarCampos(){
+
+        this.noRaiz.querySelector("#descricao").value = this._dados.descricao;
+        this.noRaiz.querySelector("#kind").textContent = this._dados.dadosMediaAPI.kind;
+        this.noRaiz.querySelector("#deviceId").textContent = this._dados.dadosMediaAPI.deviceId;
+        this.noRaiz.querySelector("#groupId").textContent =  this._dados.dadosMediaAPI.groupId;
+        this.noRaiz.querySelector("#label").textContent =  this._dados.dadosMediaAPI.label;
+
     }
 }
 customElements.define('exibidor-dispositivo', ExibidorDispositivo);
