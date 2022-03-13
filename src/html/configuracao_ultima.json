@@ -70,6 +70,11 @@
             "uuid": "d1c4a9d1-2a7e-42bd-a1e2-d5580f96918d",
             "descricao": "Exibição de Dispositivos",
             "dados": {}
+        },        
+        {
+            "uuid": "49738674-5b65-453e-83eb-52c5a119403f",
+            "descricao": "Visualização de Som",
+            "dados": {}
         }
     ],
     "views": [
@@ -91,6 +96,12 @@
                     "uuid_elemento": "d1c4a9d1-2a7e-42bd-a1e2-d5580f96918d",                    
                     "importancia": 200,
                     "componente": "exibidor-dispositivos"
+                },
+                {
+                    "uuid": "5ea7b621-5abc-48af-a513-0a5269c499f2",
+                    "uuid_elemento": "d1c4a9d1-2a7e-42bd-a1e2-d5580f96918d",                    
+                    "importancia": 200,
+                    "componente": "visualizador-som"
                 }
             ]
         }

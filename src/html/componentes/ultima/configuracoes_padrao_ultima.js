@@ -52,9 +52,9 @@ export class ConfiguracoesPadraoUltima{
                 "nome": "exibidor-dispositivos"
             },
             {
-                "url": "./componentes/dispositivo/exibidor_dispositivo.js",
-                "nome": "exibidor-dispositivo"
-            },
+                "url": "./componentes/som/visualizacao/visualizador_som.js",
+                "nome": "visualizador-som"
+            }
         ],
         "controladores":[
             {

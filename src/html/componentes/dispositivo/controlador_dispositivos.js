@@ -25,15 +25,18 @@ export class ControladorDispositivos extends ControladorBase{
                         let componente = undefined;
                         if (ultimaEvento.detail.dados.kind == "videoinput"){
                             componente = "exibidor-camera";
+
+                        }else if (['audioinput', 'audiooutput'].indexOf(ultimaEvento.detail.dados.kind) != -1) {
+                            componente = "visualizador-som";
                         }
 
                         if (componente){
                             UltimaEvento.dispararEventoExecutarAcao(this, 
                                 UltimaEvento.ACAO_ADICIONAR_ELEMENTO.nome, 
                                 {
-                                    "nome_elemento":"Nova exibição dispositivo",
-                                    "nome_componente":"exibidor-camera",
-                                    "dados":ultimaEvento.detail.dados
+                                    "nome_elemento": "Nova exibição dispositivo",
+                                    "nome_componente": componente,
+                                    "dados": ultimaEvento.detail.dados
                                 }
                             );
                         } 

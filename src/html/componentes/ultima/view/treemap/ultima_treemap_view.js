@@ -147,7 +147,7 @@ export class UltimaTreemapView extends UltimaView{
 
     aumentar(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, elemento => {
             elemento.importancia *= 1.5;   
         });
     }
