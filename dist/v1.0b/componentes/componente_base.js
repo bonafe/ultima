@@ -21,7 +21,7 @@ export class ComponenteBase extends HTMLElement{
 
     //TODO: usar tag A com href para fazer parse no endereço e extrair o caminho
     static extrairCaminhoURL(url){
-        return url.split(0, url.lastIndexOf("/")+1);
+        return url.slice(0, url.lastIndexOf("/")+1);
     }
 
 
@@ -51,28 +51,55 @@ export class ComponenteBase extends HTMLElement{
 
 
 
-    async carregarTemplate(templateURL){       
-              
-        let resposta = await fetch(this.resolverEndereco(templateURL));
+    async carregarTemplate(url_template, tentativas){       
+        
+        console.log (`Carregando template: ${url_template} (TENTAVIAS: ${tentativas})`);
+
+        if (tentativas == undefined){
+            tentativas = 0;
+        }
+        tentativas++;
+        if (tentativas > 3){
+            console.log (`Erro ao carregar template: ${url_template} NÚMERO DE TENTATIVAS EXCEDIDO (${tentativas})`);
+            return false;
+        }
+
+        let resposta = await fetch(this.resolverEndereco(url_template));
         let textoPagina = await resposta.text();
         let template = document.createElement("template");
         template.innerHTML = textoPagina;
         let elemento = template.content.cloneNode(true);
 
-        elemento.querySelectorAll("link").forEach(elemento => {
-            
-            elemento.href = this.resolverEndereco(elemento.getAttribute("href"));
-        });
+        let hrefLinks = this.removerTagsLinkETrazerHRef(elemento);
 
-        this.noRaiz.appendChild(elemento);
-        
-        //Observa no próximo laço de eventos
-        setTimeout(()=>this.observar());
+        //Carrega todos os CSS do template
+        Promise.all(hrefLinks.map( url_css => this.carregarCSS (url_css)))
+            .then(resultados => {
 
-        this.carregado = true;
-        this.dispatchEvent(new Event("carregou"));        
+                //Depois de carregar todos os CSS;
+                this.noRaiz.appendChild(elemento);
+                this.observar();
+                this.carregado = true;
+                this.dispatchEvent(new Event("carregou"));
+            });
     }
 
+
+
+    removerTagsLinkETrazerHRef(elemento){
+
+        //Para todos os links do elemento
+        return Array.from(elemento.querySelectorAll("link")).map(elementoLink => {
+            
+            //Extrai a URL (href) do link
+            let url_css = elementoLink.getAttribute("href");
+
+            //Remove o elemento link
+            elementoLink.remove();
+            
+            return url_css;
+        });       
+    }
 
 
     observar(){
@@ -106,19 +133,79 @@ export class ComponenteBase extends HTMLElement{
     adoptedCallback() {
     }
 
-    static carregarCSS (no, endereco_css, url_componente){        
+    carregarCSS (endereco, url_filho, tentativas){     
+        
+        let url_css = (url_filho? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco)); 
+
+        console.log (`Carregando CSS: ${url_css} (TENTAVIAS: ${tentativas})`);
+        
+        if (tentativas == undefined){
+            tentativas = 0;
+        }
+        tentativas++;        
+
         return new Promise ((resolve, reject) => {
 
-            let link  = document.createElement('link');            
-            link.rel  = 'stylesheet';
-            link.type = 'text/css';
-            link.href = ComponenteBase.resolverEndereco(endereco_css, ComponenteBase.extrairCaminhoURL(url_componente));            
+            //TODO: AVANÇAR NO TRATAMENTO DE ERRO. O que acontece quando o recurso está indisponível?
+            //1. Guardar em cache, se não conseguiu pegar o externo, pega o do cache
+            //2. Pode pegar o do cache antes e nem ir atrás do externo, economiza recursos de rede
+            //3. Como saber quando procurar por atualizações? Poderia receber mensagens falando que deve atualizar o recurso.
+            //4. Quando o usuário edita a estrutura, componentes, recursos da aplicação do lado do cliente, como as atualizações ficam compatíveis com isso? Podem existir diferentes versões do mesmo componente? Se estiver dentro do ShadowDOM funciona?            
+            if (tentativas > 3){
+                console.log (`Erro ao carregar CSS: ${url_css} NÚMERO DE TENTATIVAS EXCEDIDO (${tentativas})`);
+                return reject();
+            }
 
-            link.media = 'all';
-            link.onload = () => {
+            fetch(url_css)
+                .then(response => {
+                    return response.text();
+                })
+                .then(texto => {
+
+                    let style  = document.createElement('style');            
+                    style.innerHTML = texto;
+                    
+                    style.addEventListener("load", () => {
+                        resolve(true);
+                    });
+
+                    style.addEventListener("error", (e) => {
+                        reject();
+                    });
+                    this.noRaiz.appendChild(style);
+                })
+                .catch(function(error) {
+                    console.log(`Não foi possível fazer download do CSS ${url_css}`);
+                    reject();
+                });      
+        });
+    }
+
+    carregarScript (endereco, url_filho, hash_integridade){         
+        return new Promise ((resolve, reject) => {
+
+            let script  = document.createElement('script');            
+            script.setAttribute("async", "");
+            script.src = (url_filho? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco));
+
+            //TODO: VERIFICAR não está funcionando eu acho, não está sendo usado ainda
+            if (hash_integridade){
+                script.integrity = hash_integridade;
+                //TODO: verificar se precisa mesmo desse anonymous, copiado do bootstrap
+                script.crossorigin="anonymous";
+            }
+            
+            script.addEventListener("load", () => {
                 resolve(true);
-            };
-            no.appendChild(link);        
+            });
+
+            script.addEventListener("error", (e) => {
+                console.log (`Erro ao carregar script: ${script.src}`);
+                console.dir(e);
+                reject();
+            });
+
+            this.noRaiz.appendChild(script);        
         });
     }
 }

@@ -97,7 +97,7 @@ export class UltimaTreemapView extends UltimaView{
             .enter()
                 .append("ultima-treemap-elemento")                    
                     .attr("class", "node_treemap_d3js container_treemap_d3js")
-                    .attr("id",(d) => JSON.stringify(d.data.id))
+                    .attr("id_elemento",(d) => JSON.stringify(d.data.id))
                     .attr("id_view", (d) => JSON.stringify(this._view.id))                    
                     .style("left", (d) => d.x0 + "px")
                     .style("top", (d) => d.y0 + "px")

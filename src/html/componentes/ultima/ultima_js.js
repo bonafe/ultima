@@ -196,16 +196,27 @@ export class UltimaJS extends ComponenteBase{
 
 
     atualizacaoElemento(detalhe){
-        detalhe.id_elemento
-        detalhe.id_container
 
-        this.views[0].elementos.find (e => e.id == detalhe.id_elemento);
-        UltimaDBReader.getInstance().elemento_view(ultimaEvento.detail.id_view,ultimaEvento.detail.id).then (elemento => {
-            if (elemento.componente == "configuracao-ultima"){
+        UltimaDBReader.getInstance().elemento_view(detalhe.id_view, detalhe.id_elemento_view).then (elemento_view => {
 
-                this.atualizarConfiguracao(ultimaEvento.detail);    
+            if (elemento_view.componente == "configuracao-ultima"){
+
+                this.atualizarConfiguracao(detalhe);
+
+            }else{
+
+                UltimaDBReader.getInstance().elemento(detalhe.id_elemento).then (elemento => {
+
+                    elemento.dados = detalhe.dados;
+                    
+                    UltimaDBWriter.getInstance().atualizarElemento(elemento).then(()=>{
+
+                        console.log ("Elemento atualizado");
+                        //TODO: Propagar atualização para outras views
+                    });
+                });                                                        
             }
-        });                                                       
+        });
     }
 
 

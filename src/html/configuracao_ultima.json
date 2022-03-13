@@ -49,6 +49,15 @@
                 "nome_elemento": "grafo_indexeddb",
                 "nome_componente": "grafo-indexeddb"                
             }
+        },
+        {
+            "id": 6,
+            "titulo": "Câmera",
+            "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
+            "dados": {
+                "nome_elemento": "camera",
+                "nome_componente": "exibidor-camera"                
+            }
         }
     ],
     "elementos": [
@@ -109,6 +118,11 @@
         {
             "id": 11,
             "descricao": "Gerador Animado de UUID",
+            "dados": ""
+        },
+        {
+            "id": 12,
+            "descricao": "Exibição de Câmeras",
             "dados": {}
         }
     ],
@@ -121,7 +135,8 @@
                 2,
                 3,
                 4,
-                5
+                5,
+                6
             ],
             "elementos": [
                 {
@@ -135,8 +150,15 @@
                     "id": 7,
                     "id_elemento": 11,
                     "ordem": 3,
-                    "importancia": 700,
+                    "importancia": 200,
                     "componente": "gerador-uuid"
+                },
+                {
+                    "id": 8,
+                    "id_elemento": 12,
+                    "ordem": 3,
+                    "importancia": 700,
+                    "componente": "exibidor-camera"
                 },
                 {
                     "id": 5,

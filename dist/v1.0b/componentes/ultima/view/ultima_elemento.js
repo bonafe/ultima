@@ -62,17 +62,8 @@ export class UltimaElemento extends ComponenteBase {
                     this.editorDados.addEventListener("change", evento => {
                         evento.stopPropagation();
 
-                        this.elemento.dados = evento.detail;
-
-                        //TODO: Não deveria já renderizar pois o dado mudou?
-                        //Talvez ficasse lento... teria que ter um término da mudança, ou confirmação?
-
-                        //Cria um novo evento indicando dados do componente
-                        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, {                        
-                            id_elemento:this._id,
-                            id_container:this._id_view
-                        });                    
-                        this.dispatchEvent(eventoCompleto);      
+                        this.dados = evento.detail;
+                        this.enviarEventoAtualizacaoElemento();    
                     });
 
                     this.montarSelectComponente();
@@ -138,10 +129,11 @@ export class UltimaElemento extends ComponenteBase {
 
     enviarEventoAtualizacaoElemento(){
                 
-        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, {                                              
-            componente:JSON.parse(JSON.stringify(this.componente)),
-            dados: JSON.parse(JSON.stringify(this.dados)),
-            id: this._id,                    
+        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, {                                    
+            id_elemento:this.elemento.id,
+            id_view:this._id_view,
+            id_elemento_view:this._id,
+            dados:JSON.parse(JSON.stringify(this.dados))
         });    
 
         this.dispatchEvent(eventoCompleto);  
@@ -150,7 +142,7 @@ export class UltimaElemento extends ComponenteBase {
 
 
     static get observedAttributes() {
-        return ['id','id_view'];
+        return ['id_elemento','id_view'];
     }
 
 
@@ -158,7 +150,7 @@ export class UltimaElemento extends ComponenteBase {
     attributeChangedCallback(nomeAtributo, valorAntigo, novoValor) {
 
 
-        if (nomeAtributo.localeCompare("id") == 0){
+        if (nomeAtributo.localeCompare("id_elemento") == 0){
 
             this._id = Number(novoValor);
             this.renderizar();

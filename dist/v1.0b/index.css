@@ -20,8 +20,8 @@ body {
 /**********************************************************/
 .cabecalho_principal{    
   width: 100%;
-  background-color: blueviolet;
-  color: rgb(220, 190, 245);            
+  background-color: var(--cor-fundo-cabecalho);
+  color: var(--cor-texto-cabecalho);          
   padding: 5px;
   display: flex;
 }    
@@ -37,11 +37,11 @@ body {
 }
 
 .logo_icone_u{                   
-  color: orange;
+  color: var(--cor-logo-cabecalho);
 }  
 
 .logo_icone_js{                   
-  color: orange;      
+  color: var(--cor-logo-cabecalho);      
 }
 
 .ultima_titulo{
@@ -76,7 +76,7 @@ body {
 .controle_navegacao_principal{  
   padding-left: 10px;
   transition: 0.3s;
-  color: rgb(255, 123, 0);
+  color: var(--cor-link-cabecalho); 
   opacity: 0.5;
 }
 
@@ -106,9 +106,19 @@ ultima-view {
 /*                     RODAPÉ                             */
 /**********************************************************/
 .rodape_principal{
-  background-color: rgb(61, 20, 100);
-  color: rgb(250, 205, 252);      
+  background-color: var(--cor-fundo-rodape);
+  color: var(--cor-texto-rodape);      
 }
+
+.rodape_principal a{  
+  text-decoration: none;
+  color: var(--cor-link-rodape);      
+}
+
+.rodape_principal a:hover{  
+  color: var(--cor-link-hover-rodape);      
+}
+
 
 
 

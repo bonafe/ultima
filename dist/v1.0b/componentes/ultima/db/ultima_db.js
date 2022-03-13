@@ -1,4 +1,4 @@
-import { BaseInicialUltima } from "../base_inicial_ultima.js";
+import { ComponentesPadraoUltima } from "../componentes_padrao_ultima.js";
 
 
 
@@ -150,9 +150,10 @@ export class UltimaDB extends EventTarget{
     adicionarComponentesIniciais(){
         return new Promise((resolve, reject) => {
             let transacao = this.banco.transaction (["views","componentes"], "readwrite")
-           
-            let osComponentes = transacao.objectStore ("componentes");      
-            BaseInicialUltima.base.componentes.forEach (componente => {
+
+            let osComponentes = transacao.objectStore ("componentes");   
+
+            ComponentesPadraoUltima.base.componentes.forEach (componente => {
                 console.log (`adicionando componente: ${componente.nome}`);
                 osComponentes.put (componente);
             });
@@ -160,7 +161,7 @@ export class UltimaDB extends EventTarget{
             transacao.oncomplete = evento => {
                 console.info ("Elementos adicionados com sucesso");
                 resolve(true);
-            }      
+            }
         });
     }
 

@@ -21,7 +21,7 @@ export class ComponenteBase extends HTMLElement{
 
     //TODO: usar tag A com href para fazer parse no endereço e extrair o caminho
     static extrairCaminhoURL(url){
-        return url.split(0, url.lastIndexOf("/")+1);
+        return url.slice(0, url.lastIndexOf("/")+1);
     }
 
 

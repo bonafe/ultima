@@ -11,8 +11,8 @@ export class UltimaJS extends ComponenteBase{
 
 
     constructor(){        
-        super({templateURL:"./ultima_js.html", shadowDOM:false}, import.meta.url);
-        
+        super({templateURL:"./ultima_js.html", shadowDOM:true}, import.meta.url);        
+
         this.configuracoesCarregadas = false;
 
         this.addEventListener('carregou', () => {
@@ -25,8 +25,11 @@ export class UltimaJS extends ComponenteBase{
     
     renderizar(){
 
+        if (this.renderizado && (!this.estilosCarregados) && (this.estilos)){
+            this.carregarEstilos();
+        
         //TODO: Deve alterar a exibição caso um novo arquivo seja carregado
-        if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
+        }else if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
 
             UltimaDBReader.getInstance().views().then (views => {
                 
@@ -35,14 +38,26 @@ export class UltimaJS extends ComponenteBase{
                 this.criarEIniciarControleNavegadorTreemap();
             });
             
+            if (this.estilos){
+                this.carregarEstilos();
+            }
+
             this.renderizado = true;
-        }         
+        }       
     }
 
 
+    carregarEstilos(){
+        console.log ("Carregando variáveis externas de estilos................");
+        this.carregarCSS(this.estilos).then(()=>{
+            console.log ("Variáveis externas de estilos foram carregas com éxito!");
+        });
+        this.estilosCarregados = true;        
+    }
+
 
     static get observedAttributes() {
-        return ['src'];
+        return ['src', 'estilos', 'endereco'];
     }
 
 
@@ -56,7 +71,18 @@ export class UltimaJS extends ComponenteBase{
             fetch(this._src)
                 .then (response => response.json())
                 .then(configuracao => this.carregarConfiguracao(configuracao));                     
-        }      
+
+
+        }else  if (nomeAtributo.localeCompare("estilos") == 0){
+
+            this.estilosCarregados = false;
+            this.estilos = novoValor;
+            this.renderizar();        
+
+        }else  if (nomeAtributo.localeCompare("endereco") == 0){     
+            this.endereco = novoValor;
+            console.log (`Endereco: ${this.endereco}`);
+        }
     }
 
 
@@ -170,16 +196,27 @@ export class UltimaJS extends ComponenteBase{
 
 
     atualizacaoElemento(detalhe){
-        detalhe.id_elemento
-        detalhe.id_container
 
-        this.views[0].elementos.find (e => e.id == detalhe.id_elemento);
-        UltimaDBReader.getInstance().elemento_view(ultimaEvento.detail.id_view,ultimaEvento.detail.id).then (elemento => {
-            if (elemento.componente == "configuracao-ultima"){
+        UltimaDBReader.getInstance().elemento_view(detalhe.id_view, detalhe.id_elemento_view).then (elemento_view => {
 
-                this.atualizarConfiguracao(ultimaEvento.detail);    
+            if (elemento_view.componente == "configuracao-ultima"){
+
+                this.atualizarConfiguracao(detalhe);
+
+            }else{
+
+                UltimaDBReader.getInstance().elemento(detalhe.id_elemento).then (elemento => {
+
+                    elemento.dados = detalhe.dados;
+                    
+                    UltimaDBWriter.getInstance().atualizarElemento(elemento).then(()=>{
+
+                        console.log ("Elemento atualizado");
+                        //TODO: Propagar atualização para outras views
+                    });
+                });                                                        
             }
-        });                                                       
+        });
     }
 
 
