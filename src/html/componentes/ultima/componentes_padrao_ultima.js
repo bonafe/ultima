@@ -46,7 +46,15 @@ export class ComponentesPadraoUltima{
             {
                 "url": "./componentes/video/exibidor_camera.js",
                 "nome": "exibidor-camera"
-            }
+            },
+            {
+                "url": "./componentes/dispositivo/exibidor_dispositivos.js",
+                "nome": "exibidor-dispositivos"
+            },
+            {
+                "url": "./componentes/dispositivo/exibidor_dispositivo.js",
+                "nome": "exibidor-dispositivo"
+            },
         ]
     };
 }

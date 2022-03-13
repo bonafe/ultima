@@ -124,6 +124,11 @@
             "id": 12,
             "descricao": "Exibição de Câmeras",
             "dados": {}
+        },
+        {
+            "id": 13,
+            "descricao": "Exibição de Dispositivos",
+            "dados": {}
         }
     ],
     "views": [
@@ -157,8 +162,15 @@
                     "id": 8,
                     "id_elemento": 12,
                     "ordem": 3,
-                    "importancia": 700,
+                    "importancia": 200,
                     "componente": "exibidor-camera"
+                },
+                {
+                    "id": 9,
+                    "id_elemento": 12,
+                    "ordem": 3,
+                    "importancia": 700,
+                    "componente": "exibidor-dispositivos"
                 },
                 {
                     "id": 5,
