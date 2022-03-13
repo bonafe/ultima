@@ -35,7 +35,7 @@ export class UltimaDBWriter extends UltimaDB{
                 .then(() => this.limparObjectStore("componentes"))
                     .then(() => this.limparObjectStore("views"))
                         .then(() => this.limparObjectStore("acoes"))
-                            .then(() => this.adicionarComponentesIniciais())
+                            .then(() => this.atualizarComponentesPadrao())
                                 .then(()=> resolve(true));
         
         });      
