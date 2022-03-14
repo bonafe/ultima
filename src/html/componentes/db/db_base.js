@@ -139,6 +139,8 @@ export class DBBase extends EventTarget{
               
         await this.aguardarBanco();
 
+        //console.log (`${chave} - ${objectStore} - ${indice}`);
+
         let object_store = this.banco.transaction (objectStore, "readonly").objectStore (objectStore);
 
         let elemento_requisicao = object_store;

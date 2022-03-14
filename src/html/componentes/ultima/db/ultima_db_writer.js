@@ -67,7 +67,16 @@ export class UltimaDBWriter extends UltimaDB{
             })
         });
     }
-
+    async atualizarControladores (controladores){
+        return new Promise((resolve, reject) => {            
+            Promise.all(controladores.map (controlador => this.atualizarControlador(controlador))).then(retornos => {
+                resolve(true);                
+            })
+        });
+    }
+    async atualizarControlador (controlador){      
+        return this.atualizarRegistro (controlador, "controladores");    
+    }
 
     async atualizarComponente (componente){      
         return this.atualizarRegistro (componente, "componentes");    

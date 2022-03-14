@@ -17,6 +17,6 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
 
 os.chdir("../html");
 
-httpd = http.server.HTTPServer(('localhost', 443), CORSRequestHandler)
+httpd = http.server.HTTPServer(('localhost', 8443), CORSRequestHandler)
 httpd.socket = ssl.wrap_socket (httpd.socket, certfile='../resources/certificadoDigital/ultima.selfsigned.pem', server_side=True)
 httpd.serve_forever()

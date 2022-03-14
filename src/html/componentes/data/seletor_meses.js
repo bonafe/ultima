@@ -20,7 +20,8 @@ export class SeletorMeses extends ComponenteBase {
     selecionouMes(ano, mes, selecionado){
         let registro = this.dados.find(r => (r.ano == ano) && (r.mes == mes));        
         registro.selecionado = selecionado;
-        this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_DADOS, {"valorAntigo":undefined, "novoValor":this.dados}));
+        this.dispatchEvent(new CustomEvent("change", {detail:this.dados}));
+        this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO, registro));
     }
 
 
@@ -36,10 +37,10 @@ export class SeletorMeses extends ComponenteBase {
         if (nomeAtributo.localeCompare("dados") == 0){
             let dados = JSON.parse(novoValor);
 
-            if (dados.url){ 
-                this.url = dados.url;
+            if (dados.src){ 
+                this.src = dados.src;
 
-                fetch(this.url)
+                fetch(this.src)
                     .then(retorno => retorno.json())
                     .then(json => {
                         this.dados = json;
@@ -82,7 +83,7 @@ export class SeletorMeses extends ComponenteBase {
 
     renderizar (){
 
-        if (this.carregou && this.dados){ 
+        if (this.carregado && this.dados){ 
             
             let agrupado_ano = {};
 

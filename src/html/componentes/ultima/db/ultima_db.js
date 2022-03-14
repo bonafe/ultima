@@ -70,6 +70,7 @@ export class UltimaDB extends DBBase{
 
 
             let object_store_controladores = dbBase.banco.createObjectStore("controladores", { keyPath: "url" });                
+            object_store_controladores.createIndex("index_url_controlador", "url", { unique: true});
         }
     ];
 

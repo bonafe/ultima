@@ -90,7 +90,7 @@ export class UltimaJS extends ComponenteBase{
 
 
     static get observedAttributes() {
-        return ['src', 'estilos', 'endereco'];
+        return ['src', 'estilos'];
     }
 
 
@@ -112,9 +112,6 @@ export class UltimaJS extends ComponenteBase{
             this.estilos = novoValor;
             this.renderizar();        
 
-        }else  if (nomeAtributo.localeCompare("endereco") == 0){     
-            this.endereco = novoValor;
-            console.log (`Endereco: ${this.endereco}`);
         }
     }
 
@@ -133,8 +130,9 @@ export class UltimaJS extends ComponenteBase{
 
                 Promise.all([
                     UltimaDBWriter.getInstance().atualizarElementos(configuracao.elementos),
-                    UltimaDBWriter.getInstance().atualizarComponentes(configuracao.componentes),
+                    UltimaDBWriter.getInstance().atualizarComponentes(this.gerarCaminhoAbsolutoURL(configuracao.componentes)),
                     UltimaDBWriter.getInstance().atualizarAcoes(configuracao.acoes),
+                    UltimaDBWriter.getInstance().atualizarControladores(this.gerarCaminhoAbsolutoURL(configuracao.controladores)),
                     UltimaDBWriter.getInstance().atualizarView(this.views[0])
                 ]).then (respostas => {        
                     this.configuracoesCarregadas = true;                            
@@ -151,7 +149,14 @@ export class UltimaJS extends ComponenteBase{
         });        
     }
 
-
+    gerarCaminhoAbsolutoURL(lista){
+        return lista.map(elemento => {
+            if (elemento.url){
+                elemento.url = ComponenteBase.resolverEndereco(elemento.url, ComponenteBase.extrairCaminhoURL(this._src)).href;
+            }
+            return elemento;
+        })
+    }
 
     
     criarEIniciarControleNavegadorTreemap(){
