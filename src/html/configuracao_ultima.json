@@ -99,13 +99,13 @@
                     "uuid": "49e30cd4-a287-4b23-b4af-452b56e9faf8",
                     "uuid_elemento": "d1c4a9d1-2a7e-42bd-a1e2-d5580f96918d",                    
                     "importancia": 200,
-                    "componente": "exibidor-dispositivos"
+                    "componente": "editor-json"
                 },
                 {
                     "uuid": "5ea7b621-5abc-48af-a513-0a5269c499f2",
                     "uuid_elemento": "d1c4a9d1-2a7e-42bd-a1e2-d5580f96918d",                    
                     "importancia": 200,
-                    "componente": "visualizador-som"
+                    "componente": "editor-json"
                 }
             ]
         }
