@@ -6,7 +6,7 @@ import { UltimaDBReader } from "../db/ultima_db_reader.js";
 export class UltimaElemento extends ComponenteBase {
 
     constructor(){
-        super({templateURL:"./ultima_elemento.html", shadowDOM:true}, import.meta.url);
+        super({templateURL:"./ultima_elemento.html", shadowDOM:false}, import.meta.url);
 
         this.dados = null;
 

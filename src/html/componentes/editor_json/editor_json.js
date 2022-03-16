@@ -5,17 +5,18 @@ import { UltimaEvento } from '../ultima/ultima_evento.js';
 export class EditorJSON extends ComponenteBase {
 
     constructor(){
-        super({templateURL:"./editor_json.html", shadowDOM:true}, import.meta.url);
+        super({templateURL:"./editor_json.html", shadowDOM:false}, import.meta.url);
 
         this._dados = undefined;
 
         this.addEventListener("carregou", () => {
 
             //Importa dinamicamente a biblioteca JSONEditor
-            import(`${super.prefixoEndereco}/bibliotecas/jsoneditor/jsoneditor.js`).then(modulo => {
-
-                this.criarEditor();                               
-            });
+            import(ComponenteBase.resolverEndereco('../../bibliotecas/jsoneditor/jsoneditor.js', import.meta.url))
+                .then(modulo => {
+                    this.modulo = modulo;
+                    this.criarEditor();                               
+                });
         });
     }
 
@@ -122,7 +123,7 @@ export class EditorJSON extends ComponenteBase {
                 }
             }
         };
-        this.editor = new JSONEditor(container, opcoes);        
+        this.editor = new this.modulo.JSONEditor({target: container}, opcoes);        
         this.atualizarDadosEditor();
     }
 
