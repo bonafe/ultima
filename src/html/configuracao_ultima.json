@@ -65,7 +65,10 @@
         {
             "uuid": "d523c3ad-19ba-4ea1-bff0-62d950be4c11",
             "descricao": "Exibição de Câmeras",
-            "dados": {}
+            "dados": {
+                "teste":1,
+                "teste2":[1,2,3,4,5]                
+            }
         },
         {
             "uuid": "d1c4a9d1-2a7e-42bd-a1e2-d5580f96918d",

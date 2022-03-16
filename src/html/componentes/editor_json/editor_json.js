@@ -105,25 +105,23 @@ export class EditorJSON extends ComponenteBase {
 
 
     criarEditor(){
-        let container = this.noRaiz.querySelector("#editorJSON");
-        let opcoes = {
-            mode: 'tree',
-            onEvent: (no, evento) =>{                
 
-                if (evento.type.localeCompare("click") ==0){
+        if (!this.editor){
 
-                    this.dispararEventoSelecaoObjeto(no);
-
-
-                }else  if (evento.type.localeCompare("input") ==0){
-                    
-                    let valorAntigo = this.dados;
-                    this.dados = this.editor.get();
-                    this.dispatchEvent(new CustomEvent("change", {detail:this.dados}));
+            let container = this.noRaiz.querySelector("#editorJSON");
+            let opcoes = {
+                target: container,
+                props:{
+                    mode: 'tree',
+                    onChange: (updatedContent, previousContent, patchResult) => {                        
+                        this.dados = updatedContent.json;
+                        this.dispatchEvent(new CustomEvent("change", {detail:this.dados}));                      
+                    }            
                 }
-            }
-        };
-        this.editor = new this.modulo.JSONEditor({target: container}, opcoes);        
+            };
+            this.editor = new this.modulo.JSONEditor(opcoes);                   
+        }
+
         this.atualizarDadosEditor();
     }
 
@@ -131,8 +129,8 @@ export class EditorJSON extends ComponenteBase {
 
     atualizarDadosEditor(){
         if (this.editor && this.dados){
-            this.editor.set(this.dados);
-            this.editor.expandAll();
+            this.editor.set({json:this.dados});
+            setTimeout(()=>this.editor.expand(caminho => caminho.length < 2));                        
         }
     }
 }

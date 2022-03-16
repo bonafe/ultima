@@ -1,5 +1,5 @@
-import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima_evento.js';
+import { ComponenteBase } from '../../componente_base.js';
+import { UltimaEvento } from '../../ultima/ultima_evento.js';
 
 
 export class GrafoEquipe extends ComponenteBase {
@@ -17,13 +17,6 @@ export class GrafoEquipe extends ComponenteBase {
                 this.vis = true;
                 this.gerarGrafoEquipe();                               
             //});
-
-            this.noRaiz.querySelector("#adicionar").addEventListener("click", ()=>{
-                this.elementosGrafo.nodes.add({
-                    id:(Math.random()*1e7).toString(32),
-                    label: "novo nó"
-                })
-            });
         });
     }
 
@@ -39,7 +32,7 @@ export class GrafoEquipe extends ComponenteBase {
 
         if (nomeAtributo.localeCompare("dados") == 0){
             let dados = JSON.parse(novoValor);
-
+            
             if (dados.url){ 
                 this.url = dados.url;
 
@@ -62,7 +55,9 @@ export class GrafoEquipe extends ComponenteBase {
    gerarGrafoEquipe (){
 
         if (this.vis && this.dados){
-
+            
+            let titulo = `Escala AlfVCP ${this.dados.mes} de ${this.dados.ano}`;
+            this.noRaiz.querySelector("#titulo").textContent = titulo;
 
             this.idGrafo = 0;
             let elementosGrafo = this.transformarListaEmGrafo([this.dados], this.idGrafo++, 70);

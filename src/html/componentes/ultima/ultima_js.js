@@ -11,7 +11,7 @@ export class UltimaJS extends ComponenteBase{
 
 
     constructor(){        
-        super({templateURL:"./ultima_js.html", shadowDOM:true}, import.meta.url);        
+        super({templateURL:"./ultima_js.html", shadowDOM:false}, import.meta.url);        
 
         this.configuracoesCarregadas = false;
 
