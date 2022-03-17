@@ -10,8 +10,8 @@ export class UltimaJS extends ComponenteBase{
 
 
 
-    constructor(){        
-        super({templateURL:"./ultima_js.html", shadowDOM:false}, import.meta.url);        
+    constructor(){
+        super({templateURL:"./ultima_js.html", shadowDOM:true}, import.meta.url);        
 
         this.configuracoesCarregadas = false;
 
@@ -22,7 +22,7 @@ export class UltimaJS extends ComponenteBase{
     }
 
 
-    
+
     renderizar(){
 
         if (this.renderizado && (!this.estilosCarregados) && (this.estilos)){
@@ -88,6 +88,7 @@ export class UltimaJS extends ComponenteBase{
         this.estilosCarregados = true;        
     }
 
+    
 
     static get observedAttributes() {
         return ['src', 'estilos'];
@@ -168,6 +169,8 @@ export class UltimaJS extends ComponenteBase{
         [               
             {evento:UltimaEvento.EVENTO_SELECAO_OBJETO},
 
+            {evento:UltimaEvento.EVENTO_VIEW_ATUALIZADA},
+
             {evento:UltimaEvento.EXECUTAR_ACAO, funcao:this.executarAcao.bind(this)},
 
             //Eventos direcionados para o controle navegador
@@ -224,7 +227,9 @@ export class UltimaJS extends ComponenteBase{
 
         //TODO: considerando apenas um container (nome antigo: view)
         UltimaDBWriter.getInstance().atualizarView(this.controleNavegador.view).then(()=>{
+
             //Persistiu a atualização na base
+            this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_VIEW_ATUALIZADA,{"uuid_view":uuid_view}));
         });
     }                                                               
 

@@ -53,7 +53,7 @@ export class UltimaElemento extends ComponenteBase {
             }else{
 
                 
-                let url_editor_json = super.prefixoEndereco + "/componentes/editor_json/editor_json.js";                
+                let url_editor_json = super.prefixoEndereco + "/componentes/dados/json/editor/editor_json.js";                
 
                 import(url_editor_json).then(modulo => {
                     

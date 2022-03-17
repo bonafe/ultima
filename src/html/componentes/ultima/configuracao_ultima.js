@@ -1,4 +1,4 @@
-import { EditorJSON } from "../editor_json/editor_json.js";
+import { EditorJSON } from "../dados/json/editor/editor_json.js";
 import { UltimaEvento } from "./ultima_evento.js";
 
 export class ConfiguracaoUltima extends EditorJSON{

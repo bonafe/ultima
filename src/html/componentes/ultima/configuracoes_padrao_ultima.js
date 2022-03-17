@@ -7,7 +7,7 @@ export class ConfiguracoesPadraoUltima{
                 "nome": "seletor-meses"
             },
             {
-                "url": "./componentes/editor_json/editor_json.js",
+                "url": "./componentes/dados/json/editor/editor_json.js",
                 "nome": "editor-json"
             },
             {
@@ -44,6 +44,10 @@ export class ConfiguracoesPadraoUltima{
                 "nome": "gerador-uuid"
             },
             {
+                "url": "./componentes/dados/json/diferencas/visualizador_diferencas_json.js",
+                "nome": "visualizador-diferencas-json"
+            },
+            {
                 "url": "./componentes/video/exibidor_camera.js",
                 "nome": "exibidor-camera"
             },
@@ -64,6 +68,10 @@ export class ConfiguracoesPadraoUltima{
             {
                 "url": "./componentes/dispositivo/controlador_dispositivos.js",
                 "nome_classe": "ControladorDispositivos"
+            },
+            {
+                "url": "./componentes/dados/json/diferencas/controlador_visualizador_diferencas_json.js",
+                "nome_classe": "ControladorVisualizadorDiferencasJSON"
             }
         ]
     };

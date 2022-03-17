@@ -1,5 +1,5 @@
-import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima_evento.js';
+import { ComponenteBase } from '../../../componente_base.js';
+import { UltimaEvento } from '../../../ultima/ultima_evento.js';
 
 
 export class EditorJSON extends ComponenteBase {
@@ -12,7 +12,7 @@ export class EditorJSON extends ComponenteBase {
         this.addEventListener("carregou", () => {
 
             //Importa dinamicamente a biblioteca JSONEditor
-            import(ComponenteBase.resolverEndereco('../../bibliotecas/jsoneditor/jsoneditor.js', import.meta.url))
+            import(ComponenteBase.resolverEndereco('../../../../bibliotecas/jsoneditor/jsoneditor.js', import.meta.url))
                 .then(modulo => {
                     this.modulo = modulo;
                     this.criarEditor();                               
