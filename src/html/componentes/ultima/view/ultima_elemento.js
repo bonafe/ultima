@@ -175,7 +175,9 @@ export class UltimaElemento extends ComponenteBase {
         }
     }
 
-
+    atualizar(){
+        this.renderizar();
+    }
 
     renderizar(){
 
@@ -205,21 +207,33 @@ export class UltimaElemento extends ComponenteBase {
                         if (deveCarregar && !this.carregandoComponente){
                             this.componente = componente;
                             this.carregarComponente();
+                        }else{
+                            this.atualizarComponenteEEditor();
                         }
                     });                
                 });
             });
         }
         
+        
+    }
+
+
+
+    atualizarComponenteEEditor(){
         if (this.instanciaComponente &&  this.elemento){  
-            if (this.elemento.dados){                                              
-                this.instanciaComponente.setAttribute("dados", JSON.stringify(this.elemento.dados));            
+            if (this.elemento.dados){  
+                if (this.instanciaComponente.getAttribute("dados") != JSON.stringify(this.elemento.dados)){                    
+                    this.instanciaComponente.setAttribute("dados", JSON.stringify(this.elemento.dados));            
+                }
             }
         }
 
         if (this.editorDados && this.elemento){
-            if (this.elemento.dados){                                              
-                this.editorDados.setAttribute("dados", JSON.stringify(this.elemento.dados));
+            if (this.elemento.dados){                     
+                if (this.editorDados.getAttribute("dados") != JSON.stringify(this.elemento.dados)){                         
+                    this.editorDados.setAttribute("dados", JSON.stringify(this.elemento.dados));
+                }
             }
         }
     }

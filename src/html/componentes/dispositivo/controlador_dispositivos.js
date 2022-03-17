@@ -10,7 +10,7 @@ export class ControladorDispositivos extends ControladorBase{
     }
 
     processarEvento (ultimaEvento){
-        console.log (`ControladorDispositivos: processarEvento: %o`, ultimaEvento);
+        //console.log (`ControladorDispositivos: processarEvento: %o`, ultimaEvento);
 
         //REGRA: EVENTO SELEÇÃO DE OBJETO
         if (ultimaEvento.type == UltimaEvento.EVENTO_SELECAO_OBJETO){

@@ -8,7 +8,5 @@ export class ControladorUltima extends ControladorBase{
     }
 
     processarEvento (ultimaEvento){                
-    }
-
-    
+    }    
 }

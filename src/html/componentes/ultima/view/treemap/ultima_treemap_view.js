@@ -52,7 +52,15 @@ export class UltimaTreemapView extends UltimaView{
         this.renderizar();    
     }
 
-   
+
+
+    atualizarElemento(uuid_elemento){
+        let seletor = `ultima-treemap-elemento[uuid_elemento="${uuid_elemento}"]`;
+        let elementos = this.noRaiz.querySelectorAll(seletor);
+        console.log (`ATUALIZANDO ELEMENTOS VIEW COM O ELEMENTO PROCURADP: quantidade ${elementos.length}`);
+        elementos.forEach(ultimaTreemapElemento => ultimaTreemapElemento.atualizar());        
+    }
+
 
 
     criarTreeMap(){
@@ -101,6 +109,7 @@ export class UltimaTreemapView extends UltimaView{
                     .attr("class", "node_treemap_d3js container_treemap_d3js")
                     .attr("uuid_elemento_view",(d) => d.data.uuid)
                     .attr("uuid_view", (d) => this._view.uuid)                    
+                    .attr("uuid_elemento", (d) => d.data.uuid_elemento)
                     .style("left", (d) => d.x0 + "px")
                     .style("top", (d) => d.y0 + "px")
                     .style("width", (d) => Math.max(0, d.x1 - d.x0 - 1) + "px")

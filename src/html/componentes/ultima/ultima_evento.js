@@ -1,10 +1,13 @@
 export class UltimaEvento extends CustomEvent{
 
     static EVENTO_SELECAO_OBJETO = 'EVENTO_SELECAO_OBJETO'; 
-        
+    
+    //Indica que houver alguma atualização em elemento
     static EVENTO_ATUALIZACAO_ELEMENTO = 'EVENTO_ATUALIZACAO_ELEMENTO';    
+    //Indica que o elemento foi atualizado na base de dados
+    static EVENTO_ELEMENTO_ATUALIZADO = 'EVENTO_ELEMENTO_ATUALIZADO';    
 
-    //Indica que houvr alguma atualização na view
+    //Indica que houver alguma atualização na view
     static EVENTO_ATUALIZACAO_VIEW = 'EVENTO_ATUALIZACAO_VIEW';    
     //Indica que a view foi atualizada na base de dados
     static EVENTO_VIEW_ATUALIZADA = 'EVENTO_VIEW_ATUALIZADA';    

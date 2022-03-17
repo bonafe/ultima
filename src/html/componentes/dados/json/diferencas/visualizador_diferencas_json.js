@@ -67,7 +67,7 @@ export class VisualizadorDiferencasJSON extends ComponenteBase {
 
                 console.error (`Conteúdo inválido no atributo 'dados'. Deve ser: {esquerda:objetoX, direita:objetoY}`);
 
-            }else{
+            }else{                
 
                 let container = this.noRaiz.querySelector("#editorJSON");            
                 let delta = jsondiffpatch.diff(this.dados.esquerda, this.dados.direita);
