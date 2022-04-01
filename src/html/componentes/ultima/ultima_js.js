@@ -71,7 +71,7 @@ export class UltimaJS extends ComponenteBase{
                             import(ComponenteBase.resolverEndereco(controlador.url, url_raiz_ultima.href)).then(modulo => {
 
                                 controlador.instanciaControlador = new modulo[controlador.nome_classe]();                    
-                                controlador.instanciaControlador.addEventListener (UltimaEvento.EXECUTAR_ACAO, evento => this.executarAcao.bind(this)(evento.detail));
+                                //controlador.instanciaControlador.addEventListener (UltimaEvento.EXECUTAR_ACAO, evento => this.executarAcao.bind(this)(evento.detail));
                                 resolveC(true);
                             });
                         })
