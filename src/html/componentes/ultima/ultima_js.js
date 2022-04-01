@@ -194,14 +194,20 @@ export class UltimaJS extends ComponenteBase{
 
             {evento:UltimaEvento.EVENTO_ELEMENTO_ATUALIZADO, funcao:this.elementoAtualizado.bind(this)}
 
-        ].forEach (objetoEventoMonitorado => {
-            
+        ].forEach (objetoEventoMonitorado => {                        
+
             this.addEventListener (objetoEventoMonitorado.evento, evento => {
+                if (objetoEventoMonitorado.evento == UltimaEvento.EXECUTAR_ACAO){
+                    console.log ("************************************** CHEGOU EVENTO this");                
+                }
                 this.processarEvento (evento, objetoEventoMonitorado);
             });
 
             this.controladores.forEach(controlador => {
                 controlador.instanciaControlador.addEventListener (objetoEventoMonitorado.evento, evento => {
+                    if (objetoEventoMonitorado.evento == UltimaEvento.EXECUTAR_ACAO){
+                        console.log ("************************************** CHEGOU EVENTO controlador");                
+                    }
                     this.processarEvento (evento, objetoEventoMonitorado);
                 });
             })
