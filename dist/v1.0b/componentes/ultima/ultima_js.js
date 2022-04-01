@@ -10,7 +10,7 @@ export class UltimaJS extends ComponenteBase{
 
 
 
-    constructor(){        
+    constructor(){
         super({templateURL:"./ultima_js.html", shadowDOM:true}, import.meta.url);        
 
         this.configuracoesCarregadas = false;
@@ -22,7 +22,7 @@ export class UltimaJS extends ComponenteBase{
     }
 
 
-    
+
     renderizar(){
 
         if (this.renderizado && (!this.estilosCarregados) && (this.estilos)){
@@ -31,33 +31,79 @@ export class UltimaJS extends ComponenteBase{
         //TODO: Deve alterar a exibição caso um novo arquivo seja carregado
         }else if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
 
-            UltimaDBReader.getInstance().views().then (views => {
-                
-                this.views  = views;
+            this.carregarControladores().then(()=>{
 
-                this.criarEIniciarControleNavegadorTreemap();
+                UltimaDBReader.getInstance().views().then (views => {
+                    
+                    this.views  = views;
+
+                    this.criarEIniciarControleNavegadorTreemap();
+
+                    if (this.estilos){
+                        this.carregarEstilos().then(()=>{
+                            this.renderizado = true;    
+                        });
+                    }else{        
+                        this.renderizado = true;
+                    }     
+                });                                                             
             });
-            
-            if (this.estilos){
-                this.carregarEstilos();
-            }
-
-            this.renderizado = true;
         }       
     }
 
 
-    carregarEstilos(){
-        console.log ("Carregando variáveis externas de estilos................");
-        this.carregarCSS(this.estilos).then(()=>{
-            console.log ("Variáveis externas de estilos foram carregas com éxito!");
+
+    carregarControladores(){
+        return new Promise ((resolve, reject) => {
+            UltimaDBReader.getInstance().controladores().then (controladores => {
+                    
+                this.controladores  = controladores;
+
+                Promise.all(
+                    this.controladores.map (controlador => 
+                        new Promise((resolveC, rejectC) => {
+
+                            //Componentes com URL Relativa são carregados a partir do diretório raiz do Ultima
+                            //O diretório raiz é calculado partindo-se de está esta classe UltimaElemento
+                            let url_raiz_ultima =  new URL("../../",ComponenteBase.extrairCaminhoURL(import.meta.url));
+
+                            //Carrega dinamicamente o componente
+                            import(ComponenteBase.resolverEndereco(controlador.url, url_raiz_ultima.href)).then(modulo => {
+
+                                controlador.instanciaControlador = new modulo[controlador.nome_classe]();                    
+                                controlador.instanciaControlador.addEventListener (UltimaEvento.EXECUTAR_ACAO, evento => this.executarAcao.bind(this)(evento.detail));
+                                resolveC(true);
+                            });
+                        })
+                    )
+                ).then(()=>resolve(true));
+            });
         });
-        this.estilosCarregados = true;        
     }
 
 
+
+    enviarEventoParaControladores(evento){
+        this.controladores.forEach (controlador => {
+            controlador.instanciaControlador.processarEvento (evento);
+        });
+    }
+
+
+
+    carregarEstilos(){
+        return new Promise ((resolve, reject) => {            
+            this.carregarCSS(this.estilos).then(()=>{
+                this.estilosCarregados = true;        
+                resolve(true);
+            });            
+        });
+    }
+
+    
+
     static get observedAttributes() {
-        return ['src', 'estilos', 'endereco'];
+        return ['src', 'estilos'];
     }
 
 
@@ -79,9 +125,6 @@ export class UltimaJS extends ComponenteBase{
             this.estilos = novoValor;
             this.renderizar();        
 
-        }else  if (nomeAtributo.localeCompare("endereco") == 0){     
-            this.endereco = novoValor;
-            console.log (`Endereco: ${this.endereco}`);
         }
     }
 
@@ -100,8 +143,9 @@ export class UltimaJS extends ComponenteBase{
 
                 Promise.all([
                     UltimaDBWriter.getInstance().atualizarElementos(configuracao.elementos),
-                    UltimaDBWriter.getInstance().atualizarComponentes(configuracao.componentes),
+                    UltimaDBWriter.getInstance().atualizarComponentes(this.gerarCaminhoAbsolutoURL(configuracao.componentes)),
                     UltimaDBWriter.getInstance().atualizarAcoes(configuracao.acoes),
+                    UltimaDBWriter.getInstance().atualizarControladores(this.gerarCaminhoAbsolutoURL(configuracao.controladores)),
                     UltimaDBWriter.getInstance().atualizarView(this.views[0])
                 ]).then (respostas => {        
                     this.configuracoesCarregadas = true;                            
@@ -118,7 +162,14 @@ export class UltimaJS extends ComponenteBase{
         });        
     }
 
-
+    gerarCaminhoAbsolutoURL(lista){
+        return lista.map(elemento => {
+            if (elemento.url){
+                elemento.url = ComponenteBase.resolverEndereco(elemento.url, ComponenteBase.extrairCaminhoURL(this._src)).href;
+            }
+            return elemento;
+        })
+    }
 
     
     criarEIniciarControleNavegadorTreemap(){
@@ -127,22 +178,42 @@ export class UltimaJS extends ComponenteBase{
         //TODO: só está pegando a primeira view
         this.controleNavegador.view = JSON.parse(JSON.stringify(this.views[0]));
                                     
-        [   
+        [               
+            {evento:UltimaEvento.EVENTO_SELECAO_OBJETO},
+
+            {evento:UltimaEvento.EVENTO_VIEW_ATUALIZADA},
+
             {evento:UltimaEvento.EXECUTAR_ACAO, funcao:this.executarAcao.bind(this)},
 
             //Eventos direcionados para o controle navegador
             //TODO: poder ter vários controladores de containeres de navegação            
             {evento:UltimaEvento.EVENTO_ATUALIZACAO_VIEW, funcao:this.atualizarView.bind(this)},            
 
-            //Eventos tratados diretamente pelo ultima-view                        
-            {evento:UltimaEvento.EVENTO_SELECAO_OBJETO, funcao:this.selecionouObjeto.bind(this)},            
-            {evento:UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, funcao:this.atualizacaoElemento.bind(this)}
-        ].forEach (e => {
+            //Eventos tratados diretamente pelo ultima-view                                    
+            {evento:UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, funcao:this.atualizacaoElemento.bind(this)},
+
+            {evento:UltimaEvento.EVENTO_ELEMENTO_ATUALIZADO, funcao:this.elementoAtualizado.bind(this)}
+
+        ].forEach (objetoEventoMonitorado => {
             
-            this.addEventListener (e.evento, evento => e.funcao(evento.detail));
+            this.addEventListener (objetoEventoMonitorado.evento, evento => {
+                this.processarEvento (evento, objetoEventoMonitorado);
+            });
+
+            this.controladores.forEach(controlador => {
+                controlador.instanciaControlador.addEventListener (objetoEventoMonitorado.evento, evento => {
+                    this.processarEvento (evento, objetoEventoMonitorado);
+                });
+            })
         });                                   
     }
     
+    processarEvento (evento, objetoEventoMonitorado){
+        this.enviarEventoParaControladores (evento);
+        if (objetoEventoMonitorado.funcao){
+            return objetoEventoMonitorado.funcao(evento.detail);
+        }
+    }
 
     executarAcao(acao){
 
@@ -175,29 +246,21 @@ export class UltimaJS extends ComponenteBase{
     }
 
     atualizarView(detalhes){        
-        let id_container = detalhes.id_container;
+        let uuid_view = detalhes.uuid_view;
 
         //TODO: considerando apenas um container (nome antigo: view)
         UltimaDBWriter.getInstance().atualizarView(this.controleNavegador.view).then(()=>{
+
             //Persistiu a atualização na base
+            this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_VIEW_ATUALIZADA,{"uuid_view":uuid_view}));
         });
-    }
-
-
-
-    selecionouObjeto(ultimaEvento){        
-        this.adicionarElemento ({
-            nome_elemento:"Novo a partir de seleção",
-            nome_componente:ultimaEvento.detail.elemento_origem.componente,
-            dados:ultimaEvento.detail.dados
-        });
-    }                                                                   
+    }                                                               
 
 
 
     atualizacaoElemento(detalhe){
 
-        UltimaDBReader.getInstance().elemento_view(detalhe.id_view, detalhe.id_elemento_view).then (elemento_view => {
+        UltimaDBReader.getInstance().elemento_view(detalhe.uuid_view, detalhe.uuid_elemento_view).then (elemento_view => {
 
             if (elemento_view.componente == "configuracao-ultima"){
 
@@ -205,14 +268,20 @@ export class UltimaJS extends ComponenteBase{
 
             }else{
 
-                UltimaDBReader.getInstance().elemento(detalhe.id_elemento).then (elemento => {
+                UltimaDBReader.getInstance().elemento(detalhe.uuid_elemento).then (elemento => {
 
                     elemento.dados = detalhe.dados;
                     
                     UltimaDBWriter.getInstance().atualizarElemento(elemento).then(()=>{
 
-                        console.log ("Elemento atualizado");
-                        //TODO: Propagar atualização para outras views
+                        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ELEMENTO_ATUALIZADO, {                                    
+                            uuid_elemento:detalhe.uuid_elemento,
+                            uuid_view:detalhe.uuid_view,
+                            uuid_elemento_view:detalhe.uuid_elemento_view,
+                            dados:JSON.parse(JSON.stringify(elemento.dados))
+                        });    
+                                        
+                        this.dispatchEvent(eventoCompleto);
                     });
                 });                                                        
             }
@@ -221,34 +290,26 @@ export class UltimaJS extends ComponenteBase{
 
 
 
-
-
-
-   
-
-
-
-
-
-
-
-
+    elementoAtualizado(detalhe){
+        
+        this.controleNavegador.atualizarElemento (detalhe.uuid_elemento);                                                     
+    }
 
 
 
     adicionarElemento(detalhe){
 
-        let id_novo_elemento = this.proximoIdElemento(this.views[0].elementos);
+        let uuid_novo_elemento = window.crypto.randomUUID();
+        let uuid_novo_elemento_view = window.crypto.randomUUID();
 
         let novo_elemento = {                        
-            "id": id_novo_elemento,
+            "uuid": uuid_novo_elemento,
             "nome": detalhe.nome_elemento,            
             "dados": detalhe.dados
         };
         let novo_elemento_view = {
-            "id": id_novo_elemento,
-            "id_elemento": id_novo_elemento,
-            "ordem": this.proximaOrdem(this.views[0].elementos),            
+            "uuid": uuid_novo_elemento_view,
+            "uuid_elemento": uuid_novo_elemento,                     
             "importancia": this.mediaImportancia(this.views[0].elementos),
             "componente": detalhe.nome_componente
         };
@@ -270,36 +331,7 @@ export class UltimaJS extends ComponenteBase{
 
 
 
-    proximoIdElemento(elementos){
-        let id = 0;
-        elementos.forEach(elemento => {
-            if (elemento.id > id){
-                id = elemento.id;
-            }
-        });
-        return ++id;
-    }
-
-
-
-    proximaOrdem(elementos){
-        let ordem = 0;
-        elementos.forEach(elemento => {
-            if (elemento.ordem > ordem){
-                ordem = elemento.ordem;
-            }
-        });
-        ++ordem;        
-
-        return ordem;
-    }
-
-
-
-
-
-
-
+   
 
 
 
@@ -351,7 +383,7 @@ export class UltimaJS extends ComponenteBase{
             let elemento_atualizado = JSON.parse(JSON.stringify(elemento_configuracao));
 
             //Encontra o índice do elemento da configuração aqui no array de elementos da view
-            let indice = this.view.elementos.map(e => e.id).indexOf (elemento_atualizado.id);                                    
+            let indice = this.view.elementos.map(e => e.uuid).indexOf (elemento_atualizado.uuid);                                    
 
             //Remove o elemento atual da view da posição
             let [elemento_view] = this.view.elementos.splice(indice,1);

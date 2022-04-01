@@ -137,7 +137,7 @@ export class UltimaView extends ComponenteBase{
 
         let elemento_view_atualizado = evento.detail;
 
-        let indice = this.view.elementos.map(e => e.id).indexOf (elemento_view_atualizado.id);
+        let indice = this.view.elementos.map(e => e.uuid).indexOf (elemento_view_atualizado.uuid);
 
         //Remove o elemento da posição
         let [elemento] = this.view.elementos.splice(indice,1);
@@ -146,26 +146,5 @@ export class UltimaView extends ComponenteBase{
         this.view.elementos.splice(indice,0,elemento_view_atualizado);  
 
         this.salvarView();                           
-    }
-    
-
-
-    selecaoObjeto(elementoTreemap) {
-        
-        let evento = d3.event;
-
-        //Para a propagaçaõ do evento do componente
-        evento.stopPropagation();
-
-        //Cria uma copia por valor para enviar de forma segura no evento
-        let elemento =  JSON.parse(JSON.stringify(this.view.elementos.find(e => e.id == evento.detail.id_origem)));
-
-        //Cria um novo evento indicando dados do componente
-        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO,{
-            elemento_origem: elemento,
-            dados: evento.detail.dados
-        });
-        
-        this.dispatchEvent(eventoCompleto);                                                                  
     }
 }

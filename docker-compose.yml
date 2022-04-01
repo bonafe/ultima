@@ -15,7 +15,8 @@ services:
     volumes:
       - ./src/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
       #### Para conseguir rodar https, precisei mandar para dentro da VM o certificado do localhost
-      - ./src/resources/certificadoDigital/ultima.selfsigned.pem:/etc/ssl/certs/certificado-aplicacao.pem
+      #- ./src/resources/certificadoDigital/ultima.selfsigned.pem:/etc/ssl/certs/certificado-aplicacao.pem
+      - ../chaves_ultima/ultima_alfvcp.pem:/etc/ssl/certs/certificado-aplicacao.pem
       - ./src/resources/certificadoDigital/trusted.pem:/etc/ssl/certs/trusted.pem
       - ./src/resources/certificadoDigital/crl.pem:/etc/ssl/certs/CRL/crl.pem
       
@@ -31,4 +32,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.31.0.0/24
+        - subnet: 172.37.0.0/24

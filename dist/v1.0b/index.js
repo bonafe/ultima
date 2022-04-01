@@ -3,6 +3,8 @@ import { UltimaEvento } from './componentes/ultima/ultima_evento.js';
 import { UltimaJS } from './componentes/ultima/ultima_js.js';
 import { ComponenteBase } from './componentes/componente_base.js';
 
+
+
 window.onload = () => {
   
     const supportsContainerQueries = "container" in document.documentElement.style;
@@ -25,6 +27,8 @@ window.onload = () => {
     document.querySelector("ultima-js").setAttribute("estilos", ComponenteBase.resolverEndereco("./variaveis_estilo_ultima.css", ComponenteBase.extrairCaminhoURL(import.meta.url)));
 }
 
+
+
 window.openFullscreen = () => {
     let elemento = document.querySelector("ultima-js");
     if (!document.fullscreenElement) {
@@ -35,6 +39,8 @@ window.openFullscreen = () => {
         document.exitFullscreen();
       }
 }
+
+
 
 function onYouTubeIframeAPIReady() {
   window.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_PLAYER_YOUTUBE_CARREGADO,{}));

@@ -59,9 +59,17 @@ export class UltimaDBReader extends UltimaDB{
         return this.lerTodosRegistros("views");
     }
 
+    async view(chave){        
+        return this.trazerRegistro(chave, "views");
+    }
 
     
     async elemento_view(chave, chave_elemento){        
-        return this.trazerRegistro(chave, "views").then(view => view.elementos.find(e => e.id == chave_elemento));
+        return this.trazerRegistro(chave, "views").then(view => view.elementos.find(e => e.uuid == chave_elemento));
+    }
+
+
+    async controladores(){
+        return this.lerTodosRegistros("controladores");
     }
 }

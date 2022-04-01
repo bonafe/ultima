@@ -11,5 +11,10 @@ tfoot th{
 }
 
 div {
-    background-color: burlywood;
+    background-color: rgb(184, 197, 255);
+}
+
+#container{
+    height: 100%;
+    width: 100%;
 }

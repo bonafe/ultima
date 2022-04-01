@@ -52,7 +52,15 @@ export class UltimaTreemapView extends UltimaView{
         this.renderizar();    
     }
 
-   
+
+
+    atualizarElemento(uuid_elemento){
+        let seletor = `ultima-treemap-elemento[uuid_elemento="${uuid_elemento}"]`;
+        let elementos = this.noRaiz.querySelectorAll(seletor);
+        console.log (`ATUALIZANDO ELEMENTOS VIEW COM O ELEMENTO PROCURADP: quantidade ${elementos.length}`);
+        elementos.forEach(ultimaTreemapElemento => ultimaTreemapElemento.atualizar());        
+    }
+
 
 
     criarTreeMap(){
@@ -75,15 +83,17 @@ export class UltimaTreemapView extends UltimaView{
 
         this.treemap = d3.treemap().size([this.widthTreemap, this.heightTreemap]);
         
+        //TODO: tive que criar o campo id pois não sei setar um campo com nome diferente no D3 e estava
+        //Redesenhando a tela toda hora pois mudou de campo id para uuid o nome
+        this.view.elementos.forEach (e => e.id = e.uuid);
+
         const root = d3.hierarchy(this.view, (d) => d.elementos)
+            
             //Valor do elemento para cálculo da área do TreeMap
-            .sum( d => {
-                return d.importancia;
-            })
+            .sum( d => d.importancia)
+
             //Ordem dos elementos no Treemap
-            .sort((a, b) => {             
-                return a.data.ordem - b.data.ordem;
-            });         
+            .sort((a, b) => (a.data.ordem - b.data.ordem));         
         
         //console.log (root.children.map(e => `[id:${e.data.id} descricao:${e.data.descricao} ordem:${e.data.ordem} importancia:${e.data.importancia}]`).join("\n"));
 
@@ -97,8 +107,9 @@ export class UltimaTreemapView extends UltimaView{
             .enter()
                 .append("ultima-treemap-elemento")                    
                     .attr("class", "node_treemap_d3js container_treemap_d3js")
-                    .attr("id_elemento",(d) => JSON.stringify(d.data.id))
-                    .attr("id_view", (d) => JSON.stringify(this._view.id))                    
+                    .attr("uuid_elemento_view",(d) => d.data.uuid)
+                    .attr("uuid_view", (d) => this._view.uuid)                    
+                    .attr("uuid_elemento", (d) => d.data.uuid_elemento)
                     .style("left", (d) => d.x0 + "px")
                     .style("top", (d) => d.y0 + "px")
                     .style("width", (d) => Math.max(0, d.x1 - d.x0 - 1) + "px")
@@ -126,7 +137,7 @@ export class UltimaTreemapView extends UltimaView{
 
     encontrarEAplicarMudanca(idElementoProcurado, funcaoDeMudanca){
                 
-        let indice = this.view.elementos.map(e => e.id).indexOf (idElementoProcurado);
+        let indice = this.view.elementos.map(e => e.uuid).indexOf (idElementoProcurado);
 
         let elemento = this.view.elementos[indice];
 
@@ -137,7 +148,7 @@ export class UltimaTreemapView extends UltimaView{
         if (funcaoDeMudanca(elemento, indice) !== false){
         
             this.renderizar();                  
-            this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_VIEW,{id_container:this.view.id})); 
+            this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_VIEW,{uuid_view:this.view.uuid})); 
         }
     }
 
@@ -145,7 +156,7 @@ export class UltimaTreemapView extends UltimaView{
 
     aumentar(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, elemento => {
             elemento.importancia *= 1.5;   
         });
     }
@@ -155,7 +166,7 @@ export class UltimaTreemapView extends UltimaView{
 
     diminuir (propriedades) {        
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, elemento => {
             elemento.importancia *= 0.50;  
         });
     }
@@ -164,10 +175,10 @@ export class UltimaTreemapView extends UltimaView{
 
     maximizar (propriedades) {
 
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, elemento => {
 
             let somaImportanciaOutros = this.view.elementos.reduce ((valorAnterior, elementoAtual) => {
-                if (elementoAtual.id != elemento.id){                        
+                if (elementoAtual.uuid != elemento.uuid){                        
                     return valorAnterior + elementoAtual.importancia;
                 }else{
                     return valorAnterior;
@@ -182,7 +193,7 @@ export class UltimaTreemapView extends UltimaView{
 
     minimizar (propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, elemento => {
 
             let menorImportancia = this.view.elementos.reduce ((valorAnterior, elementoAtual) => {
                 if (elementoAtual.importancia < valorAnterior){
@@ -200,7 +211,7 @@ export class UltimaTreemapView extends UltimaView{
 
     restaurar (propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, elemento => {
 
             let somaImportancia = this.view.elementos.reduce ((valorAnterior, elementoAtual) => {                    
                 return valorAnterior + elementoAtual.importancia;                    
@@ -216,7 +227,7 @@ export class UltimaTreemapView extends UltimaView{
 
     fechar (propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, (elemento, indice) => {
 
             if (indice >= 0){
 
@@ -235,7 +246,7 @@ export class UltimaTreemapView extends UltimaView{
 
     irParaTras(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, (elemento, indice) => {
 
             if (indice > 0){
 
@@ -256,7 +267,7 @@ export class UltimaTreemapView extends UltimaView{
 
     irParaFrente(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, (elemento, indice) => {
         
             if (indice < (this.view.elementos.length-1)){
                 
@@ -277,7 +288,7 @@ export class UltimaTreemapView extends UltimaView{
 
     irParaFim(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, (elemento, indice) => {
         
             if (indice < (this.view.elementos.length-1)){
 
@@ -298,7 +309,7 @@ export class UltimaTreemapView extends UltimaView{
 
     irParaInicio(propriedades) {
 
-        this.encontrarEAplicarMudanca(propriedades.id_elemento_container, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_view, (elemento, indice) => {
         
         if (indice > 0){
 
@@ -313,55 +324,6 @@ export class UltimaTreemapView extends UltimaView{
                 return false;
             }
         });
-    }
-
-
-    //TODO: !!!!!!!!!!!!!!!! MIGRAÇÃO, RECEBENDO OUTRA COISA AGORA
-    atualizacaoElementoView(elementoTreemap) {
-        
-        let evento = d3.event;
-
-        //Para a propagaçaõ do evento do componente
-        evento.stopPropagation();
-
-        let elemento_view_atualizado = evento.detail;
-
-        let indice = this.view.elementos.map(e => e.id).indexOf (elemento_view_atualizado.id);
-
-        //Remove o elemento da posição
-        let [elemento] = this.view.elementos.splice(indice,1);
-
-        //Coloca o elemento atualizado no lugar
-        this.view.elementos.splice(indice,0,elemento_view_atualizado);  
-
-        this.salvarView();                           
-    }
-
-    
-
-    selecaoObjeto(elementoTreemap) {
-        
-        let evento = d3.event;
-
-        //Para a propagaçaõ do evento do componente
-        evento.stopPropagation();
-
-        //Cria uma copia por valor para enviar de forma segura no evento
-        let elemento =  JSON.parse(JSON.stringify(this.view.elementos.find(e => e.id == evento.detail.id_origem)));
-
-        //Cria um novo evento indicando dados do componente
-        let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO,{
-            elemento_origem: elemento,
-            dados: evento.detail.dados
-        });
-        
-        this.dispatchEvent(eventoCompleto);                                                                  
-    }
-
-    mudarVisualizacao(elementoTreemap) {
-        
-        let evento = d3.event;
-
     }
 }
 
