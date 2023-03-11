@@ -53,14 +53,16 @@ export class ComponenteBase extends HTMLElement{
 
     async carregarTemplate(url_template, tentativas){       
         
-        console.log (`Carregando template: ${url_template} (TENTAVIAS: ${tentativas})`);
-
         if (tentativas == undefined){
             tentativas = 0;
         }
+
+        console.info (`Carregando template: ${url_template} (TENTAVIAS: ${tentativas})`);
+        
+        //TODO: Não está implementado tentar novamente carregar o CSS caso haja erro. Implementar.
         tentativas++;
         if (tentativas > 3){
-            console.log (`Erro ao carregar template: ${url_template} NÚMERO DE TENTATIVAS EXCEDIDO (${tentativas})`);
+            console.error (`Erro ao carregar template: ${url_template} NÚMERO DE TENTATIVAS EXCEDIDO (${tentativas})`);
             return false;
         }
 
@@ -72,8 +74,14 @@ export class ComponenteBase extends HTMLElement{
 
         let hrefLinks = this.removerTagsLinkETrazerHRef(elemento);
 
-        //Carrega todos os CSS do template
-        Promise.all(hrefLinks.map( url_css => this.carregarCSS (url_css)))
+        let srcScripts = this.removerTagsScriptETrazerSrc(elemento);
+
+        //Carrega todos os CSS e Scripts do template
+        Promise.all(
+            hrefLinks.map( url_css => this.carregarCSS(url_css))
+            .concat(
+            srcScripts.map ( src_script => this.carregarScript (src_script))
+        ))
             .then(resultados => {
 
                 //Depois de carregar todos os CSS;
@@ -98,6 +106,23 @@ export class ComponenteBase extends HTMLElement{
             elementoLink.remove();
             
             return url_css;
+        });       
+    }
+
+
+
+    removerTagsScriptETrazerSrc(elemento){
+
+        //Para todos os links do elemento
+        return Array.from(elemento.querySelectorAll("script")).map(elementoLink => {
+            
+            //Extrai a URL (href) do link
+            let src_script  = elementoLink.getAttribute("src");
+
+            //Remove o elemento link
+            elementoLink.remove();
+            
+            return src_script;
         });       
     }
 

@@ -11,7 +11,10 @@ export class UltimaJS extends ComponenteBase{
 
 
     constructor(){
+        
         super({templateURL:"./ultima_js.html", shadowDOM:true}, import.meta.url);        
+
+        this.renderizado = false;
 
         this.configuracoesCarregadas = false;
 
@@ -25,11 +28,8 @@ export class UltimaJS extends ComponenteBase{
 
     renderizar(){
 
-        if (this.renderizado && (!this.estilosCarregados) && (this.estilos)){
-            this.carregarEstilos();
-        
         //TODO: Deve alterar a exibição caso um novo arquivo seja carregado
-        }else if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
+        if (this.carregado && this.configuracoesCarregadas && !this.renderizado){
 
             this.carregarControladores().then(()=>{
 
@@ -38,14 +38,8 @@ export class UltimaJS extends ComponenteBase{
                     this.views  = views;
 
                     this.criarEIniciarControleNavegadorTreemap();
-
-                    if (this.estilos){
-                        this.carregarEstilos().then(()=>{
-                            this.renderizado = true;    
-                        });
-                    }else{        
-                        this.renderizado = true;
-                    }     
+                    
+                    this.renderizado = true;
                 });                                                             
             });
         }       
@@ -67,11 +61,15 @@ export class UltimaJS extends ComponenteBase{
                             //O diretório raiz é calculado partindo-se de está esta classe UltimaElemento
                             let url_raiz_ultima =  new URL("../../",ComponenteBase.extrairCaminhoURL(import.meta.url));
 
-                            //Carrega dinamicamente o componente
+                            //Carrega dinamicamente o modulo do componente
                             import(ComponenteBase.resolverEndereco(controlador.url, url_raiz_ultima.href)).then(modulo => {
 
+                                //Cria uma nova instância desse componente
                                 controlador.instanciaControlador = new modulo[controlador.nome_classe]();                    
+
+                                //TODO: QUE CÓDIGO É ESSE????
                                 //controlador.instanciaControlador.addEventListener (UltimaEvento.EXECUTAR_ACAO, evento => this.executarAcao.bind(this)(evento.detail));
+                                
                                 resolveC(true);
                             });
                         })
@@ -103,7 +101,7 @@ export class UltimaJS extends ComponenteBase{
     
 
     static get observedAttributes() {
-        return ['src', 'estilos'];
+        return ['src'];
     }
 
 
@@ -118,12 +116,6 @@ export class UltimaJS extends ComponenteBase{
                 .then (response => response.json())
                 .then(configuracao => this.carregarConfiguracao(configuracao));                     
 
-
-        }else  if (nomeAtributo.localeCompare("estilos") == 0){
-
-            this.estilosCarregados = false;
-            this.estilos = novoValor;
-            this.renderizar();        
 
         }
     }
@@ -173,6 +165,7 @@ export class UltimaJS extends ComponenteBase{
 
     
     criarEIniciarControleNavegadorTreemap(){
+
         this.controleNavegador = this.noRaiz.querySelector("ultima-treemap-view");
             
         //TODO: só está pegando a primeira view
@@ -197,9 +190,12 @@ export class UltimaJS extends ComponenteBase{
         ].forEach (objetoEventoMonitorado => {                        
 
             this.addEventListener (objetoEventoMonitorado.evento, evento => {
+
+                //TODO: Tirar esse if não ta sendo usado que debug foi esse?
                 if (objetoEventoMonitorado.evento == UltimaEvento.EXECUTAR_ACAO){
-                    console.log ("************************************** CHEGOU EVENTO this");                
+                    console.log ("************************************** CHEGOU EVENTO this ultima js");                
                 }
+
                 this.processarEvento (evento, objetoEventoMonitorado);
             });
 

@@ -3,6 +3,16 @@
     "controladores":[],
     "acoes": [
         {
+            "uuid": "6ccdds3e9-4d0b-4fc3-b3a-3e7d22fa322",
+            "titulo": "Exibidor Dispositivos",
+            "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
+            "dados": {
+                "nome_elemento": "video_shiatsu_01",
+                "nome_componente": "exibidor-dispositivos",
+                "dados":{"src": "https://www.youtube.com/embed/3cowjrMpAys"}
+            }
+        },
+        {
             "uuid": "6cc4c0e9-4d0b-4fc3-b45a-3e7d9efaf922",
             "titulo": "Saúde",
             "nome_acao":"ACAO_ADICIONAR_ELEMENTO",            
@@ -89,7 +99,11 @@
             "uuid": "c1cddd49-4a7f-4395-a723-5eb4b2c90baf",
             "descricao": "Versão 4 com Ações",
             "acoes": [
-                "3f2ca7ad-224d-4c68-8f85-c715d81b6c05"
+                "6ccdds3e9-4d0b-4fc3-b3a-3e7d22fa322",
+                "3f2ca7ad-224d-4c68-8f85-c715d81b6c05",
+                "6cc4c0e9-4d0b-4fc3-b45a-3e7d9efaf922",
+                "1ddd0836-27b3-421a-8c83-e9140f988592",
+                "5422a45e-f2a5-4a20-a5a6-666096df2af6"
             ],
             "elementos": [
                 {
