@@ -3,43 +3,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="./variaveis_estilo.css">  
-  <link rel="stylesheet" href="./index.css">
-  <script src="./index.js" type="module"></script>
-
-  <link rel="stylesheet" href="bibliotecas/fontawesome-free-6.0.0-web/css/all.css">
-
-  <script type='text/javascript' src="bibliotecas/jsondiffpatch/jsondiffpatch.umd.min.js"></script>
-  <script type='text/javascript'  src="bibliotecas/d3/d3.v4.min.js"></script>
-  <script type='text/javascript'  src="bibliotecas/vis.js/vis.js"></script>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   
   <script src="https://www.youtube.com/iframe_api"></script>
-  
+
+
+  <link rel="stylesheet" href="../../bibliotecas/jspanel/jspanel.css">
+  <link rel="stylesheet" href="../../bibliotecas/fontawesome-free-6.0.0-web/css/all.css">
+
+  <script type='text/javascript' src="../../bibliotecas/jspanel/jspanel.js"></script>
+  <script type='text/javascript' src="../../bibliotecas/jsondiffpatch/jsondiffpatch.umd.min.js"></script>
+  <script type='text/javascript'  src="../../bibliotecas/d3/d3.v4.min.js"></script>
+  <script type='text/javascript'  src="../../bibliotecas/vis.js/vis.js"></script>
+
+  <script src="index.js" type="module"></script>
+
+  <link rel="stylesheet" type='text/css' href="./index.css"></style>
+
 </head>
-<body>
-  <header class="cabecalho_principal">
-    <span class="area-logo">
-      <span class="container_logo">
-        <i class="fa-solid fa-u fa-2x logo_icone_u"></i>        
-        <i class="fa-brands fa-js logo_icone_js"></i>
-      </span>
-      <span class="ultima_titulo">
-        <span class="ultima_nome"><strong>Última</strong></span><span class="ultima_descricao">Visualização e Navegação / Componentes e Dados</span>
-      </span>
-    </span>  
-    <span class="area-navegacao">
-      <i class="fa-solid fa-gear fa-2x controle_navegacao_principal" id="configuracao"></i>
-      <i class="fa-solid fa-circle-question fa-2x controle_navegacao_principal" id="ajuda"></i>      
-      <i class="fa-solid fa-expand fa-2x controle_navegacao_principal" id="fullscreen"></i>
-    </span>
-  </header>
-  <section class="secao_principal">
-    <ultima-js src="./configuracao_ultima.json"></ultima-js>
-  </section>  
-  <footer class="rodape_principal">
-    <a href='https://github.com/bonafe/ultima'>Código Fonte no GitHub</a>
-    <span>Teste de texto</span>
-  </footer>
-</div>
+<body> 
+  <div id="container">
+    <ultima-js src="./configuracao_ultima.json"></ultima-js>  
+  </div>
 </body>
 </html>

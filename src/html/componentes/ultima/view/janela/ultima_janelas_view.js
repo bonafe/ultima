@@ -1,137 +1,140 @@
 import { UltimaView } from '../ultima_view.js';
 
-import { UltimaTreemapElemento } from './ultima_treemap_elemento.js';
+import { UltimaJanelaElemento } from './ultima_janela_elemento.js';
 import { UltimaEvento } from '../../ultima_evento.js';
 import { ComponenteBase } from '../../../componente_base.js';
 
 
-export class UltimaTreemapView extends UltimaView{
+export class UltimaJanelasView extends UltimaView{
 
 
     constructor(){
         super();        
 
-        this.cssCarregado = false;
+        this.paineis = [];
+
+        this.ultimaJanelasViewRenderizado = false;
 
         this.addEventListener("carregou", () => {            
 
-            this.container = super.noRaiz.querySelector(".componente_navegacao_view");
+            Promise.all([
+                super.carregarCSS("../../../../bibliotecas/jspanel/jspanel.css"),
+                super.carregarScript({src:"../../../../bibliotecas/jspanel/jspanel.js"})
+            ]).then (() => {
+                this.container = this.noRaiz.querySelector(".componente_navegacao_view");
 
-            this.carregarCSS("./ultima_treemap_view.css", import.meta.url)
-                .then(()=>{
-                    this.cssCarregado = true;
-                    this.renderizar();
-                });            
+                //Precisa escutar o evento no document
+                document.addEventListener("jspaneldragstop", evento => {
+
+                    let indice = this.view.elementos.map(e => e.uuid).indexOf (evento.panel.uuid);
+
+                    let elemento = this.view.elementos[indice];
+
+                    elemento["offsetLeft"] = evento.panel.offsetLeft;
+                    elemento["offsetTop"] = evento.panel.offsetTop;
+
+                    console.log(`Drag Stop: ${evento.panel.uuid}: ${evento.panel.offsetLeft}-${evento.panel.offsetTop}`);
+
+                    this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_VIEW,{uuid_view:this.view.uuid})); 
+                    
+                }, false);
+                document.addEventListener("jspanelresizestop", evento => {
+                    console.log(`Resize Stop: ${evento.panel.uuid}: ${evento.panel.offsetWidth}-${evento.panel.offsetHeight}`);
+                }, false);
+
+
+                this.renderizar();
+            });                   
         });        
+    }
+
+
+
+    remover(){
+        this.paineis.forEach(painel => painel.close());
+        this.paineis = [];
+        super.remover();
+    }
+
+
+
+    get paineis(){  
+        return this._paineis;
+    }
+    
+
+
+    set paineis(paineis){
+        this._paineis = paineis;
     }
 
 
 
     renderizar() {
 
-        if (this.container && super.view && this.cssCarregado){
+        if (this.container && this._view && !this.ultimaJanelasViewRenderizado){
 
             //Atualiza o atributo ordem do elemento
-            super.view.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
+            this._view.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
 
-            if (!this.node){
-                this.criarTreeMap();
-            }else{
-                this.atualizarTreeMap();
-            }
+            this.view.elementos.forEach (elemento => {
+                this.criarPainel(elemento);
+            });
+
+            this.ultimaJanelasViewRenderizado = true;
         }
         super.renderizar();
     }
     
 
-
     adicionarElemento(elemento){                                          
 
-        super.view.elementos.push({...elemento});
+        let copiaElemento = JSON.parse(JSON.stringify(elemento));
+
+        this._view.elementos.push(copiaElemento);
                                
-        this.renderizar();    
+        this.criarPainel(copiaElemento);
     }
 
 
 
     atualizarElemento(uuid_elemento){
-        let seletor = `ultima-treemap-elemento[uuid_elemento="${uuid_elemento}"]`;
+        let seletor = `ultima-janela_elemento[uuid_elemento="${uuid_elemento}"]`;
         let elementos = this.noRaiz.querySelectorAll(seletor);
         console.log (`ATUALIZANDO ELEMENTOS VIEW COM O ELEMENTO PROCURADP: quantidade ${elementos.length}`);
-        elementos.forEach(ultimaTreemapElemento => ultimaTreemapElemento.atualizar());        
+        elementos.forEach(ultimaJanelaElemento => ultimaJanelalemento.atualizar());        
     }
 
 
 
-    criarTreeMap(){
-
-        d3.select(this.container).selectAll("div").remove();
-    
-        this.divD3 = d3.select(this.container).append("div")
-            .style("position", "relative")
-            .style("width", (super.widthUltimaView + super.marginUltimaView.left + super.marginUltimaViewright) + "px")
-            .style("height", (super.heightUltimaView + super.marginUltimaView.top + super.marginUltimaViewbottom) + "px")
-            .style("left", super.marginUltimaView.left + "px")
-            .style("top", super.marginUltimaView.top + "px");
-        
-        this.enterUpdateExit();  
-    }
 
 
+    criarPainel(elementoUltima){
+        let painel = jsPanel.create({
+            id: `ultima_janelas_view_painel_${elementoUltima.uuid}`,
+            theme: 'dark',
+            headerLogo: '<i class="fad fa-home-heart ml-2"></i>',
+            headerTitle: 'Título Elemento View',
+            headerToolbar: '<span class="text-sm">Just some text in optional header toolbar ...</span>',
+            footerToolbar: '<span class="flex flex-grow">You can have a footer toolbar too</span>'+
+                           '<i class="fal fa-clock mr-2"></i><span class="clock">loading ...</span>',
+            panelSize: {
+                width: () => { return Math.min(800, window.innerWidth*0.9);},
+                height: () => { return Math.min(500, window.innerHeight*0.6);}
+            },
+            animateIn: 'jsPanelFadeIn',
+            onwindowresize: true,
+            callback: painel => {
+                let elemento = document.createElement("ultima-janela-elemento");                
+                elemento.setAttribute("uuid_elemento_view",elementoUltima.uuid)
+                elemento.setAttribute("uuid_view", this.view.uuid)                    
+                elemento.setAttribute("uuid_elemento", elementoUltima.uuid_elemento)
+                painel.content.appendChild(elemento);
+                painel.uuid = elementoUltima.uuid;
+            },            
+        });
 
-    enterUpdateExit(){
-
-        this.treemap = d3.treemap().size([super.widthUltimaView, super.heightUltimaView]);
-        
-        //TODO: tive que criar o campo id pois não sei setar um campo com nome diferente no D3 e estava
-        //Redesenhando a tela toda hora pois mudou de campo id para uuid o nome
-        this.view.elementos.forEach (e => e.id = e.uuid);
-
-        const root = d3.hierarchy(this.view, (d) => d.elementos)
-            
-            //Valor do elemento para cálculo da área do TreeMap
-            .sum( d => d.importancia)
-
-            //Ordem dos elementos no Treemap
-            .sort((a, b) => (a.data.ordem - b.data.ordem));         
-        
-        //console.log (root.children.map(e => `[id:${e.data.id} descricao:${e.data.descricao} ordem:${e.data.ordem} importancia:${e.data.importancia}]`).join("\n"));
-
-        this.node = this.divD3.selectAll(".node_treemap_d3js").data(this.treemap(root).leaves(), d => d.data.id);                                      
-
-        //EXIT
-        this.node.exit().remove();
-
-        let novosNos = this.node
-            //ENTER
-            .enter()
-                .append("ultima-treemap-elemento")                    
-                    .attr("class", "node_treemap_d3js container_treemap_d3js")
-                    .attr("uuid_elemento_view",(d) => d.data.uuid)
-                    .attr("uuid_view", (d) => this._view.uuid)                    
-                    .attr("uuid_elemento", (d) => d.data.uuid_elemento)
-                    .style("left", (d) => d.x0 + "px")
-                    .style("top", (d) => d.y0 + "px")
-                    .style("width", (d) => Math.max(0, d.x1 - d.x0 - 1) + "px")
-                    .style("height", (d) => Math.max(0, d.y1 - d.y0  - 1) + "px");
-   
-        this.node
-            //UPDATE
-            .transition().duration(500)
-                .style("left", d => {
-                    //console.log (`******* ATUALIZANDO elemento-treemap: ${d.data.id} (ordem: ${d.data.ordem})`);
-                    return `${d.x0}px`;
-                })
-                .style("top", d => `${d.y0}px`)
-                .style('width', d => `${Math.max(0, d.x1 - d.x0 -1)}px`)
-                .style('height', d => `${Math.max(0, d.y1 - d.y0 -1)}px`);                                    
-    }
-
-
-
-    atualizarTreeMap(){
-
-        this.enterUpdateExit();
+        this.paineis.push(painel);
     }
 
 
@@ -327,4 +330,4 @@ export class UltimaTreemapView extends UltimaView{
     }
 }
 
-customElements.define('ultima-treemap-view', UltimaTreemapView);
+customElements.define('ultima-janelas-view', UltimaJanelasView);

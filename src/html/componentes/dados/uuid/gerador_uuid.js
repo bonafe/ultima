@@ -32,7 +32,7 @@ export class GeradorUUID extends ComponenteBase {
 
 
     renderizar(){
-        if (this.uuids && this.carregado && this.dados){     
+        if (this.uuids && super.carregado && this.dados){     
                         
             this.uuids.textContent = this.dados;
         }

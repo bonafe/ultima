@@ -42,7 +42,7 @@ export class ExibidorDispositivos extends ComponenteBase {
 
     renderizar(){
         
-        if (this.carregado && !this.renderizado){
+        if (super.carregado && !this.renderizado){
             
             this.preencherDispositivos().then(()=>{
                 

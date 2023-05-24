@@ -175,7 +175,10 @@ export class DBBase extends EventTarget{
         let object_store = this.banco.transaction (objectStore, "readwrite").objectStore (objectStore);
                 
         return new Promise((resolve, reject) => {            
+
+            //Comando para salvar  registro na object store
             let request = object_store.put(copia_registro);
+
             request.onsuccess = evento => {                
                 resolve(true);
             };    
@@ -193,8 +196,11 @@ export class DBBase extends EventTarget{
 
         let object_store = this.banco.transaction (objectStore, "readwrite").objectStore (objectStore);
                 
-        return new Promise((resolve, reject) => {            
+        return new Promise((resolve, reject) => {    
+
+            //Comando para limpar a object store
             let request = object_store.clear();
+
             request.onsuccess = evento => {                
                 resolve(true);
             };    

@@ -249,7 +249,7 @@ export class UltimaElemento extends ComponenteBase {
 
     carregarComponente(){
 
-        if (this.carregado){
+        if (super.carregado){
 
             this.carregandoComponente = true;
       

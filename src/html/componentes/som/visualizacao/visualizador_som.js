@@ -97,7 +97,7 @@ export class VisualizadorSom extends ComponenteBase {
 
     renderizar(){
         
-        if (this.carregado && !this.renderizado){
+        if (super.carregado && !this.renderizado){
             
             this.preencherFontesDeSomDisponiveis().then(()=>{
                 this.iniciarFonteDeSom();            

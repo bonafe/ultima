@@ -70,7 +70,7 @@ export class ExibidorDispositivo extends ComponenteBase {
 
     renderizar(){
         
-        if (this.carregado){
+        if (super.carregado){
             this.atualizarCampos();
         }        
     }

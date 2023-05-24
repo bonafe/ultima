@@ -61,7 +61,7 @@ export class VisualizadorDiferencasJSON extends ComponenteBase {
 
     renderizar(){
 
-        if (this.dados && this.carregado){
+        if (this.dados && super.carregado){
 
             if (!(this.dados.esquerda && this.dados.direita)){
 
