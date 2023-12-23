@@ -1,5 +1,5 @@
 import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima_evento.js';
+import { Evento } from '../espaco/evento.js';
 
 
 export class ExibidorVideo extends ComponenteBase {
@@ -12,7 +12,7 @@ export class ExibidorVideo extends ComponenteBase {
 
         this.addEventListener("carregou", () => {
             
-            window.addEventListener(UltimaEvento.EVENTO_PLAYER_YOUTUBE_CARREGADO, ()=> this.renderizar());
+            window.addEventListener(Evento.EVENTO_PLAYER_YOUTUBE_CARREGADO, ()=> this.renderizar());
             this.renderizar();
         });
     }
@@ -135,7 +135,7 @@ export class ExibidorVideo extends ComponenteBase {
                     this.dados.acoes.filter (acao => !acao.executada && (acao.tempo < this.tempoAtualVideo))
                         .forEach(acao => {                            
                             acao.executada = true;
-                            this.dispatchEvent (new UltimaEvento(UltimaEvento.EVENTO_EXECUTAR_ACAO, acao));
+                            this.dispatchEvent (new Evento(Evento.EVENTO_EXECUTAR_ACAO, acao));
                         });      
                     
                     //Verifica ações 10 vezes por segundo

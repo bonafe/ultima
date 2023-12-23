@@ -1,12 +1,14 @@
 
-import { UltimaJS } from './componentes/ultima/ultima_js.js';
+import { Espaco } from './componentes/espaco/espaco.js';
 
 
 
 
 window.onload = () => {
   
-    const supportsContainerQueries = "container" in document.documentElement.style;
+  //Caso não exista suporte para Container Queries, carrega o polyfill
+  //TODO: não carregar da CDN, mas sim do servidor local ou carregar utilizando validação de Hash
+  const supportsContainerQueries = "container" in document.documentElement.style;
     if (!supportsContainerQueries) {
         import("https://cdn.skypack.dev/container-query-polyfill").then(modulo =>{});
     }              
@@ -28,5 +30,5 @@ window.openFullscreen = () => {
 
 
 function onYouTubeIframeAPIReady() {
-  window.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_PLAYER_YOUTUBE_CARREGADO,{}));
+  window.dispatchEvent(new Evento(Evento.EVENTO_PLAYER_YOUTUBE_CARREGADO,{}));
 }

@@ -4681,7 +4681,7 @@ readers do not read off random characters that represent icons */
 .fa-store-slash::before {
   content: "\e071"; }
 
-.fa-street-view::before {
+.fa-street-visualizacao::before {
   content: "\f21d"; }
 
 .fa-strikethrough::before {

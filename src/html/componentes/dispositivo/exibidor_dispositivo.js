@@ -1,5 +1,5 @@
 import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima_evento.js';
+import { Evento } from '../espaco/evento.js';
 
 
 
@@ -22,7 +22,7 @@ export class ExibidorDispositivo extends ComponenteBase {
 
 
             this.noRaiz.querySelector("#exibir").addEventListener("click", ()=>{
-                this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO, 
+                this.dispatchEvent(new Evento(Evento.EVENTO_SELECAO_OBJETO, 
                     {
                         deviceId:this.dados.dadosMediaAPI.deviceId, 
                         kind:this.dados.dadosMediaAPI.kind

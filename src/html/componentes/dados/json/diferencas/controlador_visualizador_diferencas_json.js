@@ -1,7 +1,6 @@
 import { ControladorBase } from "../../../controlador_base.js";
-import { UltimaDB } from "../../../ultima/db/ultima_db.js";
-import { UltimaDBReader } from "../../../ultima/db/ultima_db_reader.js";
-import { UltimaEvento } from "../../../ultima/ultima_evento.js";
+import { LeitorEspacoDB } from "../../../espaco/modelo/leitor_espaco_db.js";
+import { Evento } from "../../../espaco/evento.js";
 
 
 
@@ -15,24 +14,24 @@ export class ControladorVisualizadorDiferencasJSON extends ControladorBase{
 
 
 
-    processarEvento (ultimaEvento){
-        //console.log (`ControladorVisualizadorDiferencasJSON: processarEvento: %o`, ultimaEvento);
+    processarEvento (Evento){
+        //console.log (`ControladorVisualizadorDiferencasJSON: processarEvento: %o`, Evento);
         
-        //Caso a view tenha sido atualizada        
-        if (ultimaEvento.type == UltimaEvento.EVENTO_VIEW_ATUALIZADA){
+        //Caso a visualizacao tenha sido atualizada        
+        if (Evento.type == Evento.EVENTO_VISUALIZACAO_ATUALIZADA){
 
-            let uuid_view = ultimaEvento.detail.uuid_view;
+            let uuid_visualizacao = Evento.detail.uuid_visualizacao;
 
-            UltimaDBReader.getInstance().view(uuid_view)
-                .then(view => {             
+            LeitorEspacoDB.getInstance().visualizacao(uuid_visualizacao)
+                .then(visualizacao => {             
                     
                     //Verifica se existe algum elemento visualizador-diferencas-json
-                    for (let indice = 0; indice < view.elementos.length; indice++){
-                        let elementoView = view.elementos[indice];                                             
+                    for (let indice = 0; indice < visualizacao.elementos.length; indice++){
+                        let elementoView = visualizacao.elementos[indice];                                             
                         if (elementoView.componente == "visualizador-diferencas-json"){
 
                             //Caso exista, atualiza os dados do visualizador-diferencas-json com os elementos em suas laterais
-                            this.atualizarDadosVisualizadorDiferencasJSON(view, elementoView, indice);                            
+                            this.atualizarDadosVisualizadorDiferencasJSON(visualizacao, elementoView, indice);                            
                         }
                     }                 
                 });               
@@ -41,10 +40,10 @@ export class ControladorVisualizadorDiferencasJSON extends ControladorBase{
 
 
 
-    atualizarDadosVisualizadorDiferencasJSON(view, elementoView, indice){
+    atualizarDadosVisualizadorDiferencasJSON(visualizacao, elementoView, indice){
 
-        let elementoViewEsquerda = ((indice == 0) ? undefined : view.elementos[indice-1]);
-        let elementoViewDireita = ((indice == (view.elementos.lenght-1)) ? undefined : view.elementos[indice+1]);
+        let elementoViewEsquerda = ((indice == 0) ? undefined : visualizacao.elementos[indice-1]);
+        let elementoViewDireita = ((indice == (visualizacao.elementos.lenght-1)) ? undefined : visualizacao.elementos[indice+1]);
 
         if (!elementoViewEsquerda){
             elementoViewEsquerda = elementoViewDireita;
@@ -56,8 +55,8 @@ export class ControladorVisualizadorDiferencasJSON extends ControladorBase{
         if (elementoViewEsquerda && elementoViewDireita){
 
             Promise.all([
-                UltimaDBReader.getInstance().elemento(elementoViewEsquerda.uuid_elemento),
-                UltimaDBReader.getInstance().elemento(elementoViewDireita.uuid_elemento)
+                LeitorEspacoDB.getInstance().elemento(elementoViewEsquerda.uuid_elemento),
+                LeitorEspacoDB.getInstance().elemento(elementoViewDireita.uuid_elemento)
             ]).then (retornos => {
                 const [elementoEsquerda, elementoDireita] = retornos;
                                
@@ -67,11 +66,11 @@ export class ControladorVisualizadorDiferencasJSON extends ControladorBase{
                         direita: elementoDireita.dados
                     };
 
-                    let eventoCompleto = new UltimaEvento(UltimaEvento.EVENTO_ATUALIZACAO_ELEMENTO, {                                    
+                    let eventoCompleto = new Evento(Evento.EVENTO_ATUALIZACAO_ELEMENTO, {                                    
                         uuid_elemento:elementoView.uuid_elemento,
-                        uuid_view:view.uuid,
-                        uuid_elemento_view:elementoView.uuid,
-                        dados:JSON.parse(JSON.stringify(dados))
+                        uuid_visualizacao:visualizacao.uuid,
+                        uuid_elemento_visualizacao:elementoView.uuid,
+                        dados:structuredClone(dados)
                     });                                
 
                     this.dispatchEvent(eventoCompleto);                     

@@ -1,5 +1,5 @@
 import { ComponenteBase } from '../../../componente_base.js';
-import { UltimaEvento } from '../../../ultima/ultima_evento.js';
+import { Evento } from '../../../espaco/evento.js';
 
 
 export class EditorJSON extends ComponenteBase {
@@ -81,7 +81,7 @@ export class EditorJSON extends ComponenteBase {
 
             if (typeof dados === 'object'){
                 
-                this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO,dados));
+                this.dispatchEvent(new Evento(Evento.EVENTO_SELECAO_OBJETO,dados));
             }
         }
     }

@@ -166,7 +166,7 @@ export class DBBase extends EventTarget{
     async atualizarRegistro (registro, objectStore){
               
         //Garante que o que será persistido é uma cópia
-        let copia_registro = JSON.parse(JSON.stringify(registro));        
+        let copia_registro = structuredClone(registro);        
 
         await this.aguardarBanco();
 

@@ -1,5 +1,5 @@
 import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima_evento.js';
+import { Evento } from '../espaco/evento.js';
 
 
 export class SeletorMeses extends ComponenteBase {
@@ -21,7 +21,7 @@ export class SeletorMeses extends ComponenteBase {
         let registro = this.dados.find(r => (r.ano == ano) && (r.mes == mes));        
         registro.selecionado = selecionado;
         this.dispatchEvent(new CustomEvent("change", {detail:this.dados}));
-        this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO, registro));
+        this.dispatchEvent(new Evento(Evento.EVENTO_SELECAO_OBJETO, registro));
     }
 
 
@@ -59,8 +59,8 @@ export class SeletorMeses extends ComponenteBase {
 
         let linha = document.createElement("tr");                    
         
-        let espaco_vazio = document.createElement("th");                                            
-        linha.appendChild (espaco_vazio);
+        let Espaco_vazio = document.createElement("th");                                            
+        linha.appendChild (Espaco_vazio);
 
         for (let iMes = 0; iMes < 12; iMes++){
 

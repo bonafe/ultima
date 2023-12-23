@@ -1,5 +1,5 @@
 import { ComponenteBase } from '../../componente_base.js';
-import { UltimaEvento } from '../../ultima/ultima_evento.js';
+import { Evento } from '../../espaco/evento.js';
 
 
 export class GrafoBases extends ComponenteBase {
@@ -96,7 +96,7 @@ export class GrafoBases extends ComponenteBase {
 
             this.grafo.on ("click", parametros => {
                 console.dir(parametros);
-                this.dispatchEvent(new UltimaEvento(UltimaEvento.EVENTO_SELECAO_OBJETO, parametros));
+                this.dispatchEvent(new Evento(Evento.EVENTO_SELECAO_OBJETO, parametros));
             });
 
             this.gerandoGrafo = false;

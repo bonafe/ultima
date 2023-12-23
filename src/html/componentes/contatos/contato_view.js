@@ -9,4 +9,4 @@ export class ContatoView extends ComponenteBase {
         });
     }
 }
-customElements.define('contato-view', ContatoView);
+customElements.define('contato-visualizacao', ContatoView);

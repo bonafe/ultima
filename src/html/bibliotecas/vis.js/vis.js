@@ -2888,7 +2888,7 @@ var DataSet = __webpack_require__(11);
 /**
  * DataView
  *
- * a dataview offers a filtered view on a dataset or an other dataview.
+ * a dataview offers a filtered visualizacao on a dataset or an other dataview.
  *
  * @param {DataSet | DataView} data
  * @param {Object} [options]   Available options: see method get
@@ -2915,7 +2915,7 @@ function DataView(data, options) {
 // and trigger changes accordingly
 
 /**
- * Set a data source for the view
+ * Set a data source for the visualizacao
  * @param {DataSet | DataView} data
  */
 DataView.prototype.setData = function (data) {
@@ -3007,7 +3007,7 @@ DataView.prototype.refresh = function () {
 };
 
 /**
- * Get data from the data view
+ * Get data from the data visualizacao
  *
  * Usage:
  *
@@ -3206,8 +3206,8 @@ DataView.prototype._onEvent = function (event, params, senderId) {
         break;
 
       case 'update':
-        // determine the event from the views viewpoint: an updated
-        // item can be added, updated, or removed from this view.
+        // determine the event from the visualizacoes viewpoint: an updated
+        // item can be added, updated, or removed from this visualizacao.
         for (i = 0, len = ids.length; i < len; i++) {
           id = ids[i];
           item = this.get(id);
@@ -4319,7 +4319,7 @@ var NodeBase = function () {
   }, {
     key: 'initContextForDraw',
     value: function initContextForDraw(ctx, values) {
-      var borderWidth = values.borderWidth / this.body.view.scale;
+      var borderWidth = values.borderWidth / this.body.visualizacao.scale;
 
       ctx.lineWidth = Math.min(this.width, borderWidth);
       ctx.strokeStyle = values.borderColor;
@@ -4335,7 +4335,7 @@ var NodeBase = function () {
   }, {
     key: 'performStroke',
     value: function performStroke(ctx, values) {
-      var borderWidth = values.borderWidth / this.body.view.scale;
+      var borderWidth = values.borderWidth / this.body.visualizacao.scale;
 
       //draw dashed border if enabled, save and restore is required for firefox not to crash on unix.
       ctx.save();
@@ -12515,7 +12515,7 @@ Group.prototype._updateItemsInRange = function (orderedItems, oldVisibleItems, r
     }
   };
 
-  // first check if the items that were in view previously are still in view.
+  // first check if the items that were in visualizacao previously are still in visualizacao.
   // IMPORTANT: this handles the case for the items with startdate before the window and enddate after the window!
   // also cleans up invisible items.
   if (oldVisibleItems.length > 0) {
@@ -14278,7 +14278,7 @@ var CircleImageBase = function (_NodeBase) {
 
         var factor = 1;
         if (this.options.shapeProperties.interpolation === true) {
-          factor = this.imageObj.width / this.width / this.body.view.scale;
+          factor = this.imageObj.width / this.width / this.body.visualizacao.scale;
         }
 
         this.imageObj.drawImageAtPosition(ctx, factor, this.left, this.top, this.width, this.height);
@@ -14522,7 +14522,7 @@ var Edge = function () {
             } else if (typeof selectedWidth === 'number') {
               values.width += selectedWidth;
             }
-            values.width = Math.max(values.width, 0.3 / this.body.view.scale);
+            values.width = Math.max(values.width, 0.3 / this.body.visualizacao.scale);
             values.color = this.options.color.highlight;
             values.shadow = this.options.shadow.enabled;
           } else if (this.hover) {
@@ -14532,7 +14532,7 @@ var Edge = function () {
             } else if (typeof hoverWidth === 'number') {
               values.width += hoverWidth;
             }
-            values.width = Math.max(values.width, 0.3 / this.body.view.scale);
+            values.width = Math.max(values.width, 0.3 / this.body.visualizacao.scale);
             values.color = this.options.color.hover;
             values.shadow = this.options.shadow.enabled;
           }
@@ -14549,7 +14549,7 @@ var Edge = function () {
         }
       } else {
         values.shadow = this.options.shadow.enabled;
-        values.width = Math.max(values.width, 0.3 / this.body.view.scale);
+        values.width = Math.max(values.width, 0.3 / this.body.visualizacao.scale);
       }
       return values;
     }
@@ -26256,13 +26256,13 @@ var Label = function () {
       if (this.elementOptions.label === undefined) return;
 
       // check if we have to render the label
-      var viewFontSize = this.fontOptions.size * this.body.view.scale;
+      var viewFontSize = this.fontOptions.size * this.body.visualizacao.scale;
       if (this.elementOptions.label && viewFontSize < this.elementOptions.scaling.label.drawThreshold - 1) return;
 
       // This ensures that there will not be HUGE letters on screen
       // by setting an upper limit on the visible text size (regardless of zoomLevel)
       if (viewFontSize >= this.elementOptions.scaling.label.maxVisible) {
-        viewFontSize = Number(this.elementOptions.scaling.label.maxVisible) / this.body.view.scale;
+        viewFontSize = Number(this.elementOptions.scaling.label.maxVisible) / this.body.visualizacao.scale;
       }
 
       // update the size cache if required
@@ -26648,7 +26648,7 @@ var Label = function () {
         return false; // nothing to display
       }
 
-      var viewFontSize = this.fontOptions.size * this.body.view.scale;
+      var viewFontSize = this.fontOptions.size * this.body.visualizacao.scale;
       if (viewFontSize < this.elementOptions.scaling.label.drawThreshold - 1) {
         return false; // Too small or too far away to show
       }
@@ -27058,12 +27058,12 @@ var EdgeBase = function () {
     key: "getLineWidth",
     value: function getLineWidth(selected, hover) {
       if (selected === true) {
-        return Math.max(this.selectionWidth, 0.3 / this.body.view.scale);
+        return Math.max(this.selectionWidth, 0.3 / this.body.visualizacao.scale);
       } else {
         if (hover === true) {
-          return Math.max(this.hoverWidth, 0.3 / this.body.view.scale);
+          return Math.max(this.hoverWidth, 0.3 / this.body.visualizacao.scale);
         } else {
-          return Math.max(this.options.width, 0.3 / this.body.view.scale);
+          return Math.max(this.options.width, 0.3 / this.body.visualizacao.scale);
         }
       }
     }
@@ -27453,7 +27453,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 /**
  * @typedef {{x:number, y:number}} Point
  * 
- * A point in view-coordinates.
+ * A point in visualizacao-coordinates.
  */
 
 /**
@@ -35840,7 +35840,7 @@ Graph3d.prototype._getStrokeWidth = function (point) {
 
 
 /**
- * Draw a bar element in the view with the given properties.
+ * Draw a bar element in the visualizacao with the given properties.
  *
  * @param {CanvasRenderingContext2D} ctx
  * @param {Object} point
@@ -42436,7 +42436,7 @@ var PhysicsEngine = __webpack_require__(220)['default'];
 var ClusterEngine = __webpack_require__(227)['default'];
 var CanvasRenderer = __webpack_require__(229)['default'];
 var Canvas = __webpack_require__(230)['default'];
-var View = __webpack_require__(231)['default'];
+var visualizacao = __webpack_require__(231)['default'];
 var InteractionHandler = __webpack_require__(232)['default'];
 var SelectionHandler = __webpack_require__(234)['default'];
 var LayoutEngine = __webpack_require__(235)['default'];
@@ -42531,7 +42531,7 @@ function Network(container, data, options) {
       getPointer: function getPointer() {}
     },
     modules: {},
-    view: {
+    visualizacao: {
       scale: 1,
       translation: { x: 0, y: 0 }
     }
@@ -42548,7 +42548,7 @@ function Network(container, data, options) {
   this.canvas = new Canvas(this.body); // DOM handler
   this.selectionHandler = new SelectionHandler(this.body, this.canvas); // Selection handler
   this.interactionHandler = new InteractionHandler(this.body, this.canvas, this.selectionHandler); // Interaction handler handles all the hammer bindings (that are bound by canvas), key
-  this.view = new View(this.body, this.canvas); // camera handler, does animations and zooms
+  this.visualizacao = new visualizacao(this.body, this.canvas); // camera handler, does animations and zooms
   this.renderer = new CanvasRenderer(this.body, this.canvas); // renderer, starts renderloop, has events that modules can hook into
   this.physics = new PhysicsEngine(this.body); // physics engine, does all the simulations
   this.layoutEngine = new LayoutEngine(this.body); // layout engine for inital layout and hierarchical layout
@@ -42612,7 +42612,7 @@ Network.prototype.setOptions = function (options) {
       this.body.emitter.emit("refreshNodes");
     }
     // these two do not have options at the moment, here for completeness
-    //this.view.setOptions(options.view);
+    //this.visualizacao.setOptions(options.visualizacao);
     //this.clustering.setOptions(options.clustering);
 
     if ('configure' in options) {
@@ -42809,7 +42809,7 @@ Network.prototype.destroy = function () {
   delete this.canvas;
   delete this.selectionHandler;
   delete this.interactionHandler;
-  delete this.view;
+  delete this.visualizacao;
   delete this.renderer;
   delete this.physics;
   delete this.layoutEngine;
@@ -43009,22 +43009,22 @@ Network.prototype.redraw = function () {
   return this.renderer.redraw.apply(this.renderer, arguments);
 };
 Network.prototype.getScale = function () {
-  return this.view.getScale.apply(this.view, arguments);
+  return this.visualizacao.getScale.apply(this.visualizacao, arguments);
 };
 Network.prototype.getViewPosition = function () {
-  return this.view.getViewPosition.apply(this.view, arguments);
+  return this.visualizacao.getViewPosition.apply(this.visualizacao, arguments);
 };
 Network.prototype.fit = function () {
-  return this.view.fit.apply(this.view, arguments);
+  return this.visualizacao.fit.apply(this.visualizacao, arguments);
 };
 Network.prototype.moveTo = function () {
-  return this.view.moveTo.apply(this.view, arguments);
+  return this.visualizacao.moveTo.apply(this.visualizacao, arguments);
 };
 Network.prototype.focus = function () {
-  return this.view.focus.apply(this.view, arguments);
+  return this.visualizacao.focus.apply(this.visualizacao, arguments);
 };
 Network.prototype.releaseNode = function () {
-  return this.view.releaseNode.apply(this.view, arguments);
+  return this.visualizacao.releaseNode.apply(this.visualizacao, arguments);
 };
 Network.prototype.getOptionsFromConfigurator = function () {
   var options = {};
@@ -46599,7 +46599,7 @@ var Image = function (_CircleImageBase) {
       if (this.options.shapeProperties.useBorderWithImage === true) {
         var neutralborderWidth = this.options.borderWidth;
         var selectionLineWidth = this.options.borderWidthSelected || 2 * this.options.borderWidth;
-        var borderWidth = (selected ? selectionLineWidth : neutralborderWidth) / this.body.view.scale;
+        var borderWidth = (selected ? selectionLineWidth : neutralborderWidth) / this.body.visualizacao.scale;
         ctx.lineWidth = Math.min(this.width, borderWidth);
 
         ctx.beginPath();
@@ -52447,8 +52447,8 @@ var CanvasRenderer = function () {
 
         // set scaling and translation
         ctx.save();
-        ctx.translate(this.body.view.translation.x, this.body.view.translation.y);
-        ctx.scale(this.body.view.scale, this.body.view.scale);
+        ctx.translate(this.body.visualizacao.translation.x, this.body.visualizacao.translation.y);
+        ctx.scale(this.body.visualizacao.scale, this.body.visualizacao.scale);
 
         ctx.beginPath();
         this.body.emitter.emit("beforeDrawing", ctx);
@@ -52490,8 +52490,8 @@ var CanvasRenderer = function () {
       this.canvas.setTransform();
       var ctx = this.canvas.getContext();
       ctx.save();
-      ctx.translate(this.body.view.translation.x, this.body.view.translation.y);
-      ctx.scale(this.body.view.scale, this.body.view.scale);
+      ctx.translate(this.body.visualizacao.translation.x, this.body.visualizacao.translation.y);
+      ctx.scale(this.body.visualizacao.scale, this.body.visualizacao.scale);
 
       var nodes = this.body.nodes;
       var node = void 0;
@@ -52682,10 +52682,10 @@ var Canvas = function () {
       // bind the events
       this.body.emitter.once("resize", function (obj) {
         if (obj.width !== 0) {
-          _this.body.view.translation.x = obj.width * 0.5;
+          _this.body.visualizacao.translation.x = obj.width * 0.5;
         }
         if (obj.height !== 0) {
-          _this.body.view.translation.y = obj.height * 0.5;
+          _this.body.visualizacao.translation.y = obj.height * 0.5;
         }
       });
       this.body.emitter.on("setSize", this.setSize.bind(this));
@@ -52765,7 +52765,7 @@ var Canvas = function () {
       if (this.initialized === true) {
         this.cameraState.previousWidth = this.frame.canvas.width / pixelRatio;
         this.cameraState.previousHeight = this.frame.canvas.height / pixelRatio;
-        this.cameraState.scale = this.body.view.scale;
+        this.cameraState.scale = this.body.visualizacao.scale;
         this.cameraState.position = this.DOMtoCanvas({
           x: 0.5 * this.frame.canvas.width / pixelRatio,
           y: 0.5 * this.frame.canvas.height / pixelRatio
@@ -52795,19 +52795,19 @@ var Canvas = function () {
           newScale = this.cameraState.scale * heightRatio;
         }
 
-        this.body.view.scale = newScale;
-        // this comes from the view module.
+        this.body.visualizacao.scale = newScale;
+        // this comes from the visualizacao module.
         var currentViewCenter = this.DOMtoCanvas({
           x: 0.5 * this.frame.canvas.clientWidth,
           y: 0.5 * this.frame.canvas.clientHeight
         });
 
-        var distanceFromCenter = { // offset from view, distance view has to change by these x and y to center the node
+        var distanceFromCenter = { // offset from visualizacao, distance visualizacao has to change by these x and y to center the node
           x: currentViewCenter.x - this.cameraState.position.x,
           y: currentViewCenter.y - this.cameraState.position.y
         };
-        this.body.view.translation.x += distanceFromCenter.x * this.body.view.scale;
-        this.body.view.translation.y += distanceFromCenter.y * this.body.view.scale;
+        this.body.visualizacao.translation.x += distanceFromCenter.x * this.body.visualizacao.scale;
+        this.body.visualizacao.translation.y += distanceFromCenter.y * this.body.visualizacao.scale;
       }
     }
 
@@ -52872,8 +52872,8 @@ var Canvas = function () {
       // add the frame to the container element
       this.body.container.appendChild(this.frame);
 
-      this.body.view.scale = 1;
-      this.body.view.translation = { x: 0.5 * this.frame.canvas.clientWidth, y: 0.5 * this.frame.canvas.clientHeight };
+      this.body.visualizacao.scale = 1;
+      this.body.visualizacao.translation = { x: 0.5 * this.frame.canvas.clientWidth, y: 0.5 * this.frame.canvas.clientHeight };
 
       this._bindHammer();
     }
@@ -53119,7 +53119,7 @@ var Canvas = function () {
   }, {
     key: '_XconvertDOMtoCanvas',
     value: function _XconvertDOMtoCanvas(x) {
-      return (x - this.body.view.translation.x) / this.body.view.scale;
+      return (x - this.body.visualizacao.translation.x) / this.body.visualizacao.scale;
     }
 
     /**
@@ -53133,7 +53133,7 @@ var Canvas = function () {
   }, {
     key: '_XconvertCanvasToDOM',
     value: function _XconvertCanvasToDOM(x) {
-      return x * this.body.view.scale + this.body.view.translation.x;
+      return x * this.body.visualizacao.scale + this.body.visualizacao.translation.x;
     }
 
     /**
@@ -53147,7 +53147,7 @@ var Canvas = function () {
   }, {
     key: '_YconvertDOMtoCanvas',
     value: function _YconvertDOMtoCanvas(y) {
-      return (y - this.body.view.translation.y) / this.body.view.scale;
+      return (y - this.body.visualizacao.translation.y) / this.body.visualizacao.scale;
     }
 
     /**
@@ -53161,7 +53161,7 @@ var Canvas = function () {
   }, {
     key: '_YconvertCanvasToDOM',
     value: function _YconvertCanvasToDOM(y) {
-      return y * this.body.view.scale + this.body.view.translation.y;
+      return y * this.body.visualizacao.scale + this.body.visualizacao.translation.y;
     }
 
     /**
@@ -53218,18 +53218,18 @@ var util = __webpack_require__(2);
 var NetworkUtil = __webpack_require__(76)['default'];
 
 /**
- * The view
+ * The visualizacao
  */
 
-var View = function () {
+var visualizacao = function () {
   /**
    * @param {Object} body
    * @param {Canvas} canvas
    */
-  function View(body, canvas) {
+  function visualizacao(body, canvas) {
     var _this = this;
 
-    (0, _classCallCheck3['default'])(this, View);
+    (0, _classCallCheck3['default'])(this, visualizacao);
 
     this.body = body;
     this.canvas = canvas;
@@ -53260,7 +53260,7 @@ var View = function () {
    */
 
 
-  (0, _createClass3['default'])(View, [{
+  (0, _createClass3['default'])(visualizacao, [{
     key: 'setOptions',
     value: function setOptions() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -53337,7 +53337,7 @@ var View = function () {
     // animation
 
     /**
-     * Center a node in view.
+     * Center a node in visualizacao.
      *
      * @param {number} nodeId
      * @param {number} [options]
@@ -53384,7 +53384,7 @@ var View = function () {
         options.offset.y = 0;
       }
       if (options.scale === undefined) {
-        options.scale = this.body.view.scale;
+        options.scale = this.body.visualizacao.scale;
       }
       if (options.position === undefined) {
         options.position = this.getViewPosition();
@@ -53439,16 +53439,16 @@ var View = function () {
         this._transitionRedraw(true); // by setting easingtime to 1, we finish the animation.
       }
 
-      this.sourceScale = this.body.view.scale;
-      this.sourceTranslation = this.body.view.translation;
+      this.sourceScale = this.body.visualizacao.scale;
+      this.sourceTranslation = this.body.visualizacao.translation;
       this.targetScale = options.scale;
 
       // set the scale so the viewCenter is based on the correct zoom level. This is overridden in the transitionRedraw
       // but at least then we'll have the target transition
-      this.body.view.scale = this.targetScale;
+      this.body.visualizacao.scale = this.targetScale;
       var viewCenter = this.canvas.DOMtoCanvas({ x: 0.5 * this.canvas.frame.canvas.clientWidth, y: 0.5 * this.canvas.frame.canvas.clientHeight });
 
-      var distanceFromCenter = { // offset from view, distance view has to change by these x and y to center the node
+      var distanceFromCenter = { // offset from visualizacao, distance visualizacao has to change by these x and y to center the node
         x: viewCenter.x - options.position.x,
         y: viewCenter.y - options.position.y
       };
@@ -53463,8 +53463,8 @@ var View = function () {
           this.viewFunction = this._lockedRedraw.bind(this);
           this.body.emitter.on("initRedraw", this.viewFunction);
         } else {
-          this.body.view.scale = this.targetScale;
-          this.body.view.translation = this.targetTranslation;
+          this.body.visualizacao.scale = this.targetScale;
+          this.body.visualizacao.translation = this.targetTranslation;
           this.body.emitter.emit("_requestRedraw");
         }
       } else {
@@ -53487,17 +53487,17 @@ var View = function () {
     value: function _lockedRedraw() {
       var nodePosition = { x: this.body.nodes[this.lockedOnNodeId].x, y: this.body.nodes[this.lockedOnNodeId].y };
       var viewCenter = this.canvas.DOMtoCanvas({ x: 0.5 * this.canvas.frame.canvas.clientWidth, y: 0.5 * this.canvas.frame.canvas.clientHeight });
-      var distanceFromCenter = { // offset from view, distance view has to change by these x and y to center the node
+      var distanceFromCenter = { // offset from visualizacao, distance visualizacao has to change by these x and y to center the node
         x: viewCenter.x - nodePosition.x,
         y: viewCenter.y - nodePosition.y
       };
-      var sourceTranslation = this.body.view.translation;
+      var sourceTranslation = this.body.visualizacao.translation;
       var targetTranslation = {
-        x: sourceTranslation.x + distanceFromCenter.x * this.body.view.scale + this.lockedOnNodeOffset.x,
-        y: sourceTranslation.y + distanceFromCenter.y * this.body.view.scale + this.lockedOnNodeOffset.y
+        x: sourceTranslation.x + distanceFromCenter.x * this.body.visualizacao.scale + this.lockedOnNodeOffset.x,
+        y: sourceTranslation.y + distanceFromCenter.y * this.body.visualizacao.scale + this.lockedOnNodeOffset.y
       };
 
-      this.body.view.translation = targetTranslation;
+      this.body.visualizacao.translation = targetTranslation;
     }
 
     /**
@@ -53529,8 +53529,8 @@ var View = function () {
 
       var progress = util.easingFunctions[this.animationEasingFunction](this.easingTime);
 
-      this.body.view.scale = this.sourceScale + (this.targetScale - this.sourceScale) * progress;
-      this.body.view.translation = {
+      this.body.visualizacao.scale = this.sourceScale + (this.targetScale - this.sourceScale) * progress;
+      this.body.visualizacao.translation = {
         x: this.sourceTranslation.x + (this.targetTranslation.x - this.sourceTranslation.x) * progress,
         y: this.sourceTranslation.y + (this.targetTranslation.y - this.sourceTranslation.y) * progress
       };
@@ -53555,7 +53555,7 @@ var View = function () {
   }, {
     key: 'getScale',
     value: function getScale() {
-      return this.body.view.scale;
+      return this.body.visualizacao.scale;
     }
 
     /**
@@ -53569,10 +53569,10 @@ var View = function () {
       return this.canvas.DOMtoCanvas({ x: 0.5 * this.canvas.frame.canvas.clientWidth, y: 0.5 * this.canvas.frame.canvas.clientHeight });
     }
   }]);
-  return View;
+  return visualizacao;
 }();
 
-exports['default'] = View;
+exports['default'] = visualizacao;
 
 /***/ }),
 /* 232 */
@@ -53730,7 +53730,7 @@ var InteractionHandler = function () {
       if (new Date().valueOf() - this.touchTime > 50) {
         this.drag.pointer = this.getPointer(event.center);
         this.drag.pinched = false;
-        this.pinch.scale = this.body.view.scale;
+        this.pinch.scale = this.body.visualizacao.scale;
         // to avoid double fireing of this event because we have two hammer instances. (on canvas and on frame)
         this.touchTime = new Date().valueOf();
       }
@@ -53926,7 +53926,7 @@ var InteractionHandler = function () {
 
       this.drag.dragging = true;
       this.drag.selection = [];
-      this.drag.translation = util.extend({}, this.body.view.translation); // copy the object
+      this.drag.translation = util.extend({}, this.body.visualizacao.translation); // copy the object
       this.drag.nodeId = undefined;
 
       if (node !== undefined && this.options.dragNodes === true) {
@@ -53963,7 +53963,7 @@ var InteractionHandler = function () {
           }
         }
       } else {
-        // fallback if no node is selected and thus the view is dragged.
+        // fallback if no node is selected and thus the visualizacao is dragged.
         this.selectionHandler._generateClickEvent('dragStart', event, this.drag.pointer, undefined, true);
       }
     }
@@ -54024,7 +54024,7 @@ var InteractionHandler = function () {
           var diffX = pointer.x - this.drag.pointer.x;
           var diffY = pointer.y - this.drag.pointer.y;
 
-          this.body.view.translation = { x: this.drag.translation.x + diffX, y: this.drag.translation.y + diffY };
+          this.body.visualizacao.translation = { x: this.drag.translation.x + diffX, y: this.drag.translation.y + diffY };
           this.body.emitter.emit('_requestRedraw');
         }
       }
@@ -54087,7 +54087,7 @@ var InteractionHandler = function () {
     key: 'zoom',
     value: function zoom(scale, pointer) {
       if (this.options.zoomView === true) {
-        var scaleOld = this.body.view.scale;
+        var scaleOld = this.body.visualizacao.scale;
         if (scale < 0.00001) {
           scale = 0.00001;
         }
@@ -54102,14 +54102,14 @@ var InteractionHandler = function () {
           }
         }
         // + this.canvas.frame.canvas.clientHeight / 2
-        var translation = this.body.view.translation;
+        var translation = this.body.visualizacao.translation;
 
         var scaleFrac = scale / scaleOld;
         var tx = (1 - scaleFrac) * pointer.x + translation.x * scaleFrac;
         var ty = (1 - scaleFrac) * pointer.y + translation.y * scaleFrac;
 
-        this.body.view.scale = scale;
-        this.body.view.translation = { x: tx, y: ty };
+        this.body.visualizacao.scale = scale;
+        this.body.visualizacao.translation = { x: tx, y: ty };
 
         if (preScaleDragPointer != undefined) {
           var postScaleDragPointer = this.canvas.canvasToDOM(preScaleDragPointer);
@@ -54120,9 +54120,9 @@ var InteractionHandler = function () {
         this.body.emitter.emit('_requestRedraw');
 
         if (scaleOld < scale) {
-          this.body.emitter.emit('zoom', { direction: '+', scale: this.body.view.scale, pointer: pointer });
+          this.body.emitter.emit('zoom', { direction: '+', scale: this.body.visualizacao.scale, pointer: pointer });
         } else {
-          this.body.emitter.emit('zoom', { direction: '-', scale: this.body.view.scale, pointer: pointer });
+          this.body.emitter.emit('zoom', { direction: '-', scale: this.body.visualizacao.scale, pointer: pointer });
         }
       }
     }
@@ -54157,7 +54157,7 @@ var InteractionHandler = function () {
         if (delta !== 0) {
 
           // calculate the new scale
-          var scale = this.body.view.scale;
+          var scale = this.body.visualizacao.scale;
           var zoom = delta / 10;
           if (delta < 0) {
             zoom = zoom / (1 - zoom);
@@ -54608,7 +54608,7 @@ var NavigationHandler = function () {
   }, {
     key: '_moveUp',
     value: function _moveUp() {
-      this.body.view.translation.y += this.options.keyboard.speed.y;
+      this.body.visualizacao.translation.y += this.options.keyboard.speed.y;
     }
     /**
      *
@@ -54618,7 +54618,7 @@ var NavigationHandler = function () {
   }, {
     key: '_moveDown',
     value: function _moveDown() {
-      this.body.view.translation.y -= this.options.keyboard.speed.y;
+      this.body.visualizacao.translation.y -= this.options.keyboard.speed.y;
     }
     /**
      *
@@ -54628,7 +54628,7 @@ var NavigationHandler = function () {
   }, {
     key: '_moveLeft',
     value: function _moveLeft() {
-      this.body.view.translation.x += this.options.keyboard.speed.x;
+      this.body.visualizacao.translation.x += this.options.keyboard.speed.x;
     }
     /**
      *
@@ -54638,7 +54638,7 @@ var NavigationHandler = function () {
   }, {
     key: '_moveRight',
     value: function _moveRight() {
-      this.body.view.translation.x -= this.options.keyboard.speed.x;
+      this.body.visualizacao.translation.x -= this.options.keyboard.speed.x;
     }
     /**
      *
@@ -54648,16 +54648,16 @@ var NavigationHandler = function () {
   }, {
     key: '_zoomIn',
     value: function _zoomIn() {
-      var scaleOld = this.body.view.scale;
-      var scale = this.body.view.scale * (1 + this.options.keyboard.speed.zoom);
-      var translation = this.body.view.translation;
+      var scaleOld = this.body.visualizacao.scale;
+      var scale = this.body.visualizacao.scale * (1 + this.options.keyboard.speed.zoom);
+      var translation = this.body.visualizacao.translation;
       var scaleFrac = scale / scaleOld;
       var tx = (1 - scaleFrac) * this.canvas.canvasViewCenter.x + translation.x * scaleFrac;
       var ty = (1 - scaleFrac) * this.canvas.canvasViewCenter.y + translation.y * scaleFrac;
 
-      this.body.view.scale = scale;
-      this.body.view.translation = { x: tx, y: ty };
-      this.body.emitter.emit('zoom', { direction: '+', scale: this.body.view.scale, pointer: null });
+      this.body.visualizacao.scale = scale;
+      this.body.visualizacao.translation = { x: tx, y: ty };
+      this.body.emitter.emit('zoom', { direction: '+', scale: this.body.visualizacao.scale, pointer: null });
     }
 
     /**
@@ -54668,16 +54668,16 @@ var NavigationHandler = function () {
   }, {
     key: '_zoomOut',
     value: function _zoomOut() {
-      var scaleOld = this.body.view.scale;
-      var scale = this.body.view.scale / (1 + this.options.keyboard.speed.zoom);
-      var translation = this.body.view.translation;
+      var scaleOld = this.body.visualizacao.scale;
+      var scale = this.body.visualizacao.scale / (1 + this.options.keyboard.speed.zoom);
+      var translation = this.body.visualizacao.translation;
       var scaleFrac = scale / scaleOld;
       var tx = (1 - scaleFrac) * this.canvas.canvasViewCenter.x + translation.x * scaleFrac;
       var ty = (1 - scaleFrac) * this.canvas.canvasViewCenter.y + translation.y * scaleFrac;
 
-      this.body.view.scale = scale;
-      this.body.view.translation = { x: tx, y: ty };
-      this.body.emitter.emit('zoom', { direction: '-', scale: this.body.view.scale, pointer: null });
+      this.body.visualizacao.scale = scale;
+      this.body.visualizacao.translation = { x: tx, y: ty };
+      this.body.emitter.emit('zoom', { direction: '-', scale: this.body.visualizacao.scale, pointer: null });
     }
 
     /**
@@ -55793,7 +55793,7 @@ exports['default'] = SelectionHandler;
  * =====
  *
  * A hierarchical layout is a different thing from a hierarchical network.
- * The layout is a way to arrange the nodes in the view; this can be done
+ * The layout is a way to arrange the nodes in the visualizacao; this can be done
  * on non-hierarchical networks as well. The converse is also possible.
  */
 
@@ -56500,7 +56500,7 @@ var LayoutEngine = function () {
     }
 
     /**
-     * Move all the nodes towards to the center so gravitational pull wil not move the nodes away from view
+     * Move all the nodes towards to the center so gravitational pull wil not move the nodes away from visualizacao
      * @private
      */
 
@@ -57808,7 +57808,7 @@ var DirectionInterface = function () {
      * only among themselves. In essence, it is a sub-network.
      *
      * @param {number} index The index number of a tree
-     * @return {number} the width of a tree in the view coordinates
+     * @return {number} the width of a tree in the visualizacao coordinates
      */
 
   }, {
@@ -59080,7 +59080,7 @@ var ManipulationSystem = function () {
     value: function _controlNodeTouch(event) {
       this.selectionHandler.unselectAll();
       this.lastTouch = this.body.functions.getPointer(event.center);
-      this.lastTouch.translation = util.extend({}, this.body.view.translation); // copy the object
+      this.lastTouch.translation = util.extend({}, this.body.visualizacao.translation); // copy the object
     }
 
     /**
@@ -59138,7 +59138,7 @@ var ManipulationSystem = function () {
         // if the drag was not started properly because the click started outside the network div, start it now.
         var diffX = pointer.x - this.lastTouch.x;
         var diffY = pointer.y - this.lastTouch.y;
-        this.body.view.translation = { x: this.lastTouch.translation.x + diffX, y: this.lastTouch.translation.y + diffY };
+        this.body.visualizacao.translation = { x: this.lastTouch.translation.x + diffX, y: this.lastTouch.translation.y + diffY };
       }
       this.body.emitter.emit('_redraw');
     }
@@ -59208,7 +59208,7 @@ var ManipulationSystem = function () {
       // check to avoid double fireing of this function.
       if (new Date().valueOf() - this.touchTime > 100) {
         this.lastTouch = this.body.functions.getPointer(event.center);
-        this.lastTouch.translation = util.extend({}, this.body.view.translation); // copy the object
+        this.lastTouch.translation = util.extend({}, this.body.visualizacao.translation); // copy the object
 
         var pointer = this.lastTouch;
         var node = this.selectionHandler.getNodeAt(pointer);
@@ -59263,7 +59263,7 @@ var ManipulationSystem = function () {
       } else {
         var diffX = pointer.x - this.lastTouch.x;
         var diffY = pointer.y - this.lastTouch.y;
-        this.body.view.translation = { x: this.lastTouch.translation.x + diffX, y: this.lastTouch.translation.y + diffY };
+        this.body.visualizacao.translation = { x: this.lastTouch.translation.x + diffX, y: this.lastTouch.translation.y + diffY };
       }
     }
 

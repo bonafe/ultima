@@ -1,5 +1,5 @@
 import { ComponenteBase } from '../componente_base.js';
-import { UltimaEvento } from '../ultima/ultima_evento.js';
+import { Evento } from '../espaco/evento.js';
 
 
 export class ExibidorImagem extends ComponenteBase {
