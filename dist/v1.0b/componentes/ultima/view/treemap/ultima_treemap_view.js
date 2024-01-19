@@ -15,7 +15,7 @@ export class UltimaTreemapView extends UltimaView{
 
         this.addEventListener("carregou", () => {            
 
-            this.container = this.noRaiz.querySelector(".componente_navegacao_view");
+            this.container = super.noRaiz.querySelector(".componente_navegacao_view");
 
             this.carregarCSS("./ultima_treemap_view.css", import.meta.url)
                 .then(()=>{
@@ -29,10 +29,10 @@ export class UltimaTreemapView extends UltimaView{
 
     renderizar() {
 
-        if (this.container && this._view && this.cssCarregado){
+        if (this.container && super.view && this.cssCarregado){
 
             //Atualiza o atributo ordem do elemento
-            this._view.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
+            super.view.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
 
             if (!this.node){
                 this.criarTreeMap();
@@ -47,7 +47,7 @@ export class UltimaTreemapView extends UltimaView{
 
     adicionarElemento(elemento){                                          
 
-        this._view.elementos.push(JSON.parse(JSON.stringify(elemento)));
+        super.view.elementos.push({...elemento});
                                
         this.renderizar();    
     }
@@ -69,10 +69,10 @@ export class UltimaTreemapView extends UltimaView{
     
         this.divD3 = d3.select(this.container).append("div")
             .style("position", "relative")
-            .style("width", (this.widthTreemap + this.marginTreemap.left + this.marginTreemap.right) + "px")
-            .style("height", (this.heightTreemap + this.marginTreemap.top + this.marginTreemap.bottom) + "px")
-            .style("left", this.marginTreemap.left + "px")
-            .style("top", this.marginTreemap.top + "px");
+            .style("width", (super.widthUltimaView + super.marginUltimaView.left + super.marginUltimaViewright) + "px")
+            .style("height", (super.heightUltimaView + super.marginUltimaView.top + super.marginUltimaViewbottom) + "px")
+            .style("left", super.marginUltimaView.left + "px")
+            .style("top", super.marginUltimaView.top + "px");
         
         this.enterUpdateExit();  
     }
@@ -81,7 +81,7 @@ export class UltimaTreemapView extends UltimaView{
 
     enterUpdateExit(){
 
-        this.treemap = d3.treemap().size([this.widthTreemap, this.heightTreemap]);
+        this.treemap = d3.treemap().size([super.widthUltimaView, super.heightUltimaView]);
         
         //TODO: tive que criar o campo id pois não sei setar um campo com nome diferente no D3 e estava
         //Redesenhando a tela toda hora pois mudou de campo id para uuid o nome

@@ -95,7 +95,7 @@ export class ExibidorCamera extends ComponenteBase {
 
     renderizar(){
         
-        if (this.carregado && !this.renderizado){
+        if (super.carregado && !this.renderizado){
             
             this.preencherCamerasDisponiveis().then(()=>{
                 this.iniciarCamera();            

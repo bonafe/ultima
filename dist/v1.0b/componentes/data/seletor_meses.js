@@ -83,7 +83,7 @@ export class SeletorMeses extends ComponenteBase {
 
     renderizar (){
 
-        if (this.carregado && this.dados){ 
+        if (super.carregado && this.dados){ 
             
             let agrupado_ano = {};
 

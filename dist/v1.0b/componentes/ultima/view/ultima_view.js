@@ -9,15 +9,15 @@ export class UltimaView extends ComponenteBase{
     
 
     constructor(){
-        super({templateURL:"./ultima_view.html", shadowDOM:false}, import.meta.url);        
+        super({templateURL:"./ultima_view.html", shadowDOM:true}, import.meta.url);        
 
         this._view = undefined;
 
+        this.marginUltimaView = {top: 0, right: 0, bottom: 0, left: 0};  
+
         this.addEventListener("carregou", () => {
 
-            this.container = this.noRaiz.querySelector(".componente_navegacao_view");
-
-            this.atualizarDimensoes();            
+            this.container = this.noRaiz.querySelector(".componente_navegacao_view");                              
 
             this.renderizar();
         });        
@@ -25,20 +25,33 @@ export class UltimaView extends ComponenteBase{
 
 
 
-    atualizarDimensoes(){
-        if (this.container){
-            this.marginTreemap = {top: 0, right: 0, bottom: 0, left: 0};
-            this.widthTreemap = this.container.clientWidth - this.marginTreemap.left - this.marginTreemap.right;
-            this.heightTreemap = this.container.clientHeight - this.marginTreemap.top - this.marginTreemap.bottom;
-            this.colorTreemap = d3.scaleOrdinal().range(d3.schemeCategory20c);
-        }
+    get marginUltimaView(){
+        return this._marginUltimaView;
+    }
+
+
+
+    set marginUltimaView(marginUltimaView){
+        this._marginUltimaView = marginUltimaView;
+    }
+
+
+
+    get widthUltimaView(){
+        return (this.container && this.marginUltimaView ? this.container.clientWidth - this.marginUltimaView .left - this.marginUltimaView.right : 0);
+    }
+
+
+
+    get heightUltimaView(){
+        return (this.container && this.marginUltimaView ? this.container.clientHeight - this.marginUltimaView.top - this.marginUltimaView.bottom : 0);
     }
 
 
 
     renderizar() {      
 
-        if (this.carregado && !this.renderizado && this._view){
+        if (super.carregado && !this.renderizado && this.view){
             this.criarEIniciarMenuDeAcoes();
             this.renderizado = true;
         }
@@ -51,10 +64,11 @@ export class UltimaView extends ComponenteBase{
         let menuAcoes = this.noRaiz.querySelector("#menuAcoes");
         menuAcoes.innerHTML = "";
 
-        this.querySelector("#reiniciar").addEventListener("click", () => {
+        this.noRaiz.querySelector("#reiniciar").addEventListener("click", () => {
             UltimaEvento.dispararEventoExecutarAcao(this, UltimaEvento.ACAO_REINICIAR.nome);               
         });
 
+        //Busca o detalhe das ações relacionadas a esta UltimaView
         Promise.all(this._view.acoes.map(idAcao => UltimaDBReader.getInstance().acao(idAcao)))
             .then (acoes => {
                 acoes.forEach (acao => {
@@ -118,11 +132,7 @@ export class UltimaView extends ComponenteBase{
 
 
 
-    processarNovasDimensoes(largura, altura){
-
-        //console.info (`--------------------------------> ATUALIZOU DIMENSÕES DO CONTAINER TREEMAP`);
-
-        this.atualizarDimensoes();
+    processarNovasDimensoes(largura, altura){        
         this.renderizar();
     }
 
@@ -146,5 +156,10 @@ export class UltimaView extends ComponenteBase{
         this.view.elementos.splice(indice,0,elemento_view_atualizado);  
 
         this.salvarView();                           
+    }
+
+    
+    remover(){
+        this.remove();
     }
 }

@@ -42,7 +42,11 @@ export class UltimaDBWriter extends UltimaDB{
         });      
     }
 
+
     
+    async atualizarComponente (componente){      
+        return this.atualizarRegistro (componente, "componentes");    
+    }
     
     async atualizarComponentes (componentes){
         return new Promise((resolve, reject) => {            
@@ -50,6 +54,12 @@ export class UltimaDBWriter extends UltimaDB{
                 resolve(true);
             });            
         });
+    }    
+
+
+
+    async atualizarElemento (elemento){      
+        return this.atualizarRegistro (elemento, "elementos");    
     }
 
     async atualizarElementos (elementos){
@@ -59,6 +69,12 @@ export class UltimaDBWriter extends UltimaDB{
             });            
         });
     }
+    
+
+
+    async atualizarAcao (acao){      
+        return this.atualizarRegistro (acao, "acoes");    
+    }
 
     async atualizarAcoes (acoes){
         return new Promise((resolve, reject) => {            
@@ -67,6 +83,13 @@ export class UltimaDBWriter extends UltimaDB{
             })
         });
     }
+
+
+
+    async atualizarControlador (controlador){      
+        return this.atualizarRegistro (controlador, "controladores");    
+    }
+
     async atualizarControladores (controladores){
         return new Promise((resolve, reject) => {            
             Promise.all(controladores.map (controlador => this.atualizarControlador(controlador))).then(retornos => {
@@ -74,22 +97,7 @@ export class UltimaDBWriter extends UltimaDB{
             })
         });
     }
-    async atualizarControlador (controlador){      
-        return this.atualizarRegistro (controlador, "controladores");    
-    }
-
-    async atualizarComponente (componente){      
-        return this.atualizarRegistro (componente, "componentes");    
-    }
-
-
-    async atualizarElemento (elemento){      
-        return this.atualizarRegistro (elemento, "elementos");    
-    }
-
-    async atualizarAcao (acao){      
-        return this.atualizarRegistro (acao, "acoes");    
-    }
+    
 
     async atualizarView (view){      
         return this.atualizarRegistro (view, "views");    
