@@ -1,0 +1,23 @@
+:host{    
+    
+
+    /*CABEÇALHO*/
+    --cor-fundo-cabecalho-ultima: rgb(81, 0, 97) !important;
+    --cor-logo-cabecalho-ultima: rgb(255, 115, 0) !important;
+    --cor-texto-cabecalho-ultima: rgb(236, 195, 255) !important;
+    --cor-link-cabecalho-ultima:rgb(236, 195, 255) !important;
+    --cor-link-hover-cabecalho-ultima:rgb(255, 238, 0) !important;
+
+    /*NAVEGAÇÃO*/
+    --cor-fundo-navegacao-ultima: rgb(118, 0, 141)  !important;
+    --cor-link-navegacao-ultima:rgb(236, 195, 255) !important;
+    --cor-link-hover-navegacao-ultima:rgb(255, 238, 0)  !important;
+    /*CONTEÚDO*/
+    --cor-fundo-conteudo:rgb(40, 0, 56) !important;
+
+    /*RODAPÉ*/
+    --cor-fundo-rodape-ultima: rgb(78, 0, 95) !important;
+    --cor-texto-rodape-ultima: rgb(236, 195, 255) !important;
+    --cor-link-rodape-ultima:rgb(255, 115, 0)!important;
+    --cor-link-hover-rodape-ultima:rgb(255, 238, 0) !important;
+}
