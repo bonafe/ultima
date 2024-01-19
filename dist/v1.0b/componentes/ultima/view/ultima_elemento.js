@@ -1,6 +1,10 @@
+
+
+
 import { ComponenteBase } from '../../componente_base.js';
 import { UltimaEvento } from '../ultima_evento.js';
 import { UltimaDBReader } from "../db/ultima_db_reader.js";
+
 
 
 export class UltimaElemento extends ComponenteBase {
@@ -39,12 +43,13 @@ export class UltimaElemento extends ComponenteBase {
 
     configuracao(abrir){
 
-        if (abrir){
-            this.containerComponente.style.display = "none";
-            this.containerConfiguracao.style.display = "flex";
+        //Altera visibilidade do compomente principal e da tela de configuração
+        this.containerComponente.style.display = (abrir ? "none" : "flex");
+        this.containerConfiguracao.style.display = (abrir ? "flex" : "none");
+        this.noRaiz.querySelector("#voltar").style.display = (abrir ? "block" : "none");
+        this.noRaiz.querySelector("#configuracao").style.display = (abrir ? "none" : "block"); 
 
-            this.noRaiz.querySelector("#voltar").style.display = "block";
-            this.noRaiz.querySelector("#configuracao").style.display = "none";
+        if (abrir){            
 
             if (this.carregouComponentesConfiguracao){
 
@@ -52,34 +57,36 @@ export class UltimaElemento extends ComponenteBase {
 
             }else{
 
-                
-                let url_editor_json = super.prefixoEndereco + "/componentes/dados/json/editor/editor_json.js";                
-
-                import(url_editor_json).then(modulo => {
+                //TODO: REMOVER
+                //Antes do componenteBase carregar scripts
+                //let url_editor_json = super.prefixoEndereco + "/componentes/dados/json/editor/editor_json.js";                
+                //import(url_editor_json).then(modulo => {
                     
-                    this.editorDados = this.noRaiz.querySelector("#editorDados");
+                this.editorDados = this.noRaiz.querySelector("#editorDados");
 
-                    this.editorDados.addEventListener("change", evento => {
-                        evento.stopPropagation();
+                this.editorDados.addEventListener("change", evento => {
 
-                        this.dados = evento.detail;
-                        this.enviarEventoAtualizacaoElemento();    
-                    });
+                    //Intercepta o evento change do editor de dados
+                    evento.stopPropagation();
 
-                    this.montarSelectComponente();
-                    this.carregouComponentesConfiguracao = true;
-                    this.renderizar();                   
-                });                
+                    this.dados = evento.detail;
+                    this.enviarEventoAtualizacaoElemento();    
+                });
+
+                this.montarSelectComponente();
+                this.carregouComponentesConfiguracao = true;
+                this.renderizar();                   
+
+
+
+                //Antes do componenteBase carregar scripts
+                //});                
             }            
 
         //FECHAR / ENCERRAR
         }else{
 
-            this.containerComponente.style.display = "flex";
-            this.containerConfiguracao.style.display = "none";
-
-            this.noRaiz.querySelector("#voltar").style.display = "none";
-            this.noRaiz.querySelector("#configuracao").style.display = "block";                        
+                                   
         }
     }
 
@@ -242,18 +249,25 @@ export class UltimaElemento extends ComponenteBase {
 
     carregarComponente(){
 
-        if (this.carregado){
+        if (super.carregado){
 
             this.carregandoComponente = true;
       
             //Componentes com URL Relativa são carregados a partir do diretório raiz do Ultima
             //O diretório raiz é calculado partindo-se de está esta classe UltimaElemento
+            //Este arquivo deve estar em componentes/ultima/ultima/view/ultima_elemento.js
+            //Está a quatro níveis da raiz de onde está hospedado
             let url_raiz_ultima =  new URL("../../../",ComponenteBase.extrairCaminhoURL(import.meta.url));
 
             //Carrega dinamicamente o componente
             import(ComponenteBase.resolverEndereco(this.componente.url, url_raiz_ultima.href)).then(modulo => {
-
+                
+                //modulo não é usado mas está carregado em memória pelo último import
+                //podemos pegar informações do módulo do componente que que foi carregado
+                //podemos agora referencia-lo pelo nome e cria uma instância
                 this.instanciaComponente = document.createElement(this.componente.nome);
+
+                //Nossa classe UltimaElemento exibe esse componente que foi carregado dinamicamente
                 this.noRaiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);
 
 
@@ -290,6 +304,7 @@ export class UltimaElemento extends ComponenteBase {
 
     adicionarComportamentoBotoesElementoTreemap(){
 
+        //Ir para a configuração do UltimaElemento diz respeito somente a ele
         this.noRaiz.querySelector("#configuracao").addEventListener("click", ()=>{
             this.configuracao(true);
         });
@@ -297,6 +312,9 @@ export class UltimaElemento extends ComponenteBase {
             this.configuracao(false);
         });
 
+
+
+        //Já as funções que modificam o elemento no espaço de elementos onde ele está inserido são enviadas para frente como um UltimaEvento
         this.noRaiz.querySelector("#aumentar").addEventListener("click", ()=>{
             UltimaEvento.dispararEventoExecutarAcao(this, 
                 UltimaEvento.ACAO_AUMENTAR_ELEMENTO.nome, {"uuid_elemento_view":this._uuid});            

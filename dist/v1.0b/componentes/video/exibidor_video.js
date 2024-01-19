@@ -38,7 +38,7 @@ export class ExibidorVideo extends ComponenteBase {
 
         //TODO: lidar com mudanças nos valores dos dados
         //Se todos os elementos estão prontos e nenhum componente de vídeo foi criado
-        if (this.carregado && YT && this.dados && !this.componenteVideo){
+        if (super.carregado && YT && this.dados && !this.componenteVideo){
             
             this.carregarComponenteVideo();                 
         }

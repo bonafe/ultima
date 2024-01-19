@@ -102,24 +102,32 @@ export class UltimaDB extends DBBase{
 
     atualizarConfiguracoesPadrao(){
         return new Promise((resolve, reject) => {
+
             let transacao = this.banco.transaction (["componentes", "controladores"], "readwrite")
+
 
             let osComponentes = transacao.objectStore ("componentes");   
 
+            //TODO: precisa verificar se já existe e deixar a versão mais nova (talvez poder escolher a versão)
+            //TODO: mesmo componente poderá ser adicionado mais de uma vez se estiver no arquivo JSON de configurações do usuário
             ConfiguracoesPadraoUltima.base.componentes.forEach (componente => {
-                console.log (`adicionando componente: ${componente.nome}`);
+                console.log (`UltimaDB: adicionando componente: ${componente.nome}`);
                 osComponentes.put (componente);
             });
 
+
             let osControladores = transacao.objectStore ("controladores");   
 
+            //TODO: precisa verificar se já existe e deixar a versão mais nova (talvez poder escolher a versão)
+            //TODO: mesmo controlador poderá ser adicionado mais de uma vez se estiver no arquivo JSON de configurações do usuário
             ConfiguracoesPadraoUltima.base.controladores.forEach (controlador => {
-                console.log (`adicionando CONTROLADOR: ${controlador.url}-${controlador.nome_classe}`);
+                console.log (`UltimaDB: adicionando CONTROLADOR: ${controlador.url}-${controlador.nome_classe}`);
                 osControladores.put (controlador);
             });
 
+
             transacao.oncomplete = evento => {
-                console.info ("Elementos adicionados com sucesso");
+                console.info ("UltimaDB: dlementos adicionados com sucesso");
                 resolve(true);
             }
         });

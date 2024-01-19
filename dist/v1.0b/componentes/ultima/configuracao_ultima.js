@@ -1,10 +1,12 @@
+import { ComponenteBase } from "../componente_base.js";
 import { EditorJSON } from "../dados/json/editor/editor_json.js";
 import { UltimaEvento } from "./ultima_evento.js";
 
-export class ConfiguracaoUltima extends EditorJSON{
+export class ConfiguracaoUltima extends ComponenteBase{
 
     constructor(){
-        super();      
+        super({templateURL:"./configuracao_ultima.html", shadowDOM:true}, import.meta.url);        
+   
         
         this.addEventListener("carregou", () => {
 
@@ -26,7 +28,7 @@ export class ConfiguracaoUltima extends EditorJSON{
         let estilos = document.createElement("link");
         this.noRaiz.appendChild(estilos);
         estilos.setAttribute("rel", "stylesheet");
-        estilos.setAttribute("href","componentes/ultima/ultima_view.css")
+        estilos.setAttribute("href","componentes/ultima/view/ultima_view.css")
 
 
         let div = document.createElement("div");
