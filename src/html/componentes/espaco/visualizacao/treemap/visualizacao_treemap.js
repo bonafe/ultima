@@ -1,4 +1,4 @@
-import { Visualizador } from '../visualizador.js';
+import { Visualizacao } from '../visualizacao.js';
 
 import { Evento } from '../../evento.js';
 
@@ -9,7 +9,7 @@ import { ElementoTreemap } from './elemento_treemap.js';
 
 
 
-export class VisualizadorTreemap extends Visualizador{
+export class VisualizacaoTreemap extends Visualizacao{
 
 
 
@@ -21,9 +21,9 @@ export class VisualizadorTreemap extends Visualizador{
 
         this.addEventListener("carregou", () => {            
 
-            this.container = super.noRaiz.querySelector(".componente_navegacao_visualizador");
+            this.container = super.noRaiz.querySelector(".componente_navegacao_visualizacao");
 
-            this.carregarCSS("./visualizador_treemap.css", import.meta.url)
+            this.carregarCSS("./visualizacao_treemap.css", import.meta.url)
                 .then(()=>{
                     this.cssCarregado = true;
                     this.renderizar();
@@ -74,10 +74,10 @@ export class VisualizadorTreemap extends Visualizador{
         d3.select(this.container).selectAll("div").remove();
     
 
-        let width = (super.widthUltimaView + super.marginUltimaView.left + super.marginUltimaView.right) + "px";
-        let height = (super.heightUltimaView + super.marginUltimaView.top + super.marginUltimaView.bottom) + "px";
-        let left = super.marginUltimaView.left + "px";
-        let top = super.marginUltimaView.top + "px";
+        let width = (super.widthVisualizacao + super.margemVisualizacao.left + super.margemVisualizacao.right) + "px";
+        let height = (super.heightVisualizacao + super.margemVisualizacao.top + super.margemVisualizacao.bottom) + "px";
+        let left = super.margemVisualizacao.left + "px";
+        let top = super.margemVisualizacao.top + "px";
         
         console.log (`width: ${width} height: ${height} left: ${left} top: ${top}`);
 
@@ -95,9 +95,7 @@ export class VisualizadorTreemap extends Visualizador{
 
     enterUpdateExit(){
 
-        console.log ("width e height: " + super.widthUltimaView + " " + super.heightUltimaView);
-
-        this.treemap = d3.treemap().size([super.widthUltimaView, super.heightUltimaView]);
+        this.treemap = d3.treemap().size([super.widthVisualizacao, super.heightVisualizacao]);
         
         //TODO: tive que criar o campo id pois não sei setar um campo com nome diferente no D3 e estava
         //Redesenhando a tela toda hora pois mudou de campo id para uuid o nome
@@ -108,11 +106,11 @@ export class VisualizadorTreemap extends Visualizador{
             //Valor do elemento para cálculo da área do TreeMap
             .sum( d => d.importancia)
 
+            
+
             //Ordem dos elementos no Treemap
             .sort((a, b) => (a.data.ordem - b.data.ordem));         
         
-        //console.log (root.children.map(e => `[id:${e.data.id} descricao:${e.data.descricao} ordem:${e.data.ordem} importancia:${e.data.importancia}]`).join("\n"));
-
         this.node = this.divD3.selectAll(".node_treemap_d3js").data(this.treemap(root).leaves(), d => d.data.id);                                      
 
         //EXIT
@@ -355,4 +353,4 @@ export class VisualizadorTreemap extends Visualizador{
     }
 }
 
-customElements.define('visualizador-treemap', VisualizadorTreemap);
+customElements.define('visualizacao-treemap', VisualizacaoTreemap);

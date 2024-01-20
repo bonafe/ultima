@@ -1,7 +1,7 @@
 /**********************************************************/
 /*                CONTAINER PAI                           */
 /**********************************************************/
-.secao_principal_visualizador{    
+.secao_principal_visualizacao{    
     width: 100%;
     height: 100%;
     display: flex;
@@ -13,7 +13,7 @@
 /**********************************************************/
 /*                CABEÇALHO                               */
 /**********************************************************/
-.cabecalho_principal_visualizador{    
+.cabecalho_principal_visualizacao{    
     background-color: var(--cor-fundo-navegacao);
     color: var(--cor-texto-cabecalho);      
     display: flex;
@@ -26,7 +26,7 @@
 /**********************************************************/
 /*                NAVEGAÇÃO                               */
 /**********************************************************/
-.navegacao_visualizador{
+.navegacao_visualizacao{
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -34,7 +34,7 @@
     font-weight: bold;    
 }
 
-.navegacao_visualizador a{
+.navegacao_visualizacao a{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;    
@@ -45,7 +45,7 @@
     margin-left: 25px;
 }
 
-.navegacao_visualizador a:hover{    
+.navegacao_visualizacao a:hover{    
     color: var(--cor-link-hover-navegacao);
     text-decoration: none;
     opacity: 1;
@@ -57,13 +57,13 @@
 /**********************************************************/
 /*                CONTEÚDO PRINCIPAL                      */
 /**********************************************************/
-.secao_componente_navegacao_visualizador{
+.secao_componente_navegacao_visualizacao{
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);        
 }
 
-.componente_navegacao_visualizador{
+.componente_navegacao_visualizacao{
     width: 100%;
     height: 100%;        
 }
@@ -73,7 +73,7 @@
 /**********************************************************/
 /*                     RODAPÉ                             */
 /**********************************************************/
-.rodape_principal_visualizador{
+.rodape_principal_visualizacao{
     display: flex;
     justify-content: center;
     align-items: center; 
@@ -83,7 +83,7 @@
     color: var(--cor-texto-rodape);      
 }
 
-.rodape_principal_visualizador a{
+.rodape_principal_visualizacao a{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;    
@@ -94,7 +94,7 @@
     margin-left: 25px;
 }
 
-.rodape_principal_visualizador a:hover{    
+.rodape_principal_visualizacao a:hover{    
     color: var(--cor-link-hover-rodape);
     text-decoration: none;
     opacity: 1;

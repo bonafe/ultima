@@ -122,10 +122,10 @@ export class Elemento extends ComponenteBase {
                 evento.stopPropagation();
                 this.componente = this.componentes.find(c => c.nome == this.noRaiz.querySelector("#selectComponente").value);
                 
-                this.elemento_view.componente = this.componente.nome;
+                this.elemento_visualizacao.componente = this.componente.nome;
 
                 //Cria um novo evento indicando dados do componente
-                let eventoCompleto = new Evento(Evento.EVENTO_ATUALIZACAO_VISUALIZACAO, this.elemento_view);                    
+                let eventoCompleto = new Evento(Evento.EVENTO_ATUALIZACAO_VISUALIZACAO, this.elemento_visualizacao);                    
                 this.dispatchEvent(eventoCompleto);     
                                         
             };
@@ -150,8 +150,8 @@ export class Elemento extends ComponenteBase {
                 
         let eventoCompleto = new Evento(Evento.EVENTO_SELECAO_OBJETO, {                                    
             id_elemento_origem:this.elemento.id,
-            id_view_origem:this._uuid_visualizacao,
-            id_elemento_view_origem:this._uuid,
+            id_visualizacao_origem:this._uuid_visualizacao,
+            id_elemento_visualizacao_origem:this._uuid,
             dados:structuredClone(evento.detail)
         });    
 
@@ -192,17 +192,17 @@ export class Elemento extends ComponenteBase {
         if (this._uuid && this._uuid_visualizacao){
             
             //Recupera detalhes do elemento na visualizacao
-            LeitorEspacoDB.getInstance().elemento_view (this._uuid_visualizacao, this._uuid).then (elemento_view => {
+            LeitorEspacoDB.getInstance().elemento_visualizacao (this._uuid_visualizacao, this._uuid).then (elemento_visualizacao => {
 
-                this.elemento_view = elemento_view;
+                this.elemento_visualizacao = elemento_visualizacao;
 
                 //Recupera o elemento global
-                LeitorEspacoDB.getInstance().elemento(this.elemento_view.uuid_elemento).then (elemento => {
+                LeitorEspacoDB.getInstance().elemento(this.elemento_visualizacao.uuid_elemento).then (elemento => {
 
                     this.elemento = elemento;
             
                     //Recupera detalhes do componente HTML a ser renderizado
-                    LeitorEspacoDB.getInstance().componente (this.elemento_view.componente).then(componente => {
+                    LeitorEspacoDB.getInstance().componente (this.elemento_visualizacao.componente).then(componente => {
 
                         let deveCarregar = true;
 

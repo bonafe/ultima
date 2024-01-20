@@ -1,11 +1,11 @@
-import { Visualizador } from '../visualizador.js';
+import { Visualizacao } from '../visualizacao.js';
 
 import { ElementoJanela } from './elemento_janela.js';
 import { Evento } from '../../evento.js';
 import { ComponenteBase } from '../../../componente_base.js';
 
 
-export class VisualizadorJanelas extends Visualizador{
+export class VisualizacaoJanelas extends Visualizacao{
 
 
     constructor(){
@@ -13,7 +13,7 @@ export class VisualizadorJanelas extends Visualizador{
 
         this.paineis = [];
 
-        this.visualizadorJanelaRenderizado = false;
+        this.visualizacaoJanelaRenderizado = false;
 
         this.addEventListener("carregou", () => {            
 
@@ -21,7 +21,7 @@ export class VisualizadorJanelas extends Visualizador{
                 super.carregarCSS("../../../../bibliotecas/jspanel/jspanel.css"),
                 super.carregarScript({src:"../../../../bibliotecas/jspanel/jspanel.js"})
             ]).then (() => {
-                this.container = this.noRaiz.querySelector(".componente_navegacao_visualizador");
+                this.container = this.noRaiz.querySelector(".componente_navegacao_visualizacao");
 
                 //Precisa escutar o evento no document
                 document.addEventListener("jspaneldragstop", evento => {
@@ -35,7 +35,7 @@ export class VisualizadorJanelas extends Visualizador{
 
                     console.log(`Drag Stop: ${evento.panel.uuid}: ${evento.panel.offsetLeft}-${evento.panel.offsetTop}`);
 
-                    this.dispatchEvent(new Evento(Evento.EVENTO_ATUALIZACAO_VISUALIZACAO,{uuid_visualizador:this.visualizacao.uuid})); 
+                    this.dispatchEvent(new Evento(Evento.EVENTO_ATUALIZACAO_VISUALIZACAO,{uuid_visualizacao:this.visualizacao.uuid})); 
                     
                 }, false);
                 document.addEventListener("jspanelresizestop", evento => {
@@ -72,16 +72,16 @@ export class VisualizadorJanelas extends Visualizador{
 
     renderizar() {
 
-        if (this.container && this._visualizador && !this.visualizadorJanelaRenderizado){
+        if (this.container && this._visualizacao && !this.visualizacaoJanelaRenderizado){
 
             //Atualiza o atributo ordem do elemento
-            this._visualizador.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
+            this._visualizacao.elementos.forEach ((elemento, indice) => elemento.ordem = indice);
 
             this.visualizacao.elementos.forEach (elemento => {
                 this.criarPainel(elemento);
             });
 
-            this.visualizadorJanelaRenderizado = true;
+            this.visualizacaoJanelaRenderizado = true;
         }
         super.renderizar();
     }
@@ -91,7 +91,7 @@ export class VisualizadorJanelas extends Visualizador{
 
         let copiaElemento = structuredClone(elemento);
 
-        this._visualizador.elementos.push(copiaElemento);
+        this._visualizacao.elementos.push(copiaElemento);
                                
         this.criarPainel(copiaElemento);
     }
@@ -115,7 +115,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     criarPainel(elemento){
         let painel = jsPanel.create({
-            id: `visualizador_do_Espaco_em_janela_painel_${elemento.uuid}`,
+            id: `visualizacao_do_Espaco_em_janela_painel_${elemento.uuid}`,
             theme: 'dark',
             headerLogo: '<i class="fad fa-home-heart ml-2"></i>',
             headerTitle: 'Título Elemento visualizacao',
@@ -130,8 +130,8 @@ export class VisualizadorJanelas extends Visualizador{
             onwindowresize: true,
             callback: painel => {
                 let elemento = document.createElement("elemento-janela");                
-                elemento.setAttribute("uuid_elemento_visualizador",elemento.uuid)
-                elemento.setAttribute("uuid_visualizador", this.visualizacao.uuid)                    
+                elemento.setAttribute("uuid_elemento_visualizacao",elemento.uuid)
+                elemento.setAttribute("uuid_visualizacao", this.visualizacao.uuid)                    
                 elemento.setAttribute("uuid_elemento", elemento.uuid_elemento)
                 painel.content.appendChild(elemento);
                 painel.uuid = elemento.uuid;
@@ -155,7 +155,7 @@ export class VisualizadorJanelas extends Visualizador{
         if (funcaoDeMudanca(elemento, indice) !== false){
         
             this.renderizar();                  
-            this.dispatchEvent(new Evento(Evento.EVENTO_ATUALIZACAO_VISUALIZACAO,{uuid_visualizador:this.visualizacao.uuid})); 
+            this.dispatchEvent(new Evento(Evento.EVENTO_ATUALIZACAO_VISUALIZACAO,{uuid_visualizacao:this.visualizacao.uuid})); 
         }
     }
 
@@ -163,7 +163,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     aumentar(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, elemento => {
             elemento.importancia *= 1.5;   
         });
     }
@@ -173,7 +173,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     diminuir (propriedades) {        
         
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, elemento => {
             elemento.importancia *= 0.50;  
         });
     }
@@ -182,7 +182,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     maximizar (propriedades) {
 
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, elemento => {
 
             let somaImportanciaOutros = this.visualizacao.elementos.reduce ((valorAnterior, elementoAtual) => {
                 if (elementoAtual.uuid != elemento.uuid){                        
@@ -200,7 +200,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     minimizar (propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, elemento => {
 
             let menorImportancia = this.visualizacao.elementos.reduce ((valorAnterior, elementoAtual) => {
                 if (elementoAtual.importancia < valorAnterior){
@@ -218,7 +218,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     restaurar (propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, elemento => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, elemento => {
 
             let somaImportancia = this.visualizacao.elementos.reduce ((valorAnterior, elementoAtual) => {                    
                 return valorAnterior + elementoAtual.importancia;                    
@@ -234,7 +234,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     fechar (propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, (elemento, indice) => {
 
             if (indice >= 0){
 
@@ -253,7 +253,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     irParaTras(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, (elemento, indice) => {
 
             if (indice > 0){
 
@@ -274,7 +274,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     irParaFrente(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, (elemento, indice) => {
         
             if (indice < (this.visualizacao.elementos.length-1)){
                 
@@ -295,7 +295,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     irParaFim(propriedades) {
         
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, (elemento, indice) => {
         
             if (indice < (this.visualizacao.elementos.length-1)){
 
@@ -316,7 +316,7 @@ export class VisualizadorJanelas extends Visualizador{
 
     irParaInicio(propriedades) {
 
-        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizador, (elemento, indice) => {
+        this.encontrarEAplicarMudanca(propriedades.uuid_elemento_visualizacao, (elemento, indice) => {
         
         if (indice > 0){
 
@@ -334,4 +334,4 @@ export class VisualizadorJanelas extends Visualizador{
     }
 }
 
-customElements.define('visualizador-janelas', VisualizadorJanelas);
+customElements.define('visualizacao-janelas', VisualizacaoJanelas);

@@ -34,65 +34,65 @@ export class Evento extends CustomEvent{
     static ACAO_AUMENTAR_ELEMENTO = {
         nome:'ACAO_AUMENTAR_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     };
     static ACAO_DIMINUIR_ELEMENTO = {
         nome:'ACAO_DIMINUIR_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
 
     static ACAO_IR_PARA_TRAS_ELEMENTO = {
         nome:'ACAO_IR_PARA_TRAS_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
 
     static ACAO_IR_PARA_FRENTE_ELEMENTO = {
         nome:'ACAO_IR_PARA_FRENTE_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
 
     static ACAO_IR_PARA_INICIO_ELEMENTO = {
         nome:'ACAO_IR_PARA_INICIO_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
     
     static ACAO_IR_PARA_FIM_ELEMENTO = {
         nome:'ACAO_IR_PARA_FIM_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
     static ACAO_MAXIMIZAR_ELEMENTO = {
         nome:'ACAO_MAXIMIZAR_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
     static ACAO_MINIMIZAR_ELEMENTO = {
         nome:'ACAO_MINIMIZAR_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
     static ACAO_RESTAURAR_ELEMENTO = {
         nome:'ACAO_RESTAURAR_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
     static ACAO_FECHAR_ELEMENTO = {
         nome:'ACAO_FECHAR_ELEMENTO',
         parametros:{
-            id_elemento_view: undefined
+            id_elemento_visualizacao: undefined
         }
     }
     

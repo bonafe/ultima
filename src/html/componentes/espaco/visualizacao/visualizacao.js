@@ -4,20 +4,20 @@ import { LeitorEspacoDB } from "../modelo/leitor_espaco_db.js";
 
 
 
-export class Visualizador extends ComponenteBase{
+export class Visualizacao extends ComponenteBase{
 
     
 
     constructor(){
-        super({templateURL:"./visualizador.html", shadowDOM:true}, import.meta.url);        
+        super({templateURL:"./visualizacao.html", shadowDOM:true}, import.meta.url);        
 
         this._visualizacao = undefined;
 
-        this.marginUltimaView = {top: 0, right: 0, bottom: 0, left: 0};  
+        this.margemVisualizacao = {top: 0, right: 0, bottom: 0, left: 0};  
 
         this.addEventListener("carregou", () => {
 
-            this.container = this.noRaiz.querySelector(".componente_navegacao_visualizador");                              
+            this.container = this.noRaiz.querySelector(".componente_navegacao_visualizacao");                              
 
             this.renderizar();
         });        
@@ -25,26 +25,26 @@ export class Visualizador extends ComponenteBase{
 
 
 
-    get marginUltimaView(){
-        return this._marginUltimaView;
+    get margemVisualizacao(){
+        return this._margemVisualizacao;
     }
 
 
 
-    set marginUltimaView(marginUltimaView){
-        this._marginUltimaView = marginUltimaView;
+    set margemVisualizacao(margemVisualizacao){
+        this._margemVisualizacao = margemVisualizacao;
     }
 
 
 
-    get widthUltimaView(){
-        return (this.container && this.marginUltimaView ? this.container.clientWidth - this.marginUltimaView .left - this.marginUltimaView.right : 0);
+    get widthVisualizacao(){
+        return (this.container && this.margemVisualizacao ? this.container.clientWidth - this.margemVisualizacao .left - this.margemVisualizacao.right : 0);
     }
 
 
 
-    get heightUltimaView(){
-        return (this.container && this.marginUltimaView ? this.container.clientHeight - this.marginUltimaView.top - this.marginUltimaView.bottom : 0);
+    get heightVisualizacao(){
+        return (this.container && this.margemVisualizacao ? this.container.clientHeight - this.margemVisualizacao.top - this.margemVisualizacao.bottom : 0);
     }
 
 
@@ -68,7 +68,7 @@ export class Visualizador extends ComponenteBase{
             Evento.dispararEventoExecutarAcao(this, Evento.ACAO_REINICIAR.nome);               
         });
 
-        //Busca o detalhe das ações relacionadas a esta Visualizador
+        //Busca o detalhe das ações relacionadas a esta Visualizacao
         Promise.all(this._visualizacao.acoes.map(idAcao => LeitorEspacoDB.getInstance().acao(idAcao)))
             .then (acoes => {
                 acoes.forEach (acao => {
@@ -145,17 +145,17 @@ export class Visualizador extends ComponenteBase{
         //Para a propagaçaõ do evento do componente
         evento.stopPropagation();
 
-        let elemento_view_atualizado = evento.detail;
+        let elemento_visualizacao_atualizado = evento.detail;
 
-        let indice = this.visualizacao.elementos.map(e => e.uuid).indexOf (elemento_view_atualizado.uuid);
+        let indice = this.visualizacao.elementos.map(e => e.uuid).indexOf (elemento_visualizacao_atualizado.uuid);
 
         //Remove o elemento da posição
         let [elemento] = this.visualizacao.elementos.splice(indice,1);
 
         //Coloca o elemento atualizado no lugar
-        this.visualizacao.elementos.splice(indice,0,elemento_view_atualizado);  
+        this.visualizacao.elementos.splice(indice,0,elemento_visualizacao_atualizado);  
 
-        this.salvarView();                           
+        this.salvar();                           
     }
 
     

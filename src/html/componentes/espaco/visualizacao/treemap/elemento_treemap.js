@@ -19,4 +19,4 @@ export class ElementoTreemap extends Elemento {
         super.renderizar();
     }
 }
-customElements.define('ultima-treemap-elemento', ElementoTreemap);
+customElements.define('elemento-treemap', ElementoTreemap);
