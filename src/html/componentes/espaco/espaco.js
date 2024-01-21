@@ -53,7 +53,7 @@ export class Espaco extends ComponenteBase{
      * @param {Array} configuracao.visualizacao - Array de visualizações
      *      
      **/
-    carregarConfiguracao(configuracao){
+    carregarConfiguracao(){
 
         //LeitorEspacoDB extende EspacoDB que é uma base de dados que ao iniciar 
         //carrega configurações padrão de componentes e controladores
@@ -72,20 +72,21 @@ export class Espaco extends ComponenteBase{
             //Caso não existam visualizacoes na base [1ª Vez]
             }else{
 
-                //Caso um arquivo de configuração tenha sido passado como parâmetro
-                if (configuracao){
+                //Caso um arquivo de configuração tenha sido carregado via attributeChangedCallback,
+                //deve utilizar as configurações desse arquivo
+                if (this.configuracao){
 
                     //Carrega as visualizacoes a partir do arquivo de configuração
-                    this.visualizacoes = configuracao.visualizacoes;
+                    this.visualizacoes = this.configuracao.visualizacoes;
 
                     console.log ("Carregando configuracao do arquivo");
 
                     //Escreve todas as configurações do novo arquivo de configurações na base de dados
                     Promise.all([
-                        EscritorEspacoDB.getInstance().atualizarElementos(configuracao.elementos),
-                        EscritorEspacoDB.getInstance().atualizarComponentes(this.gerarCaminhoAbsolutoURL(configuracao.componentes)),
-                        EscritorEspacoDB.getInstance().atualizarAcoes(configuracao.acoes),
-                        EscritorEspacoDB.getInstance().atualizarControladores(this.gerarCaminhoAbsolutoURL(configuracao.controladores)),
+                        EscritorEspacoDB.getInstance().atualizarElementos(this.configuracao.elementos),
+                        EscritorEspacoDB.getInstance().atualizarComponentes(this.gerarCaminhoAbsolutoURL(this.configuracao.componentes)),
+                        EscritorEspacoDB.getInstance().atualizarAcoes(this.configuracao.acoes),
+                        EscritorEspacoDB.getInstance().atualizarControladores(this.gerarCaminhoAbsolutoURL(this.configuracao.controladores)),
 
                         //TODO: está selecionado automaticamente a primeira visualização 
                         //TODO: A visualização escolhida deveria ser a do último estado da aplicação
@@ -314,7 +315,10 @@ export class Espaco extends ComponenteBase{
             this._src = novoValor;
             fetch(this._src)
                 .then (response => response.json())
-                .then(configuracao => this.carregarConfiguracao(configuracao));                     
+                .then(configuracao => {
+                    this.configuracao = configuracao;
+                    this.carregarConfiguracao();
+                });                     
 
 
         }
@@ -406,7 +410,7 @@ export class Espaco extends ComponenteBase{
                 elementoVisualizacaoBanco => {
 
             //Para o componente configuracao-ultima, existe um tratamento especial pois ele atualiza a visualizacao
-            if (elementoVisualizacaoBanco.componente == "configuracao-ultima"){
+            if (elementoVisualizacaoBanco.componente == "configuracao-espaco"){
 
                 this.atualizarConfiguracao(elementoVisualizacaoAtualizado);
 
@@ -494,9 +498,9 @@ export class Espaco extends ComponenteBase{
     /********************************** */
     configuracao(){
 
-        let configuracaoUltima = this.visualizacoes[0].elementos.find (e => e.componente.nome == "configuracao-ultima");
+        let configuracaoEspaco = this.visualizacoes[0].elementos.find (e => e.componente.nome == "configuracao-espaco");
 
-        if (configuracaoUltima){
+        if (configuracaoEspaco){
             alert ("Já está aberta a configuração!");
         }else{  
 
@@ -510,8 +514,8 @@ export class Espaco extends ComponenteBase{
                 const [componentes, acoes, elementos, visualizacoes] = retornos;
 
                 this.adicionarElemento ({
-                    nome_elemento:"Configuração Última",
-                    nome_componente:"configuracao-ultima",
+                    nome_elemento:"Configuração Espaço",
+                    nome_componente:"configuracao-espaco",
                     dados:{                    
                         componentes: [...componentes],                  
                         acoes: [...acoes],                    
