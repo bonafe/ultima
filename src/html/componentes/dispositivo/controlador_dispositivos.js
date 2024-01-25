@@ -25,7 +25,7 @@ export class ControladorDispositivos extends ControladorBase{
         //REGRA: EVENTO SELEÇÃO DE OBJETO
         if (evento.type == Evento.EVENTO_SELECAO_OBJETO){
 
-            LeitorEspacoDB.getInstance().elemento_view(evento.detail.id_visualizacao_origem, evento.detail.id_elemento_visualizacao_origem)
+            LeitorEspacoDB.getInstance().elemento_visualizacao(evento.detail.id_visualizacao_origem, evento.detail.id_elemento_visualizacao_origem)
 
                 .then(elemento_visualizacao => {
                     

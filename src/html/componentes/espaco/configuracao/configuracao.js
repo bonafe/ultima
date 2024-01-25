@@ -1,6 +1,6 @@
-import { ComponenteBase } from "../componente_base.js";
-import { EditorJSON } from "../dados/json/editor/editor_json.js";
-import { Evento } from "./evento.js";
+import { ComponenteBase } from "../../componente_base.js";
+import { EditorJSON } from "../../dados/json/editor/editor_json.js";
+import { Evento } from "../evento.js";
 
 export class Configuracao extends ComponenteBase{
 

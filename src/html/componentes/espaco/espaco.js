@@ -2,8 +2,8 @@ import { ComponenteBase } from "../componente_base.js";
 import { Evento } from "./evento.js";
 import { EscritorEspacoDB } from "./modelo/escritor_espaco_db.js";
 import { LeitorEspacoDB } from "./modelo/leitor_espaco_db.js";
-import { VisualizadorTreemap } from "./visualizacao/treemap/visualizador_treemap.js";
-import { VisualizadorJanelas } from "./visualizacao/janela/visualizador_janelas.js";
+import { VisualizacaoTreemap } from "./visualizacao/treemap/visualizacao_treemap.js";
+import { VisualizacaoJanelas } from "./visualizacao/janela/visualizacao_janelas.js";
 
 
 
@@ -13,10 +13,10 @@ import { VisualizadorJanelas } from "./visualizacao/janela/visualizador_janelas.
 export class Espaco extends ComponenteBase{    
 
 
-    static VIZUALIZADORES_DISPONIVEIS = ["visualizador-janelas", "visualizador-treemap"];
+    static VISUALIZACOES_DISPONIVEIS = ["visualizacao-janelas", "visualizacao-treemap"];
 
     /**
-     * Carrega o template HTML que irá conter um visualizador de elementos.
+     * Carrega o template HTML que irá conter uma visualizacao de elementos.
      * Aguarda o evento 'carregou' para iniciar o carregamento das configurações
      *@constructor
      *@see carregarConfiguracao     
@@ -30,9 +30,9 @@ export class Espaco extends ComponenteBase{
         this.configuracoesCarregadas = false;
 
         //TODO: deve selecionar a visualização baseado no dispositivo
-        this.indiceVisualizadorSelecionado = 1; // VIZUALIZADORES_DISPONIVEIS[1] = visualizador-treemap
+        this.indiceVisualizacaoSelecionado = 1; // VIZUALIZADORES_DISPONIVEIS[1] = visualizacao-treemap
 
-        this.visualizador = undefined;
+        this.visualizacao = undefined;
 
         this.addEventListener('carregou', () => {            
 
@@ -53,7 +53,7 @@ export class Espaco extends ComponenteBase{
      * @param {Array} configuracao.visualizacao - Array de visualizações
      *      
      **/
-    carregarConfiguracao(configuracao){
+    carregarConfiguracao(){
 
         //LeitorEspacoDB extende EspacoDB que é uma base de dados que ao iniciar 
         //carrega configurações padrão de componentes e controladores
@@ -72,20 +72,21 @@ export class Espaco extends ComponenteBase{
             //Caso não existam visualizacoes na base [1ª Vez]
             }else{
 
-                //Caso um arquivo de configuração tenha sido passado como parâmetro
-                if (configuracao){
+                //Caso um arquivo de configuração tenha sido carregado via attributeChangedCallback,
+                //deve utilizar as configurações desse arquivo
+                if (this.configuracao){
 
                     //Carrega as visualizacoes a partir do arquivo de configuração
-                    this.visualizacoes = configuracao.visualizacoes;
+                    this.visualizacoes = this.configuracao.visualizacoes;
 
                     console.log ("Carregando configuracao do arquivo");
 
                     //Escreve todas as configurações do novo arquivo de configurações na base de dados
                     Promise.all([
-                        EscritorEspacoDB.getInstance().atualizarElementos(configuracao.elementos),
-                        EscritorEspacoDB.getInstance().atualizarComponentes(this.gerarCaminhoAbsolutoURL(configuracao.componentes)),
-                        EscritorEspacoDB.getInstance().atualizarAcoes(configuracao.acoes),
-                        EscritorEspacoDB.getInstance().atualizarControladores(this.gerarCaminhoAbsolutoURL(configuracao.controladores)),
+                        EscritorEspacoDB.getInstance().atualizarElementos(this.configuracao.elementos),
+                        EscritorEspacoDB.getInstance().atualizarComponentes(this.gerarCaminhoAbsolutoURL(this.configuracao.componentes)),
+                        EscritorEspacoDB.getInstance().atualizarAcoes(this.configuracao.acoes),
+                        EscritorEspacoDB.getInstance().atualizarControladores(this.gerarCaminhoAbsolutoURL(this.configuracao.controladores)),
 
                         //TODO: está selecionado automaticamente a primeira visualização 
                         //TODO: A visualização escolhida deveria ser a do último estado da aplicação
@@ -130,8 +131,8 @@ export class Espaco extends ComponenteBase{
 
 
 
-    mudarView(){
-        this.indiceVisualizadorSelecionado = (this.indiceVisualizadorSelecionado + 1) % Espaco.VIZUALIZADORES_DISPONIVEIS.length;
+    mudarVisualizacao(){
+        this.indiceVisualizacaoSelecionado = (this.indiceVisualizacaoSelecionado + 1) % Espaco.VISUALIZACOES_DISPONIVEIS.length;
         this.criarEIniciarControleNavegador();
     }
 
@@ -173,8 +174,8 @@ export class Espaco extends ComponenteBase{
           alert (`Última Versão: ${EspacoDB.VERSAO}`);
         });
     
-        super.noRaiz.querySelector("#mudarView").addEventListener("click", () => {
-          this.mudarView();
+        super.noRaiz.querySelector("#mudarVisualizacao").addEventListener("click", () => {
+          this.mudarVisualizacao();
         });
     }
 
@@ -226,23 +227,23 @@ export class Espaco extends ComponenteBase{
 
     criarEIniciarControleNavegador(){
 
-        if (this.visualizador){
-            this.visualizador.remover();            
+        if (this.visualizacao){
+            this.visualizacao.remover();            
         }
 
-        let containerVisualizador = super.noRaiz.querySelector(".secao_principal_ultima");
+        let containerVisualizacao = super.noRaiz.querySelector(".secao_principal_ultima");
 
-        //Cria um novo HTMLElement baseado no indice do visualizador selecionado
-        this.visualizador = document.createElement(
-            Espaco.VIZUALIZADORES_DISPONIVEIS[this.indiceVisualizadorSelecionado]
+        //Cria um novo HTMLElement baseado no indice da visualizacao selecionada
+        this.visualizacao = document.createElement(
+            Espaco.VISUALIZACOES_DISPONIVEIS[this.indiceVisualizacaoSelecionado]
         );
         
-        containerVisualizador.appendChild(this.visualizador);
+        containerVisualizacao.appendChild(this.visualizacao);
             
 
 
         //TODO: só está pegando a primeira visualizacao
-        this.visualizador.visualizacao = {...this.visualizacoes[0]};
+        this.visualizacao.visualizacao = {...this.visualizacoes[0]};
                
         //Percorre alguns eventos pré-definidos criando monitoramento para eles
         [               
@@ -314,7 +315,10 @@ export class Espaco extends ComponenteBase{
             this._src = novoValor;
             fetch(this._src)
                 .then (response => response.json())
-                .then(configuracao => this.carregarConfiguracao(configuracao));                     
+                .then(configuracao => {
+                    this.configuracao = configuracao;
+                    this.carregarConfiguracao();
+                });                     
 
 
         }
@@ -353,16 +357,16 @@ export class Espaco extends ComponenteBase{
             [Evento.ACAO_REINICIAR.nome]:this.reiniciar.bind(this),
             [Evento.ACAO_ADICIONAR_ELEMENTO.nome]:this.adicionarElemento.bind(this),
 
-            [Evento.ACAO_AUMENTAR_ELEMENTO.nome]:this.visualizador.aumentar.bind(this.visualizador),
-            [Evento.ACAO_DIMINUIR_ELEMENTO.nome]:this.visualizador.diminuir.bind(this.visualizador),
-            [Evento.ACAO_MAXIMIZAR_ELEMENTO.nome]:this.visualizador.maximizar.bind(this.visualizador),
-            [Evento.ACAO_MINIMIZAR_ELEMENTO.nome]:this.visualizador.minimizar.bind(this.visualizador),
-            [Evento.ACAO_RESTAURAR_ELEMENTO.nome]:this.visualizador.restaurar.bind(this.visualizador),
-            [Evento.ACAO_FECHAR_ELEMENTO.nome]:this.visualizador.fechar.bind(this.visualizador),
-            [Evento.ACAO_IR_PARA_TRAS_ELEMENTO.nome]:this.visualizador.irParaTras.bind(this.visualizador),
-            [Evento.ACAO_IR_PARA_FRENTE_ELEMENTO.nome]:this.visualizador.irParaFrente.bind(this.visualizador),
-            [Evento.ACAO_IR_PARA_INICIO_ELEMENTO.nome]:this.visualizador.irParaInicio.bind(this.visualizador),
-            [Evento.ACAO_IR_PARA_FIM_ELEMENTO.nome]:this.visualizador.irParaFim.bind(this.visualizador)
+            [Evento.ACAO_AUMENTAR_ELEMENTO.nome]:this.visualizacao.aumentar.bind(this.visualizacao),
+            [Evento.ACAO_DIMINUIR_ELEMENTO.nome]:this.visualizacao.diminuir.bind(this.visualizacao),
+            [Evento.ACAO_MAXIMIZAR_ELEMENTO.nome]:this.visualizacao.maximizar.bind(this.visualizacao),
+            [Evento.ACAO_MINIMIZAR_ELEMENTO.nome]:this.visualizacao.minimizar.bind(this.visualizacao),
+            [Evento.ACAO_RESTAURAR_ELEMENTO.nome]:this.visualizacao.restaurar.bind(this.visualizacao),
+            [Evento.ACAO_FECHAR_ELEMENTO.nome]:this.visualizacao.fechar.bind(this.visualizacao),
+            [Evento.ACAO_IR_PARA_TRAS_ELEMENTO.nome]:this.visualizacao.irParaTras.bind(this.visualizacao),
+            [Evento.ACAO_IR_PARA_FRENTE_ELEMENTO.nome]:this.visualizacao.irParaFrente.bind(this.visualizacao),
+            [Evento.ACAO_IR_PARA_INICIO_ELEMENTO.nome]:this.visualizacao.irParaInicio.bind(this.visualizacao),
+            [Evento.ACAO_IR_PARA_FIM_ELEMENTO.nome]:this.visualizacao.irParaFim.bind(this.visualizacao)
         };
 
         //Chava a função correspondente a ação passando os parâmetros dela
@@ -387,7 +391,7 @@ export class Espaco extends ComponenteBase{
         let uuid_visualizacao= detalhes.uuid_visualizacao;
 
         //TODO: considerando apenas um container
-        EscritorEspacoDB.getInstance().atualizarVisualizacao(this.visualizador.visualizacao).then(()=>{
+        EscritorEspacoDB.getInstance().atualizarVisualizacao(this.visualizacao.visualizacao).then(()=>{
 
             //Persistiu a atualização na base
             this.dispatchEvent(new Evento(Evento.EVENTO_VISUALIZACAO_ATUALIZADA,{"uuid_visualizacao":uuid_visualizacao}));
@@ -397,31 +401,35 @@ export class Espaco extends ComponenteBase{
 
 
     //Atualiza o elemento no banco de dados local IndexDB
-    atualizacaoElemento(elementoViewAtualizado){
+    atualizacaoElemento(elementoVisualizacaoAtualizado){
 
-        LeitorEspacoDB.getInstance().elemento_view(elementoViewAtualizado.uuid_visualizacao, elementoViewAtualizado.uuid_elemento_visualizacao).then (elementoViewBanco => {
+        LeitorEspacoDB.getInstance().elemento_visualizacao(
+            elementoVisualizacaoAtualizado.uuid_visualizacao, 
+            elementoVisualizacaoAtualizado.uuid_elemento_visualizacao).then (
+
+                elementoVisualizacaoBanco => {
 
             //Para o componente configuracao-ultima, existe um tratamento especial pois ele atualiza a visualizacao
-            if (elementoViewBanco.componente == "configuracao-ultima"){
+            if (elementoVisualizacaoBanco.componente == "configuracao-espaco"){
 
-                this.atualizarConfiguracao(elementoViewAtualizado);
+                this.atualizarConfiguracao(elementoVisualizacaoAtualizado);
 
             }else{
 
                 //Lê o elemento que está base
-                LeitorEspacoDB.getInstance().elemento(elementoViewAtualizado.uuid_elemento).then (elementoBanco => {
+                LeitorEspacoDB.getInstance().elemento(elementoVisualizacaoAtualizado.uuid_elemento).then (elementoBanco => {
 
                     //Atualizar o elemento significa atualizar seus dados
-                    elementoBanco.dados = elementoViewAtualizado.dados;
+                    elementoBanco.dados = elementoVisualizacaoAtualizado.dados;
                     
                     EscritorEspacoDB.getInstance().atualizarElemento(elementoBanco).then(()=>{
 
                         //Dispara evento indicado que o elemento foi atualizado na base
                         let eventoElementoAtualizado = new Evento(Evento.EVENTO_ELEMENTO_ATUALIZADO, {     
 
-                            uuid_elemento: elementoViewAtualizado.uuid_elemento, //O elemento que foi atualizado
-                            uuid_visualizacao: elementoViewAtualizado.uuid_visualizacao, //A visualizacao que disparou a atualizado do elemento
-                            uuid_elemento_visualizacao: elementoViewAtualizado.uuid_elemento_visualizacao, //O id desse elemento na visualizacao (a visualizacao pode exibir vários vezes o mesmo elemento)
+                            uuid_elemento: elementoVisualizacaoAtualizado.uuid_elemento, //O elemento que foi atualizado
+                            uuid_visualizacao: elementoVisualizacaoAtualizado.uuid_visualizacao, //A visualizacao que disparou a atualizado do elemento
+                            uuid_elemento_visualizacao: elementoVisualizacaoAtualizado.uuid_elemento_visualizacao, //O id desse elemento na visualizacao (a visualizacao pode exibir vários vezes o mesmo elemento)
                             dados:{...elementoBanco.dados} //Clona os dados para não serem alterados
                         });    
                                         
@@ -436,7 +444,7 @@ export class Espaco extends ComponenteBase{
 
     elementoAtualizado(detalhe){
         
-        this.visualizador.atualizarElemento (detalhe.uuid_elemento);                                                     
+        this.visualizacao.atualizarElemento (detalhe.uuid_elemento);                                                     
     }
 
 
@@ -468,10 +476,10 @@ export class Espaco extends ComponenteBase{
             EscritorEspacoDB.getInstance().atualizarVisualizacao(this.visualizacoes[0]).then( visualizacao_atualizada => {
                 
                 //Se existe um controle de navegação instanciado
-                if (this.visualizador){
+                if (this.visualizacao){
 
                     //Adiciona o novo elemento ao nosso controle de navegação
-                    this.visualizador.adicionarElemento(novo_elemento_visualizacao);
+                    this.visualizacao.adicionarElemento(novo_elemento_visualizacao);
                 }
             });
         })             
@@ -490,9 +498,9 @@ export class Espaco extends ComponenteBase{
     /********************************** */
     configuracao(){
 
-        let configuracaoUltima = this.visualizacoes[0].elementos.find (e => e.componente.nome == "configuracao-ultima");
+        let configuracaoEspaco = this.visualizacoes[0].elementos.find (e => e.componente.nome == "configuracao-espaco");
 
-        if (configuracaoUltima){
+        if (configuracaoEspaco){
             alert ("Já está aberta a configuração!");
         }else{  
 
@@ -506,8 +514,8 @@ export class Espaco extends ComponenteBase{
                 const [componentes, acoes, elementos, visualizacoes] = retornos;
 
                 this.adicionarElemento ({
-                    nome_elemento:"Configuração Última",
-                    nome_componente:"configuracao-ultima",
+                    nome_elemento:"Configuração Espaço",
+                    nome_componente:"configuracao-espaco",
                     dados:{                    
                         componentes: [...componentes],                  
                         acoes: [...acoes],                    
@@ -531,13 +539,13 @@ export class Espaco extends ComponenteBase{
             let indice = this.visualizacao.elementos.map(e => e.uuid).indexOf (elemento_atualizado.uuid);                                    
 
             //Remove o elemento atual da visualizacao da posição
-            let [elemento_view] = this.visualizacao.elementos.splice(indice,1);
+            let [elemento_visualizacao] = this.visualizacao.elementos.splice(indice,1);
 
             //Coloca uma cópia atualizada em seu lugar
             
             this.visualizacao.elementos.splice(indice,0,elemento_atualizado);
 
-            this.visualizador.atualizarElemento(elemento_atualizado);
+            this.visualizacao.atualizarElemento(elemento_atualizado);
         });
 
         //Persiste a visualizacao atualizada

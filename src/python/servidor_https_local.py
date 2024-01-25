@@ -15,10 +15,10 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         SimpleHTTPRequestHandler.end_headers(self)
 
-os.chdir("../html");
+os.chdir("../../");
 
 endereco_ip = '192.168.1.155'
 
 httpd = http.server.HTTPServer((endereco_ip, 443), CORSRequestHandler)
-httpd.socket = ssl.wrap_socket (httpd.socket, certfile='../resources/certificadoDigital/ultima.selfsigned.pem', server_side=True)
+httpd.socket = ssl.wrap_socket (httpd.socket, certfile='./src/resources/certificadoDigital/ultima.selfsigned.pem', server_side=True)
 httpd.serve_forever()

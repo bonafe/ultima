@@ -70,9 +70,9 @@ export class EspacoDB extends DBBase{
             object_store_elementos.createIndex("index_descricao_elemento", "descricao", { unique: false});
 
 
-            let object_store_views = DBBase.banco.createObjectStore("visualizacoes", { keyPath: "uuid"});                    
-            object_store_views.createIndex("index_descricao_view", "descricao", { unique: false});
-            object_store_views.createIndex("index_titulo_view", "titulo", { unique: false});
+            let object_store_visualizacoes = DBBase.banco.createObjectStore("visualizacoes", { keyPath: "uuid"});                    
+            object_store_visualizacoes.createIndex("index_descricao_visualizacoes", "descricao", { unique: false});
+            object_store_visualizacoes.createIndex("index_titulo_visualizacoes", "titulo", { unique: false});
             
 
             let object_store_acoes = DBBase.banco.createObjectStore("acoes", { keyPath: "uuid" });

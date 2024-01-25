@@ -27,11 +27,11 @@ export class ControladorVisualizadorDiferencasJSON extends ControladorBase{
                     
                     //Verifica se existe algum elemento visualizador-diferencas-json
                     for (let indice = 0; indice < visualizacao.elementos.length; indice++){
-                        let elementoView = visualizacao.elementos[indice];                                             
-                        if (elementoView.componente == "visualizador-diferencas-json"){
+                        let elementoVisualizacao = visualizacao.elementos[indice];                                             
+                        if (elementoVisualizacao.componente == "visualizador-diferencas-json"){
 
                             //Caso exista, atualiza os dados do visualizador-diferencas-json com os elementos em suas laterais
-                            this.atualizarDadosVisualizadorDiferencasJSON(visualizacao, elementoView, indice);                            
+                            this.atualizarDadosVisualizadorDiferencasJSON(visualizacao, elementoVisualizacao, indice);                            
                         }
                     }                 
                 });               
@@ -40,23 +40,23 @@ export class ControladorVisualizadorDiferencasJSON extends ControladorBase{
 
 
 
-    atualizarDadosVisualizadorDiferencasJSON(visualizacao, elementoView, indice){
+    atualizarDadosVisualizadorDiferencasJSON(visualizacao, elementoVisualizacao, indice){
 
-        let elementoViewEsquerda = ((indice == 0) ? undefined : visualizacao.elementos[indice-1]);
-        let elementoViewDireita = ((indice == (visualizacao.elementos.lenght-1)) ? undefined : visualizacao.elementos[indice+1]);
+        let elementoVisualizacaoEsquerda = ((indice == 0) ? undefined : visualizacao.elementos[indice-1]);
+        let elementoVisualizacaoDireita = ((indice == (visualizacao.elementos.lenght-1)) ? undefined : visualizacao.elementos[indice+1]);
 
-        if (!elementoViewEsquerda){
-            elementoViewEsquerda = elementoViewDireita;
+        if (!elementoVisualizacaoEsquerda){
+            elementoVisualizacaoEsquerda = elementoVisualizacaoDireita;
         }
-        if (!elementoViewDireita){
-            elementoViewDireita = elementoViewEsquerda;
+        if (!elementoVisualizacaoDireita){
+            elementoVisualizacaoDireita = elementoVisualizacaoEsquerda;
         }
 
-        if (elementoViewEsquerda && elementoViewDireita){
+        if (elementoVisualizacaoEsquerda && elementoVisualizacaoDireita){
 
             Promise.all([
-                LeitorEspacoDB.getInstance().elemento(elementoViewEsquerda.uuid_elemento),
-                LeitorEspacoDB.getInstance().elemento(elementoViewDireita.uuid_elemento)
+                LeitorEspacoDB.getInstance().elemento(elementoVisualizacaoEsquerda.uuid_elemento),
+                LeitorEspacoDB.getInstance().elemento(elementoVisualizacaoDireita.uuid_elemento)
             ]).then (retornos => {
                 const [elementoEsquerda, elementoDireita] = retornos;
                                
@@ -67,9 +67,9 @@ export class ControladorVisualizadorDiferencasJSON extends ControladorBase{
                     };
 
                     let eventoCompleto = new Evento(Evento.EVENTO_ATUALIZACAO_ELEMENTO, {                                    
-                        uuid_elemento:elementoView.uuid_elemento,
+                        uuid_elemento:elementoVisualizacao.uuid_elemento,
                         uuid_visualizacao:visualizacao.uuid,
-                        uuid_elemento_visualizacao:elementoView.uuid,
+                        uuid_elemento_visualizacao:elementoVisualizacao.uuid,
                         dados:structuredClone(dados)
                     });                                
 
