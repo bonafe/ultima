@@ -58,6 +58,10 @@ export class ConfiguracoesPadrao{
             {
                 "url": "./componentes/som/visualizacao/visualizador_som.js",
                 "nome": "visualizador-som"
+            },
+            {
+                "url": "./componentes/toque/visualizador_toque.js",
+                "nome": "visualizador-toque"
             }
         ],
         "controladores":[
