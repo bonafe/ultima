@@ -1,5 +1,8 @@
+
 import { ComponenteBase } from '../componente_base.js';
+
 import { Evento } from '../espaco/evento.js';
+
 
 
 export class VisualizadorToque extends ComponenteBase {
@@ -9,14 +12,15 @@ export class VisualizadorToque extends ComponenteBase {
     constructor(){
         super({templateURL:"./visualizador_toque.html", shadowDOM:true}, import.meta.url);        
 
-        this.ongoingTouches = new Array();
+
+        this.toques_ativos = {};
+
 
         this.addEventListener("carregou", () => {                        
             
-
             this.canvas = this.noRaiz.querySelector("#visualizadorToque");
             
-            this.iniciarEventosToque();
+            this.iniciar_eventos_toque();
 
             this.renderizar();
         });
@@ -35,188 +39,221 @@ export class VisualizadorToque extends ComponenteBase {
 
 
 
-
     renderizar(){
         
         if (super.carregado && !this.renderizado){
             
-            this.renderizado = true;
-            
+            this.renderizado = true;            
         }        
     }
 
 
 
-    iniciarEventosToque(){         
+    iniciar_eventos_toque(){         
 
         if ('ontouchstart' in window || navigator.maxTouchPoints) {
-
-            console.log ("touch api disponível");
             
-            this.canvas.addEventListener("touchstart", this.handleStart.bind(this), false);        
-            this.canvas.addEventListener("touchend", this.handleEnd.bind(this), false);
-            this.canvas.addEventListener("touchcancel", this.handleCancel.bind(this), false);
-            this.canvas.addEventListener("touchleave", this.handleEnd.bind(this), false);
-            this.canvas.addEventListener("touchmove", this.handleMove.bind(this), false);
+            this.canvas.addEventListener("touchstart", this.inicio_toque.bind(this), false);        
+            this.canvas.addEventListener("touchend", this.final_toque.bind(this), false);
+            this.canvas.addEventListener("touchcancel", this.cancelar_toque.bind(this), false);
+            this.canvas.addEventListener("touchleave", this.final_toque.bind(this), false);
+            this.canvas.addEventListener("touchmove", this.toque_moveu.bind(this), false);
 
-        } else {
-
-            console.log ("touch api NÃO DISPONÍVEL: usando a POINTER API");
+        } else {            
                         
-            this.canvas.addEventListener("pointerdown", this.handleStart.bind(this), false);     
-            this.canvas.addEventListener("pointerup", this.handleEnd.bind(this), false);
-            this.canvas.addEventListener("pointercancel", this.handleCancel.bind(this), false);
-            this.canvas.addEventListener("pointerleave", this.handleEnd.bind(this), false);
-            this.canvas.addEventListener("pointermove", this.handleMove.bind(this), false);
+            this.canvas.addEventListener("pointerdown", this.inicio_toque.bind(this), false);     
+            this.canvas.addEventListener("pointerup", this.final_toque.bind(this), false);
+            this.canvas.addEventListener("pointercancel", this.cancelar_toque.bind(this), false);
+            this.canvas.addEventListener("pointerleave", this.final_toque.bind(this), false);
+            this.canvas.addEventListener("pointermove", this.toque_moveu.bind(this), false);
         }
-
-        
-        this.log("initialized.");
     }
 
 
 
-    handleStart(evt) {
+    inicio_toque(evento) {
 
-        evt.preventDefault();
+        this.log (`Toque iniciado: ${evento.type}`);
 
-        this.log("touchstart.");
+        evento.preventDefault(); // evita que o navegador trate o evento        
 
         let ctx = this.canvas.getContext("2d");          
+        
+        let toques = this.gerar_lista_toques(evento);
 
-        let touches = evt.changedTouches || [evt]; 
-      
-        for (let i = 0; i < touches.length; i++) {
-            
-            this.log("touchstart:" + i + "...");
+        this.log (`!!!!! número de toques: ${toques.length}`);
 
-            this.ongoingTouches.push(this.copyTouch(touches[i]));
-            let color = this.colorForTouch(touches[i]);
+        let self = this;
+
+        this.log(toques[0].identifier);
+
+        toques.forEach (toque => {                                    
+
+            self.log (`--- toque iniciado: ${toque.identifier} - ${toque.type}`);
+
+            //Desenha toque
             ctx.beginPath();
-            ctx.arc(touches[i].pageX, touches[i].pageY, 4, 0, 2 * Math.PI, false); // a circle at the start
-            ctx.fillStyle = color;
-            ctx.fill();  
-            
-            this.log("touchstart:" + i + ".");
-        }
+
+            ctx.arc(toque.pageX, toque.pageY, 4, 0, 2 * Math.PI, false); // desenha um círculo no começo do toque
+
+            ctx.fillStyle = this.cor_toque(toque); // usa uma cor diferente para cada toque
+
+            ctx.fill();                                   
+
+            //Atualiza o dicionário de toques ativos com os dados do novo toque
+            this.toques_ativos[toque.identifier] = this.copiar_toque(toque); // copia apenas alguns atributos do toque            
+        });
     }
 
+    
 
-    handleMove(evt) {
-        evt.preventDefault();
+    toque_moveu(evento) {
+
+        evento.preventDefault(); // evita que o navegador trate o evento
         
         let ctx = this.canvas.getContext("2d");
 
-        let touches = evt.changedTouches || [evt]; 
+        let toques = this.gerar_lista_toques(evento); 
       
+        this.log (`número de toques: ${toques.length}`);
 
-        for (let i = 0; i < touches.length; i++) {
-
-          let color = this.colorForTouch(touches[i]);
-          let idx = this.ongoingTouchIndexById(touches[i].identifier);
-      
-            if (idx >= 0) {
+        toques.forEach (toque => {            
+                        
+            //Se existe um toque ativo com este identificador
+            if (this.toques_ativos.hasOwnProperty(toque.identifier)) {  
                 
-                this.log("continuing touch " + idx);
+                let toque_ativo = this.toques_ativos[toque.identifier];                
 
-                ctx.beginPath();
+                this.log (`--- toque moveu: ${toque_ativo.identifier} - ${toque.type}`);
+
+                //Desenha
+                ctx.beginPath();                
+
+                ctx.moveTo(toque_ativo.pageX, toque_ativo.pageY); // vai para o lugar do toque anterior
                 
-                this.log(
-                    "ctx.moveTo(" +
-                      this.ongoingTouches[idx].pageX +
-                      ", " +
-                      this.ongoingTouches[idx].pageY +
-                      ");",
-                  );
+                ctx.lineTo(toque.pageX, toque.pageY); // e desenha uma linha até o toque atual
 
-                ctx.moveTo(this.ongoingTouches[idx].pageX, this.ongoingTouches[idx].pageY);
-                this.log("ctx.lineTo(" + touches[i].pageX + ", " + touches[i].pageY + ");");
-                ctx.lineTo(touches[i].pageX, touches[i].pageY);
                 ctx.lineWidth = 4;
-                ctx.strokeStyle = color;
+                ctx.strokeStyle = this.cor_toque(toque);
                 ctx.stroke();
         
-                this.ongoingTouches.splice(idx, 1, this.copyTouch(touches[i])); // swap in the new touch record
-                
-            } else {
-                console.log("can't figure out which touch to continue");
+
+                //Atualiza o dicionário de toques ativos com os dados do toque atual
+                this.toques_ativos[toque.identifier] = this.copiar_toque(toque);                
             }
-        }
+        });
     }
 
 
 
-    handleEnd(evt) {
+    final_toque(evento) {
 
-        evt.preventDefault();
-                
-        let ctx = this.canvas.getContext("2d");
-        let touches = evt.changedTouches || [evt]; 
-      
-        for (let i = 0; i < touches.length; i++) {
+        this.log (`Toque finalizado: ${evento.type}`);
 
-            let color = this.colorForTouch(touches[i]);
-            let idx = this.ongoingTouchIndexById(touches[i].identifier);
-      
-            if (idx >= 0) {
-                ctx.lineWidth = 4;
-                ctx.fillStyle = color;
-                ctx.beginPath();
-                ctx.moveTo(this.ongoingTouches[idx].pageX, this.ongoingTouches[idx].pageY);
-                ctx.lineTo(touches[i].pageX, touches[i].pageY);
-                ctx.fillRect(touches[i].pageX - 4, touches[i].pageY - 4, 8, 8); // and a square at the end
-                this.ongoingTouches.splice(idx, 1); // remove it; we're done
-            } else {
-                this.log("can't figure out which touch to end");
-            }
-        }
-    }
-
-
-    handleCancel(evt) {
-
-        evt.preventDefault();
+        evento.preventDefault(); // evita que o navegador trate o evento
         
-        let touches = evt.changedTouches || [evt]; 
+        
+        let ctx = this.canvas.getContext("2d");
+
+        let toques = this.gerar_lista_toques(evento);
       
-        for (let i = 0; i < touches.length; i++) {
-          this.ongoingTouches.splice(i, 1); // remove it; we're done
-        }
+
+        toques.forEach (toque => {
+            
+            let toque_ativo = this.toques_ativos[toque.identifier];
+      
+            if (toque_ativo) {
+
+                //Desenha
+                ctx.lineWidth = 4;
+                
+                ctx.fillStyle = this.cor_toque(toque);
+
+                ctx.beginPath();
+
+                ctx.moveTo(toque_ativo.pageX, toque_ativo.pageY); // vai para o lugar do toque anterior
+
+                ctx.lineTo(toque.pageX, toque.pageY); // e desenha uma linha até o toque atual
+
+                ctx.fillRect(toque.pageX - 4, toque.pageY - 4, 8, 8); // desenha um quadrado no final
+
+
+                // remove o toque do dicionário de toques ativos
+                delete this.toques_ativos[toque.identifier]; 
+            }
+        });
     }
 
 
 
-    colorForTouch(touch) {
+    cancelar_toque(evento) {
 
-        let r = touch.identifier % 16;
-        let g = Math.floor(touch.identifier / 3) % 16;
-        let b = Math.floor(touch.identifier / 7) % 16;
+        evento.preventDefault(); // evita que o navegador trate o evento
+        
+        toques = this.gerar_lista_toques(evento); 
+      
+        toques.forEach (toque => {
+
+          // remove o toque do dicionário de toques ativos
+          delete this.toques_ativos[toque.identifier]; 
+
+        });
+    }
+
+
+
+    cor_toque(toque) {
+
+        let r = toque.identifier % 16;
+        let g = Math.floor(toque.identifier / 3) % 16;
+        let b = Math.floor(toque.identifier / 7) % 16;
+
         r = r.toString(16); // make it a hex digit
         g = g.toString(16); // make it a hex digit
         b = b.toString(16); // make it a hex digit
+
         let color = "#" + r + g + b;        
+
         return color;
     }
 
 
-    copyTouch(touch) {
+
+    copiar_toque(toque) {
         return {
-            identifier: touch.identifier,
-            pageX: touch.pageX,
-            pageY: touch.pageY,
+            identifier: toque.identifier,
+            pageX: toque.pageX,
+            pageY: toque.pageY,
         };
     }
-
-
-    ongoingTouchIndexById(idToFind) {
-        return this.ongoingTouches.findIndex(touch => touch.identifier === idToFind);
-    }
-
+   
 
 
     log(msg) {
         let p = this.noRaiz.querySelector("#log");
         p.innerHTML = msg + "\n" + p.innerHTML;
+    }
+
+
+
+    gerar_lista_toques(evento) {
+
+        if (evento.changedTouches) {
+
+            this.log ("changedTouches: " + evento.changedTouches.length)
+
+            let copia = [];
+            for (let i = 0; i < evento.changedTouches.length; i++) {
+                copia.push(this.copiar_toque(evento.changedTouches[i]));
+            }
+            return copia;
+
+        } else {
+
+            this.log ("não tem changedTouches: 1 EVENTO")
+
+            return [evento];
+        }        
     }
 }
 customElements.define('visualizador-toque', VisualizadorToque);

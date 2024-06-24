@@ -209,4 +209,9 @@ export class DBBase extends EventTarget{
             };
         });
      }
+
+
+     static async estimar_armazenamento (){
+        return await navigator.storage.estimate();
+     }
 }
