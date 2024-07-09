@@ -4,40 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exemplo Componente com Conexão Bidirecionado de Dados</title>
-    <script src="./br-teste.js" type="module"></script>
-    <script>
+    <script src="./br-teste.js" type="module"></script>    
+    <script type="module">
+
+        import {ComponenteBase} from '../componente_base.js';
+
         window.addEventListener('load', () => {
             const brTeste = document.querySelector('br-teste');
 
-            let json_dados_pessoa_com_2_enderecos = {
-                nome: 'Fulano de Tal',
-                telefone: '11 99999-9999',
-                email: 'a@a.com',
-                enderecos: [
-                    {
-                        rua: 'Rua 1',
-                        numero: '123',
-                        bairro: 'Bairro 1',
-                        cidade: 'Cidade 1',
-                        estado: 'Estado 1',
-                        cep: '12345-678',
-                        complemento: 'Complemento 1'
-                    },
-                    {
-                        rua: 'Rua 2',
-                        numero: '456',
-                        bairro: 'Bairro 2',
-                        cidade: 'Cidade 2',
-                        estado: 'Estado 2',
-                        cep: '98765-432',
-                        complemento: 'Complemento 2'
-                    }
-                ],
-                observacoes: 'está é uma grande observação',
-                ativo: true
-            };
+            brTeste.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {               
 
-            brTeste.setAttribute('dados-teste', JSON.stringify(json_dados_pessoa_com_2_enderecos));
+                let json_dados_pessoa_com_2_enderecos = {
+                    nome: 'Fulano de Tal',
+                    telefone: '11 99999-9999',
+                    email: 'a@a.com',
+                    enderecos: [
+                        {
+                            rua: 'Rua 1',
+                            numero: '123',
+                            bairro: 'Bairro 1',
+                            cidade: 'Cidade 1',
+                            estado: 'Estado 1',
+                            cep: '12345-678',
+                            complemento: 'Complemento 1'
+                        },
+                        {
+                            rua: 'Rua 2',
+                            numero: '456',
+                            bairro: 'Bairro 2',
+                            cidade: 'Cidade 2',
+                            estado: 'Estado 2',
+                            cep: '98765-432',
+                            complemento: 'Complemento 2'
+                        }
+                    ],
+                    observacoes: 'está é uma grande observação',
+                    ativo: true
+                };
+
+                brTeste.setAttribute('dados', JSON.stringify(json_dados_pessoa_com_2_enderecos));
+
+
+                console.log('********** Componente carregou');
+            });
         });
     </script>
 </head>

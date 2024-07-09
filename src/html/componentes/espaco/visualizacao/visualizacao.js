@@ -15,7 +15,7 @@ export class Visualizacao extends ComponenteBase{
 
         this.margemVisualizacao = {top: 0, right: 0, bottom: 0, left: 0};  
 
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
 
             this.container = this.noRaiz.querySelector(".componente_navegacao_visualizacao");                              
 

@@ -9,7 +9,7 @@ export class ExibidorImagem extends ComponenteBase {
 
         this._dados = undefined;
 
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
             this.img = this.noRaiz.querySelector("img");            
             this.atualizarImg();
         });

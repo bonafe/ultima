@@ -65,7 +65,7 @@ export class BindableHTMLElement extends HTMLElement{
 		this.inicializarElementos();					
         this.atualizacaoInicial();
 		this.carregado = true;
-		this.dispatchEvent(new Event("carregou"));	
+		this.dispatchEvent(new Event(ComponenteBase.EVENTO_CARREGOU));	
 	}
 
 

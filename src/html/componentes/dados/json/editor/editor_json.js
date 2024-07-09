@@ -9,7 +9,7 @@ export class EditorJSON extends ComponenteBase {
 
         this._dados = undefined;
 
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
 
             //Importa dinamicamente a biblioteca JSONEditor
             import(ComponenteBase.resolverEndereco('../../../../bibliotecas/jsoneditor/jsoneditor.js', import.meta.url))

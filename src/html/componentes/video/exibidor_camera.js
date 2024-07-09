@@ -12,7 +12,7 @@ export class ExibidorCamera extends ComponenteBase {
 
         this.video = undefined;        
 
-        this.addEventListener("carregou", () => {            
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {            
 
             this.cameras = this.noRaiz.querySelector("#cameras");         
             this.video = this.noRaiz.querySelector("#video");

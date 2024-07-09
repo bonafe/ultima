@@ -8,7 +8,7 @@ export class Configuracao extends ComponenteBase{
         super({templateURL:"./configuracao.html", shadowDOM:true}, import.meta.url);        
    
         
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
 
             this.tratarDownloadConfiguracao();
             this.tratarEventoMudancaDados();            

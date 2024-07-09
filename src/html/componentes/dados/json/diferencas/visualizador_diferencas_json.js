@@ -12,7 +12,7 @@ export class VisualizadorDiferencasJSON extends ComponenteBase {
 
         this._dados = undefined;
 
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
 
             //TODO: Não funciona com IMPORT, está tendo que importar no index.html
             //Importa dinamicamente a biblioteca jsondiffpatch

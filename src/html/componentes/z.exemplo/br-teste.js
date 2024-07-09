@@ -3,7 +3,13 @@ import { ComponenteConexaoBidirecionalDados } from '../componente_conexao_bidire
 export class BrTeste extends ComponenteConexaoBidirecionalDados {
 
     constructor() {
-        super({templateURL: './br-teste.html', shadowDOM: true}, import.meta.url, "dados_teste");
+        super(
+            {
+                templateURL: './br-teste.html', 
+                shadowDOM: true
+            }, 
+            import.meta.url
+        );
     }
 
 }

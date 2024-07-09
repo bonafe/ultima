@@ -12,7 +12,7 @@ export class VisualizadorSom extends ComponenteBase {
 
         this.video = undefined;        
 
-        this.addEventListener("carregou", () => {                        
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {                        
 
             this.fontesDeSom = this.noRaiz.querySelector("#fontesDeSom"); 
 

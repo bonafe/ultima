@@ -9,7 +9,7 @@ export class SeletorMeses extends ComponenteBase {
     constructor(){
         super({templateURL:"./seletor_meses.html", shadowDOM:true}, import.meta.url);
         
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
         
             this.renderizar();
         });

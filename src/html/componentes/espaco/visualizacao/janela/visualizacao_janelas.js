@@ -15,7 +15,7 @@ export class VisualizacaoJanelas extends Visualizacao{
 
         this.visualizacaoJanelaRenderizado = false;
 
-        this.addEventListener("carregou", () => {            
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {            
 
             Promise.all([
                 super.carregarCSS("../../../../bibliotecas/jspanel/jspanel.css"),

@@ -8,7 +8,7 @@ export class GrafoBases extends ComponenteBase {
     constructor(){
         super({templateURL:"./grafo_bases.html", shadowDOM:true}, import.meta.url);
         
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
         
             //TODO: carregar dinamicamente o vis.js
             //Importa dinamicamente a biblioteca JSONEditor

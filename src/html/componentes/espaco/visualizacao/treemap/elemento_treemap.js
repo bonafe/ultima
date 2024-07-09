@@ -9,7 +9,7 @@ export class ElementoTreemap extends Elemento {
     constructor(){
         super();
 
-        this.addEventListener("carregou", () => {  
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {  
         });
     }
 

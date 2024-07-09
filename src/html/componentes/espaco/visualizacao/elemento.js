@@ -14,7 +14,7 @@ export class Elemento extends ComponenteBase {
 
         this.dados = null;
 
-        this.addEventListener("carregou", () => {  
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {  
 
             this.containerComponente = this.noRaiz.querySelector("#containerComponente");
             this.containerConfiguracao = this.noRaiz.querySelector("#containerConfiguracao");

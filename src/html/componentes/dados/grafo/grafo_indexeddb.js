@@ -6,7 +6,7 @@ export class GrafoIndexedDB extends GrafoBases{
     constructor(){
         super();      
         
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
             
             this.carregarIndexedDB().then(() => {
                 this.renderizar();

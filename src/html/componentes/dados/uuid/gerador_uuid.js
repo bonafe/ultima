@@ -13,7 +13,7 @@ export class GeradorUUID extends ComponenteBase {
         this._dados = undefined;
 
 
-        this.addEventListener("carregou", () => {          
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {          
 
             this.uuids = this.noRaiz.querySelector("#uuids");
 

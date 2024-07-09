@@ -11,7 +11,7 @@ export class VisualizadorToque extends ComponenteBase {
 
         this.ongoingTouches = new Array();
 
-        this.addEventListener("carregou", () => {                        
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {                        
             
 
             this.canvas = this.noRaiz.querySelector("#visualizadorToque");

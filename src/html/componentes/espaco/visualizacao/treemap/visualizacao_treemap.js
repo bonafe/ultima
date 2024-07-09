@@ -19,7 +19,7 @@ export class VisualizacaoTreemap extends Visualizacao{
 
         this.cssCarregado = false;
 
-        this.addEventListener("carregou", () => {            
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {            
 
             this.container = super.noRaiz.querySelector(".componente_navegacao_visualizacao");
 

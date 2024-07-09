@@ -10,7 +10,7 @@ export class ExibidorVideo extends ComponenteBase {
         this._dados = undefined;
         this.ultimoTempo = 0;
 
-        this.addEventListener("carregou", () => {
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
             
             window.addEventListener(Evento.EVENTO_PLAYER_YOUTUBE_CARREGADO, ()=> this.renderizar());
             this.renderizar();

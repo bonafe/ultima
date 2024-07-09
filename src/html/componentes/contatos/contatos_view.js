@@ -5,7 +5,7 @@ export class ContatosView extends ComponenteBase {
     constructor(){
         super({templateURL:"./contatos_view.html", shadowDOM:true}, import.meta.url);
 
-        this.addEventListener("carregou", () => {                               
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {                               
         });
     }
 }

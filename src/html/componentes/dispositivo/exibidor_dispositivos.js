@@ -12,7 +12,7 @@ export class ExibidorDispositivos extends ComponenteBase {
 
         this.video = undefined;        
 
-        this.addEventListener("carregou", () => {            
+        this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {            
 
             this.renderizar();
         });
