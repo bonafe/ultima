@@ -77,9 +77,7 @@ export class ComponenteBase extends HTMLElement {
     async carregarTemplate(url_template, tentativas = 1) {
         if (tentativas == undefined) {
             tentativas = 0;
-        }
-
-        console.info(`Carregando template: ${url_template} (TENTATIVAS: ${tentativas})`);
+        }        
 
         tentativas++;
         if (tentativas > ComponenteBase.LIMITE_TENTATIVAS_CARREGAR_RECURSO) {
@@ -172,8 +170,6 @@ export class ComponenteBase extends HTMLElement {
      */
     carregarCSS(endereco, url_filho, tentativas = 1) {
         let url_css = (url_filho ? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco));
-
-        console.log(`Carregando CSS: ${url_css} (TENTATIVAS: ${tentativas})`);
 
         if (tentativas == undefined) {
             tentativas = 0;
