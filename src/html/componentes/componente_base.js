@@ -83,23 +83,39 @@ export class ComponenteBase extends HTMLElement {
     }
 
     corrigirCaminhosRelativos(elemento) {
-        const tagsParaCorrigir = ['img', 'a'];
-        const atributosParaCorrigir = {
+        const tagsParaCorrigir = {
             'img': 'src',
-            'a': 'href'
+            'a': 'href',
+            'audio': 'src',
+            'video': 'src',
+            'source': 'src',
+            'iframe': 'src',
+            'embed': 'src',
+            'object': 'data',
+            'track': 'src',
+            'area': 'href',
+            'meta': 'content',
+            'link': 'href'
         };
+    
+        for (let tag in tagsParaCorrigir) {
 
-        tagsParaCorrigir.forEach(tag => {
+            let atributo = tagsParaCorrigir[tag];
+            
             elemento.querySelectorAll(tag).forEach(elementoTag => {
-                let atributo = atributosParaCorrigir[tag];
+                if (tag === 'link' && elementoTag.getAttribute('rel') === 'stylesheet') {
+                    return; // Ignorar links CSS
+                }
                 let valorAtributo = elementoTag.getAttribute(atributo);
                 if (valorAtributo) {
                     let urlCorrigida = this.resolverEndereco(valorAtributo);
                     elementoTag.setAttribute(atributo, urlCorrigida);
                 }
             });
-        });
+        }
     }
+    
+    
 
     removerTagsLinkETrazerHRef(elemento) {
         return Array.from(elemento.querySelectorAll("link")).map(elementoLink => {
