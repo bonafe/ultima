@@ -108,7 +108,7 @@ export class EditorJSON extends ComponenteBase {
 
         if (!this.editor){
 
-            let container = this.noRaiz.querySelector("#editorJSON");
+            let container = super.no_raiz.querySelector("#editorJSON");
             let opcoes = {
                 target: container,
                 props:{

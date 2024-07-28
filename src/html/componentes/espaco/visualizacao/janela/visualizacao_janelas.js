@@ -21,7 +21,7 @@ export class VisualizacaoJanelas extends Visualizacao{
                 super.carregarCSS("../../../../bibliotecas/jspanel/jspanel.css"),
                 super.carregarScript({src:"../../../../bibliotecas/jspanel/jspanel.js"})
             ]).then (() => {
-                this.container = this.noRaiz.querySelector(".componente_navegacao_visualizacao");
+                this.container = super.no_raiz.querySelector(".componente_navegacao_visualizacao");
 
                 //Precisa escutar o evento no document
                 document.addEventListener("jspaneldragstop", evento => {
@@ -102,7 +102,7 @@ export class VisualizacaoJanelas extends Visualizacao{
 
         let seletor = `elemento-janela[uuid_elemento="${uuid_elemento}"]`;
         
-        let elementos = this.noRaiz.querySelectorAll(seletor);
+        let elementos = super.no_raiz.querySelectorAll(seletor);
         
         console.log (`ATUALIZANDO ELEMENTOS visualizacao COM O ELEMENTO PROCURADP: quantidade ${elementos.length}`);
 

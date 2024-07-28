@@ -14,14 +14,14 @@ export class ExibidorDispositivo extends ComponenteBase {
 
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {            
         
-            this.descricao = this.noRaiz.querySelector("#descricao");
+            this.descricao = super.no_raiz.querySelector("#descricao");
 
             this.descricao.addEventListener("change", ()=>{
                 this.mudouEstado();                
             });
 
 
-            this.noRaiz.querySelector("#exibir").addEventListener("click", ()=>{
+            super.no_raiz.querySelector("#exibir").addEventListener("click", ()=>{
                 this.dispatchEvent(new Evento(Evento.EVENTO_SELECAO_OBJETO, 
                     {
                         deviceId:this.dados.dadosMediaAPI.deviceId, 
@@ -77,11 +77,11 @@ export class ExibidorDispositivo extends ComponenteBase {
 
     atualizarCampos(){
 
-        this.noRaiz.querySelector("#descricao").value = this._dados.descricao;
-        this.noRaiz.querySelector("#kind").textContent = this._dados.dadosMediaAPI.kind;
-        this.noRaiz.querySelector("#deviceId").textContent = this._dados.dadosMediaAPI.deviceId;
-        this.noRaiz.querySelector("#groupId").textContent =  this._dados.dadosMediaAPI.groupId;
-        this.noRaiz.querySelector("#label").textContent =  this._dados.dadosMediaAPI.label;
+        super.no_raiz.querySelector("#descricao").value = this._dados.descricao;
+        super.no_raiz.querySelector("#kind").textContent = this._dados.dadosMediaAPI.kind;
+        super.no_raiz.querySelector("#deviceId").textContent = this._dados.dadosMediaAPI.deviceId;
+        super.no_raiz.querySelector("#groupId").textContent =  this._dados.dadosMediaAPI.groupId;
+        super.no_raiz.querySelector("#label").textContent =  this._dados.dadosMediaAPI.label;
 
     }
 }

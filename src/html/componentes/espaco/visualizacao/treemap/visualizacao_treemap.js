@@ -62,7 +62,7 @@ export class VisualizacaoTreemap extends Visualizacao{
 
     atualizarElemento(uuid_elemento){
         let seletor = `elemento-treemap[uuid_elemento="${uuid_elemento}"]`;
-        let elementos = this.noRaiz.querySelectorAll(seletor);
+        let elementos = super.no_raiz.querySelectorAll(seletor);
         console.log (`ATUALIZANDO ELEMENTOS visualizacao COM O ELEMENTO PROCURADP: quantidade ${elementos.length}`);
         elementos.forEach(ultimaTreemapElemento => ultimaTreemapElemento.atualizar());        
     }

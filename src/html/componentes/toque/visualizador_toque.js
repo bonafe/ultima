@@ -18,7 +18,7 @@ export class VisualizadorToque extends ComponenteBase {
 
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {                        
             
-            this.canvas = this.noRaiz.querySelector("#visualizadorToque");
+            this.canvas = super.no_raiz.querySelector("#visualizadorToque");
             
             this.iniciar_eventos_toque();
 
@@ -230,7 +230,7 @@ export class VisualizadorToque extends ComponenteBase {
 
 
     log(msg) {
-        let p = this.noRaiz.querySelector("#log");
+        let p = super.no_raiz.querySelector("#log");
         p.innerHTML = msg + "\n" + p.innerHTML;
     }
 

@@ -49,7 +49,8 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
 
 
     attributeChangedCallback(nome_atributo, valor_antigo, valor_novo) {
-        if (nome_atributo === 'data-dados') {            
+        if (nome_atributo === 'data-dados') {      
+            console.log (`************** attributeChangedCallback: ${valor_novo}`);      
             this.atualizar_dados(JSON.parse(valor_novo));
         }
     }
@@ -89,7 +90,7 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
             
             // O mapa de dados consiste no relacionamento entre 
             // um atributo do elemento HTML e um caminho de dados
-            const elementos = this.noRaiz.querySelectorAll("[data-mapa]");
+            const elementos = super.no_raiz.querySelectorAll("[data-mapa]");
 
             // Para cada um desses elementos iremos verificar se houve mudança de valor
             elementos.forEach(elemento => {
@@ -133,7 +134,8 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
                         //Para outros elementos, podemos simplesmente atualizar o atributo
                         } else {
 
-                            elemento[atributo_elemento] = novo_valor;
+                            console.log (`************** atualizando elemento: ${atributo_elemento} = ${JSON.stringify(novo_valor)}`);
+                            elemento.setAttribute(atributo_elemento, JSON.stringify(novo_valor));
                         }                    
                     }
                 });
@@ -171,7 +173,7 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
 
     // Inicializa os elementos vinculados
     inicializar_elementos() {
-        this.noRaiz.querySelectorAll("[data-mapa]").forEach(elemento => {
+        super.no_raiz.querySelectorAll("[data-mapa]").forEach(elemento => {
             const funcao_mudanca_conteudo = this.gerar_funcao_mudanca_conteudo(JSON.parse(elemento.dataset.mapa));
             this.#listeners.push({ elemento, funcao_mudanca_conteudo });
             elemento.addEventListener("change", funcao_mudanca_conteudo);

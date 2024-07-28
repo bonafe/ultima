@@ -10,7 +10,7 @@ export class ExibidorIframe extends ComponenteBase {
         this._dados = undefined;
 
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
-            this.iFrame = this.noRaiz.querySelector("iframe");            
+            this.iFrame = super.no_raiz.querySelector("iframe");            
             this.atualizarIFrame();
         });
     }

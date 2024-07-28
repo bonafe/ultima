@@ -17,7 +17,7 @@ export class Visualizacao extends ComponenteBase{
 
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
 
-            this.container = this.noRaiz.querySelector(".componente_navegacao_visualizacao");                              
+            this.container = super.no_raiz.querySelector(".componente_navegacao_visualizacao");                              
 
             this.renderizar();
         });        
@@ -61,10 +61,10 @@ export class Visualizacao extends ComponenteBase{
     
     criarEIniciarMenuDeAcoes(){
 
-        let menuAcoes = this.noRaiz.querySelector("#menuAcoes");
+        let menuAcoes = super.no_raiz.querySelector("#menuAcoes");
         menuAcoes.innerHTML = "";
 
-        this.noRaiz.querySelector("#reiniciar").addEventListener("click", () => {
+        super.no_raiz.querySelector("#reiniciar").addEventListener("click", () => {
             Evento.dispararEventoExecutarAcao(this, Evento.ACAO_REINICIAR.nome);               
         });
 

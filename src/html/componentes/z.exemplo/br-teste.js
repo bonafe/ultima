@@ -1,5 +1,7 @@
 import { ComponenteConexaoBidirecionalDados } from '../componente_conexao_bidirecional_dados.js';
 
+import { BrEndereco } from './br-endereco.js';
+
 export class BrTeste extends ComponenteConexaoBidirecionalDados {
 
     constructor() {

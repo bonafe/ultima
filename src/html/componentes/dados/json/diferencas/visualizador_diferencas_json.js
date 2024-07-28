@@ -69,14 +69,14 @@ export class VisualizadorDiferencasJSON extends ComponenteBase {
 
             }else{                
 
-                let container = this.noRaiz.querySelector("#editorJSON");            
+                let container = super.no_raiz.querySelector("#editorJSON");            
                 let delta = jsondiffpatch.diff(this.dados.esquerda, this.dados.direita);
 
                 // beautiful html diff
-                this.noRaiz.querySelector('#diferencaEmHTML').innerHTML = jsondiffpatch.formatters.html.format(delta, this.dados.esquerda);
+                super.no_raiz.querySelector('#diferencaEmHTML').innerHTML = jsondiffpatch.formatters.html.format(delta, this.dados.esquerda);
 
                 // self-explained json
-                //this.noRaiz.querySelector('#diferencaEmJSON').innerHTML = jsondiffpatch.formatters.annotated.format(delta, this.dados.esquerda);              
+                //super.no_raiz.querySelector('#diferencaEmJSON').innerHTML = jsondiffpatch.formatters.annotated.format(delta, this.dados.esquerda);              
             }
         }        
     }

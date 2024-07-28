@@ -95,7 +95,7 @@ export class SeletorMeses extends ComponenteBase {
             });
 
 
-            let container = this.noRaiz.querySelector("#containerMeses");
+            let container = super.no_raiz.querySelector("#containerMeses");
             container.innerHTML = "";
 
             let tabela = document.createElement("table");            

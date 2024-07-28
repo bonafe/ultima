@@ -14,10 +14,10 @@ export class ExibidorCamera extends ComponenteBase {
 
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {            
 
-            this.cameras = this.noRaiz.querySelector("#cameras");         
-            this.video = this.noRaiz.querySelector("#video");
-            this.downloadGravacao = this.noRaiz.querySelector("#downloadGravacao");
-            this.btnGravacao = this.noRaiz.querySelector("#btnGravacao");
+            this.cameras = super.no_raiz.querySelector("#cameras");         
+            this.video = super.no_raiz.querySelector("#video");
+            this.downloadGravacao = super.no_raiz.querySelector("#downloadGravacao");
+            this.btnGravacao = super.no_raiz.querySelector("#btnGravacao");
 
             this.cameras.addEventListener("change", ()=>{
                 this.iniciarCamera();

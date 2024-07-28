@@ -26,13 +26,13 @@ export class Configuracao extends ComponenteBase{
     tratarDownloadConfiguracao(){
 
         let estilos = document.createElement("link");
-        this.noRaiz.appendChild(estilos);
+        super.no_raiz.appendChild(estilos);
         estilos.setAttribute("rel", "stylesheet");
         estilos.setAttribute("href","componentes/espaco/visualizacao/visualizacao.css")
 
 
         let div = document.createElement("div");
-        this.noRaiz.insertBefore(div, this.noRaiz.querySelector("#editorJSON"));
+        super.no_raiz.insertBefore(div, super.no_raiz.querySelector("#editorJSON"));
         div.classList.add("navegacao_ultima");
         div.classList.add("cabecalho_principal_ultima");
         

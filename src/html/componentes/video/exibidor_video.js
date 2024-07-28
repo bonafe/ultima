@@ -52,7 +52,7 @@ export class ExibidorVideo extends ComponenteBase {
 
         this.componenteVideo = 
             new YT.Player(
-                this.noRaiz.querySelector("#video"), 
+                super.no_raiz.querySelector("#video"), 
                 {                  
                     videoId: this.dados.src,
                     events: {

@@ -59,7 +59,7 @@ export class ExibidorDispositivos extends ComponenteBase {
 
                 this.atualizarDispositivos(dispositivosMediaAPI);
 
-                let listaDispositivos = this.noRaiz.querySelector("#dispositivos");   
+                let listaDispositivos = super.no_raiz.querySelector("#dispositivos");   
 
                 //TODO: não apagar tudo, atualizar com o que mudou
                 listaDispositivos.innerHTML = "";

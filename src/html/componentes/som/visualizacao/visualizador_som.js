@@ -14,12 +14,12 @@ export class VisualizadorSom extends ComponenteBase {
 
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {                        
 
-            this.fontesDeSom = this.noRaiz.querySelector("#fontesDeSom"); 
+            this.fontesDeSom = super.no_raiz.querySelector("#fontesDeSom"); 
 
-            this.canvas = this.noRaiz.querySelector("#visualizadorSom");
+            this.canvas = super.no_raiz.querySelector("#visualizadorSom");
 
-            this.downloadGravacao = this.noRaiz.querySelector("#downloadGravacao");
-            this.btnGravacao = this.noRaiz.querySelector("#btnGravacao");
+            this.downloadGravacao = super.no_raiz.querySelector("#downloadGravacao");
+            this.btnGravacao = super.no_raiz.querySelector("#btnGravacao");
 
             this.fontesDeSom.addEventListener("change", ()=>{
                 this.iniciarFonteDeSom();

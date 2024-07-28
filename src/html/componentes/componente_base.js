@@ -1,8 +1,29 @@
+
+
+
 export class ComponenteBase extends HTMLElement {
+
+
 
     static EVENTO_CARREGOU = "carregou_componente_base";
 
     static LIMITE_TENTATIVAS_CARREGAR_RECURSO = 3; // Tenta no máximo 3 vezes carregar um recurso antes de desistir
+
+
+
+    #no_raiz;
+
+    #filhos_componente_base;
+
+    #url_herdeiro;
+    #url_base;
+
+    #carregado;
+
+    #numero_total_filhos;
+    #numero_filhos_carregados;
+    
+
 
     /**
      * Ao construir um ComponenteBase, é necessário passar um objeto com as propriedades do componente e a URL da classe javascript que o herda
@@ -16,30 +37,41 @@ export class ComponenteBase extends HTMLElement {
         super();
 
         // TODO: Verificar se o objeto propriedades possui as propriedades necessárias
-        this.url_herdeiro = url_herdeiro;
-        this.url_base = ComponenteBase.extrairCaminhoURL(this.url_herdeiro);
+        this.#url_herdeiro = url_herdeiro;
+        this.#url_base = ComponenteBase.extrairCaminhoURL(this.#url_herdeiro);
 
-        this._carregado = false;
+
+        this.#carregado = false;
+
+        this.#numero_total_filhos = 0;
+        this.#numero_filhos_carregados = 0;
+        
 
         // Se o componente usa shadowDOM, cria um shadowRoot, senão usa o próprio elemento
         if (propriedades.shadowDOM) {
-            this.noRaiz = this.attachShadow({ mode: 'open' });
+            this.#no_raiz = this.attachShadow({ mode: 'open' });
         } else {
-            this.noRaiz = this;
+            this.#no_raiz = this;
         }
 
         this.carregarTemplate(propriedades.templateURL);
     }
 
+
+
     // Getter para noRaiz
-    get noRaiz() {
-        return this._noRaiz;
+    get no_raiz() {
+        return this.#no_raiz;
     }
 
-    // Setter para noRaiz
-    set noRaiz(noRaiz) {
-        this._noRaiz = noRaiz;
+
+
+    // Getter para carregado
+    get carregado(){
+        return this.#carregado;
     }
+
+
 
     /**
      * Extrai o caminho base de uma URL
@@ -50,6 +82,8 @@ export class ComponenteBase extends HTMLElement {
         // TODO: usar tag A com href para fazer parse no endereço e extrair o caminho
         return url.slice(0, url.lastIndexOf("/") + 1);
     }
+
+
 
     /**
      * Resolve um endereço relativo ou absoluto
@@ -65,9 +99,13 @@ export class ComponenteBase extends HTMLElement {
         }
     }
 
+
+
     resolverEndereco(endereco) {
-        return ComponenteBase.resolverEndereco(endereco, this.url_base);
+        return ComponenteBase.resolverEndereco(endereco, this.#url_base);
     }
+
+
 
     /**
      * Carrega o template HTML do componente
@@ -102,12 +140,16 @@ export class ComponenteBase extends HTMLElement {
             ...scripts.map(script => this.carregarScript(script))
         ]).then(resultados => {
             // Depois de carregar todos os CSS;
-            this.noRaiz.appendChild(elemento);
-            this.observar();
-            this._carregado = true;
-            this.dispatchEvent(new Event(ComponenteBase.EVENTO_CARREGOU));
+            this.#no_raiz.appendChild(elemento);
+            this.observar();     
+            
+            setTimeout(() => {
+                this.verificar_carregamento();
+            });
         });
     }
+
+
 
     /**
      * Remove as tags <link> do template e retorna seus hrefs
@@ -121,6 +163,8 @@ export class ComponenteBase extends HTMLElement {
             return url_css;
         });
     }
+
+
 
     /**
      * Remove as tags <script> do template e retorna seus atributos
@@ -139,6 +183,8 @@ export class ComponenteBase extends HTMLElement {
         });
     }
 
+
+
     observar() {
         this.resizeObserver = new ResizeObserver(elementos => {
             elementos.forEach(elemento => {
@@ -149,13 +195,56 @@ export class ComponenteBase extends HTMLElement {
         });
 
         // Irá observar o primeiro elemento da classe observado
-        let elemento_observado = this.noRaiz.querySelector(".observado");
+        let elemento_observado = this.#no_raiz.querySelector(".observado");
         if (elemento_observado) {
             this.resizeObserver.observe(elemento_observado);
         }
     }
 
-    connectedCallback() {}
+
+
+    verificar_carregamento(){
+
+        const allDescendants = this.#no_raiz.querySelectorAll('*');
+        
+        this.#filhos_componente_base = Array.from(allDescendants).filter(child => child instanceof ComponenteBase);
+
+
+        this.#numero_total_filhos = this.#filhos_componente_base.length; 
+
+        this.#filhos_componente_base.forEach(filho => {
+            
+            if (filho.carregado) {
+
+                this.#numero_filhos_carregados++;
+
+                this.verifica_se_todos_filhos_carregados();
+
+            }else{
+
+                filho.addEventListener(ComponenteBase.EVENTO_CARREGOU, evento => {
+
+                    //O evento do filho não é propagado
+                    evento.preventrDefault();
+
+                    this.#numero_filhos_carregados++;
+
+                    this.verifica_se_todos_filhos_carregados();
+                });
+            }
+        });
+    }
+    
+    verifica_se_todos_filhos_carregados(){
+
+        //Se todos os filhos estiverem carregados
+        if (this.#numero_filhos_carregados === this.#numero_total_filhos) {
+            this.#carregado = true;
+            this.dispatchEvent(new CustomEvent(ComponenteBase.EVENTO_CARREGOU, { bubbles: true, composed: true }));                    
+        }
+    }
+
+    connectedCallback() {} 
 
     disconnectedCallback() {}
 
@@ -196,7 +285,7 @@ export class ComponenteBase extends HTMLElement {
                     style.addEventListener("error", (e) => {
                         reject();
                     });
-                    this.noRaiz.appendChild(style);
+                    this.#no_raiz.appendChild(style);
                 })
                 .catch(function (error) {
                     console.log(`Não foi possível fazer download do CSS ${url_css}`);
@@ -237,12 +326,7 @@ export class ComponenteBase extends HTMLElement {
                 reject();
             });
 
-            this.noRaiz.appendChild(script);
+            this.#no_raiz.appendChild(script);
         });
-    }
-
-    // Getter para carregado
-    get carregado(){
-        return this._carregado;
     }
 }

@@ -57,7 +57,7 @@ export class GrafoEquipe extends ComponenteBase {
         if (this.vis && this.dados){
             
             let titulo = `Escala AlfVCP ${this.dados.mes} de ${this.dados.ano}`;
-            this.noRaiz.querySelector("#titulo").textContent = titulo;
+            super.no_raiz.querySelector("#titulo").textContent = titulo;
 
             this.idGrafo = 0;
             let elementosGrafo = this.transformarListaEmGrafo([this.dados], this.idGrafo++, 70);
@@ -68,7 +68,7 @@ export class GrafoEquipe extends ComponenteBase {
                   }
             };
             this.elementosGrafo = elementosGrafo;
-            let grafo = new vis.Network (this.noRaiz.querySelector("#divGrafo"), this.elementosGrafo, options);            
+            let grafo = new vis.Network (super.no_raiz.querySelector("#divGrafo"), this.elementosGrafo, options);            
 
             grafo.on ("click", parametros => {
                 console.dir(parametros);

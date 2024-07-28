@@ -92,7 +92,7 @@ export class GrafoBases extends ComponenteBase {
               }
 
             this.elementosGrafo = elementosGrafo;
-            this.grafo = new vis.Network (this.noRaiz.querySelector("#divGrafo"), this.elementosGrafo, options);            
+            this.grafo = new vis.Network (super.no_raiz.querySelector("#divGrafo"), this.elementosGrafo, options);            
 
             this.grafo.on ("click", parametros => {
                 console.dir(parametros);

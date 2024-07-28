@@ -16,11 +16,11 @@ export class Elemento extends ComponenteBase {
 
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {  
 
-            this.containerComponente = this.noRaiz.querySelector("#containerComponente");
-            this.containerConfiguracao = this.noRaiz.querySelector("#containerConfiguracao");
+            this.containerComponente = super.no_raiz.querySelector("#containerComponente");
+            this.containerConfiguracao = super.no_raiz.querySelector("#containerConfiguracao");
             
             //Estilos da configuração
-            this.noRaiz.querySelector("#voltar").style.display = "none";
+            super.no_raiz.querySelector("#voltar").style.display = "none";
             this.containerComponente.style.display = "flex";
             this.containerConfiguracao.style.display = "none";
 
@@ -46,8 +46,8 @@ export class Elemento extends ComponenteBase {
         //Altera visibilidade do compomente principal e da tela de configuração
         this.containerComponente.style.display = (abrir ? "none" : "flex");
         this.containerConfiguracao.style.display = (abrir ? "flex" : "none");
-        this.noRaiz.querySelector("#voltar").style.display = (abrir ? "block" : "none");
-        this.noRaiz.querySelector("#configuracao").style.display = (abrir ? "none" : "block"); 
+        super.no_raiz.querySelector("#voltar").style.display = (abrir ? "block" : "none");
+        super.no_raiz.querySelector("#configuracao").style.display = (abrir ? "none" : "block"); 
 
         if (abrir){            
 
@@ -62,7 +62,7 @@ export class Elemento extends ComponenteBase {
                 //let url_editor_json = super.prefixoEndereco + "/componentes/dados/json/editor/editor_json.js";                
                 //import(url_editor_json).then(modulo => {
                     
-                this.editorDados = this.noRaiz.querySelector("#editorDados");
+                this.editorDados = super.no_raiz.querySelector("#editorDados");
 
                 this.editorDados.addEventListener("change", evento => {
 
@@ -95,7 +95,7 @@ export class Elemento extends ComponenteBase {
             
             this.componentes = componentes;
 
-            let select = this.noRaiz.querySelector("#selectComponente");
+            let select = super.no_raiz.querySelector("#selectComponente");
             select.innerHTML = "";
 
             this.componentes.forEach(componente => {
@@ -120,7 +120,7 @@ export class Elemento extends ComponenteBase {
 
             function eventoSelecionouComponente(evento){           
                 evento.stopPropagation();
-                this.componente = this.componentes.find(c => c.nome == this.noRaiz.querySelector("#selectComponente").value);
+                this.componente = this.componentes.find(c => c.nome == super.no_raiz.querySelector("#selectComponente").value);
                 
                 this.elemento_visualizacao.componente = this.componente.nome;
 
@@ -268,7 +268,7 @@ export class Elemento extends ComponenteBase {
                 this.instanciaComponente = document.createElement(this.componente.nome);
 
                 //Nossa classe Elemento exibe esse componente que foi carregado dinamicamente
-                this.noRaiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);
+                super.no_raiz.querySelector("#containerComponente").appendChild(this.instanciaComponente);
 
 
                 this.instanciaComponente.classList.add('componente');            
@@ -305,62 +305,62 @@ export class Elemento extends ComponenteBase {
     adicionarComportamentoBotoesElementoTreemap(){
 
         //Ir para a configuração do Elemento diz respeito somente a ele
-        this.noRaiz.querySelector("#configuracao").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#configuracao").addEventListener("click", ()=>{
             this.configuracao(true);
         });
-        this.noRaiz.querySelector("#voltar").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#voltar").addEventListener("click", ()=>{
             this.configuracao(false);
         });
 
 
 
         //Já as funções que modificam o elemento no espaço de elementos onde ele está inserido são enviadas para frente como um Evento
-        this.noRaiz.querySelector("#aumentar").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#aumentar").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_AUMENTAR_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});            
         });
 
-        this.noRaiz.querySelector("#diminuir").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#diminuir").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_DIMINUIR_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});            
         });
 
-        this.noRaiz.querySelector("#irParaTras").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#irParaTras").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_IR_PARA_TRAS_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});             
         });
 
-        this.noRaiz.querySelector("#irParaFrente").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#irParaFrente").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_IR_PARA_FRENTE_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});            
         });
 
-        this.noRaiz.querySelector("#irParaInicio").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#irParaInicio").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_IR_PARA_INICIO_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});            
         });
 
-        this.noRaiz.querySelector("#irParaFim").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#irParaFim").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_IR_PARA_FIM_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});              
         });
 
-        this.noRaiz.querySelector("#maximizar").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#maximizar").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_MAXIMIZAR_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid}); 
         });
 
-        this.noRaiz.querySelector("#restaurar").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#restaurar").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_RESTAURAR_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});
         });
 
-        this.noRaiz.querySelector("#minimizar").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#minimizar").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_MINIMIZAR_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});
         });
 
-        this.noRaiz.querySelector("#fechar").addEventListener("click", ()=>{
+        super.no_raiz.querySelector("#fechar").addEventListener("click", ()=>{
             Evento.dispararEventoExecutarAcao(this, 
                 Evento.ACAO_FECHAR_ELEMENTO.nome, {"uuid_elemento_visualizacao":this._uuid});
         });                    
