@@ -5,7 +5,7 @@ export class ComponenteBase extends HTMLElement {
 
 
 
-    static EVENTO_CARREGOU = "carregou_componente_base";
+    static EVENTO_CARREGOU = "carregou_componente";
 
     static LIMITE_TENTATIVAS_CARREGAR_RECURSO = 3; // Tenta no máximo 3 vezes carregar um recurso antes de desistir
 
@@ -47,7 +47,6 @@ export class ComponenteBase extends HTMLElement {
         this.#numero_filhos_carregados = 0;
         
 
-        // Se o componente usa shadowDOM, cria um shadowRoot, senão usa o próprio elemento
         if (propriedades.shadowDOM) {
             this.#no_raiz = this.attachShadow({ mode: 'open' });
         } else {
@@ -79,7 +78,6 @@ export class ComponenteBase extends HTMLElement {
      * @returns {string} Caminho base da URL
      */
     static extrairCaminhoURL(url) {
-        // TODO: usar tag A com href para fazer parse no endereço e extrair o caminho
         return url.slice(0, url.lastIndexOf("/") + 1);
     }
 
@@ -115,7 +113,7 @@ export class ComponenteBase extends HTMLElement {
     async carregarTemplate(url_template, tentativas = 1) {
         if (tentativas == undefined) {
             tentativas = 0;
-        }        
+        }
 
         tentativas++;
         if (tentativas > ComponenteBase.LIMITE_TENTATIVAS_CARREGAR_RECURSO) {
@@ -134,7 +132,9 @@ export class ComponenteBase extends HTMLElement {
         let hrefLinks = this.removerTagsLinkETrazerHRef(elemento);
         let scripts = this.removerERecuperarElementosScript(elemento);
 
-        // Carrega todos os CSS e Scripts do template
+        // Corrige os caminhos relativos para tags <img>, <a> e outras
+        this.corrigirCaminhosRelativos(elemento);
+
         Promise.all([
             ...hrefLinks.map(url_css => this.carregarCSS(url_css)),
             ...scripts.map(script => this.carregarScript(script))
@@ -147,6 +147,39 @@ export class ComponenteBase extends HTMLElement {
                 this.verificar_carregamento();
             });
         });
+    }
+
+    corrigirCaminhosRelativos(elemento) {
+        const tagsParaCorrigir = {
+            'img': 'src',
+            'a': 'href',
+            'audio': 'src',
+            'video': 'src',
+            'source': 'src',
+            'iframe': 'src',
+            'embed': 'src',
+            'object': 'data',
+            'track': 'src',
+            'area': 'href',
+            'meta': 'content',
+            'link': 'href'
+        };
+    
+        for (let tag in tagsParaCorrigir) {
+
+            let atributo = tagsParaCorrigir[tag];
+            
+            elemento.querySelectorAll(tag).forEach(elementoTag => {
+                if (tag === 'link' && elementoTag.getAttribute('rel') === 'stylesheet') {
+                    return; // Ignorar links CSS
+                }
+                let valorAtributo = elementoTag.getAttribute(atributo);
+                if (valorAtributo) {
+                    let urlCorrigida = this.resolverEndereco(valorAtributo);
+                    elementoTag.setAttribute(atributo, urlCorrigida);
+                }
+            });
+        }
     }
 
 
@@ -250,13 +283,6 @@ export class ComponenteBase extends HTMLElement {
 
     adoptedCallback() {}
 
-    /**
-     * Carrega um arquivo CSS e insere no componente
-     * @param {string} endereco - Endereço do arquivo CSS
-     * @param {string} [url_filho] - URL base alternativa
-     * @param {number} [tentativas=1] - Número de tentativas de carregamento
-     * @returns {Promise} Promise resolvida quando o CSS for carregado
-     */
     carregarCSS(endereco, url_filho, tentativas = 1) {
         let url_css = (url_filho ? ComponenteBase.resolverEndereco(endereco, url_filho) : this.resolverEndereco(endereco));
 
@@ -266,7 +292,6 @@ export class ComponenteBase extends HTMLElement {
         tentativas++;
 
         return new Promise((resolve, reject) => {
-            // TODO: AVANÇAR NO TRATAMENTO DE ERRO. O que acontece quando o recurso está indisponível?
             if (tentativas > ComponenteBase.LIMITE_TENTATIVAS_CARREGAR_RECURSO) {
                 console.log(`Erro ao carregar CSS: ${url_css} NÚMERO DE TENTATIVAS EXCEDIDO (${tentativas})`);
                 return reject();
@@ -294,12 +319,6 @@ export class ComponenteBase extends HTMLElement {
         });
     }
 
-    /**
-     * Carrega um arquivo de script e insere no componente
-     * @param {Object} atributos_script - Atributos do script
-     * @param {string} [url_filho] - URL base alternativa
-     * @returns {Promise} Promise resolvida quando o script for carregado
-     */
     carregarScript(atributos_script, url_filho) {
         return new Promise((resolve, reject) => {
             let script = document.createElement('script');
@@ -310,7 +329,6 @@ export class ComponenteBase extends HTMLElement {
                 script.setAttribute("type", atributos_script.type);
             }
 
-            // TODO: VERIFICAR não está funcionando eu acho, não está sendo usado ainda
             if (atributos_script.hash_integridade) {
                 script.integrity = atributos_script.hash_integridade;
                 script.crossorigin = "anonymous";
