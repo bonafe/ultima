@@ -245,27 +245,32 @@ export class ComponenteBase extends HTMLElement {
 
         this.#numero_total_filhos = this.#filhos_componente_base.length; 
 
-        this.#filhos_componente_base.forEach(filho => {
-            
-            if (filho.carregado) {
-
-                this.#numero_filhos_carregados++;
-
-                this.verifica_se_todos_filhos_carregados();
-
-            }else{
-
-                filho.addEventListener(ComponenteBase.EVENTO_CARREGOU, evento => {
-
-                    //O evento do filho não é propagado
-                    evento.preventrDefault();
+        if (this.#numero_total_filhos === 0) {
+            this.#carregado = true;
+            this.dispatchEvent(new CustomEvent(ComponenteBase.EVENTO_CARREGOU, { bubbles: true, composed: true }));
+        }else{
+            this.#filhos_componente_base.forEach(filho => {
+                
+                if (filho.carregado) {
 
                     this.#numero_filhos_carregados++;
 
                     this.verifica_se_todos_filhos_carregados();
-                });
-            }
-        });
+
+                }else{
+
+                    filho.addEventListener(ComponenteBase.EVENTO_CARREGOU, evento => {
+
+                        //O evento do filho não é propagado
+                        evento.preventDefault();
+
+                        this.#numero_filhos_carregados++;
+
+                        this.verifica_se_todos_filhos_carregados();
+                    });
+                }
+            });
+        }
     }
     
     verifica_se_todos_filhos_carregados(){
