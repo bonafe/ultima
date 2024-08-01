@@ -134,8 +134,10 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
                         //Para outros elementos, podemos simplesmente atualizar o atributo
                         } else {
 
-                            console.log (`************** atualizando elemento: ${atributo_elemento} = ${JSON.stringify(novo_valor)}`);
-                            elemento.setAttribute(atributo_elemento, JSON.stringify(novo_valor));
+                            let valor_em_string = (typeof novo_valor === 'object') ? JSON.stringify(novo_valor) : novo_valor;
+
+                            console.log (`************** atualizando elemento: ${atributo_elemento} = ${JSON.stringify(novo_valor)} [${typeof novo_valor}]`);
+                            elemento.setAttribute(atributo_elemento, valor_em_string);
                         }                    
                     }
                 });
