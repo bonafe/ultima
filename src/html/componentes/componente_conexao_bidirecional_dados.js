@@ -183,24 +183,38 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
         this.processarParaCada();
     }
 
+
+
     processarParaCada() {
         super.no_raiz.querySelectorAll("[data-para-cada]").forEach(elemento => {
-            const expressao = elemento.dataset.paraCada; // Exemplo: "item em lista"
-            const [variavel, caminhoLista] = expressao.split(" em ");
-            const lista = this.obterValor(this.#dados, caminhoLista.split("."));
             
-            if (Array.isArray(lista)) {
-                const container = document.createDocumentFragment();
+            console.log ("************** processarParaCada");
 
+            setTimeout(() => {
+
+                const expressao = elemento.dataset.paraCada; // Exemplo: "item em lista"
+                const [variavel, caminhoLista] = expressao.split(" em ");
+                const lista = this.obterValor(this.#dados, caminhoLista.split("."));
                 
-                lista.forEach(item => {
-                    const clone = elemento.cloneNode(true);
-                    //this.vincularItemAoElemento(clone, item, variavel);
-                    container.appendChild(clone);
-                });
-                
-                elemento.replaceWith(container);
-            }
+                if (Array.isArray(lista)) {
+                    const container = document.createDocumentFragment();
+        
+                    lista.forEach(item => {
+                        const clone = elemento.cloneNode(true);
+
+                        clone.dataset.paraCada = null;
+                        clone.dataset.mapa = null;
+                        // Aqui você pode vincular os dados ao clone
+                        // this.vincularItemAoElemento(clone, item, variavel);
+                        container.appendChild(clone);
+                    });
+        
+                    // Substitui o elemento original pelo novo container com os clones
+                    elemento.replaceWith(container);
+                } else {
+                    elemento.remove(); // Remove o elemento original se a lista não for válida ou estiver vazia
+                }
+            }, 1000);
         });
     }
 
