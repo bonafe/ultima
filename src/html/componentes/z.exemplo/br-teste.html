@@ -76,6 +76,8 @@
                 <input type="checkbox" id="inputAtivo" data-mapa='{"checked":"ativo"}' class='form-control'>
             </div>
         </div>
-        <br-endereco data-mapa='{"data-dados":"endereco1"}'></br-endereco>
+        <div data-para-cada="endereco em enderecos">
+            <br-endereco data-mapa='{"data-dados":"endereco"}'></br-endereco>
+        </div>
     </form>
 </div>

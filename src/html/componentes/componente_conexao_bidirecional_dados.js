@@ -180,6 +180,41 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
             this.#listeners.push({ elemento, funcao_mudanca_conteudo });
             elemento.addEventListener("change", funcao_mudanca_conteudo);
         });
+        this.processarParaCada();
+    }
+
+    processarParaCada() {
+        super.no_raiz.querySelectorAll("[data-para-cada]").forEach(elemento => {
+            const expressao = elemento.dataset.paraCada; // Exemplo: "item em lista"
+            const [variavel, caminhoLista] = expressao.split(" em ");
+            const lista = this.obterValor(this.#dados, caminhoLista.split("."));
+            
+            if (Array.isArray(lista)) {
+                const container = document.createDocumentFragment();
+
+                
+                lista.forEach(item => {
+                    const clone = elemento.cloneNode(true);
+                    //this.vincularItemAoElemento(clone, item, variavel);
+                    container.appendChild(clone);
+                });
+                
+                elemento.replaceWith(container);
+            }
+        });
+    }
+
+    vincularItemAoElemento(elemento, item, variavel) {
+        // Substitui as variáveis no elemento pelo valor correspondente
+        const mapaDados = JSON.parse(elemento.dataset.mapa || "{}");
+        
+        Object.keys(mapaDados).forEach(chave => {
+            mapaDados[chave] = mapaDados[chave].replace(new RegExp(variavel, "g"), JSON.stringify(item));
+        });
+
+        elemento.dataset.mapa = JSON.stringify(mapaDados);
+        this.#dados = item;
+        this.atualizar_dados(this.#dados);
     }
 
     
