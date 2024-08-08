@@ -5,7 +5,7 @@ import { ComponenteBase } from './componente_base.js';
 
 
 
-export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
+export class ComponenteReativo extends ComponenteBase {
 
 
     
@@ -204,8 +204,7 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
 
                         clone.dataset.paraCada = null;
                         clone.dataset.mapa = null;
-                        // Aqui você pode vincular os dados ao clone
-                        // this.vincularItemAoElemento(clone, item, variavel);
+                        
                         container.appendChild(clone);
                     });
         
@@ -218,18 +217,7 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
         });
     }
 
-    vincularItemAoElemento(elemento, item, variavel) {
-        // Substitui as variáveis no elemento pelo valor correspondente
-        const mapaDados = JSON.parse(elemento.dataset.mapa || "{}");
-        
-        Object.keys(mapaDados).forEach(chave => {
-            mapaDados[chave] = mapaDados[chave].replace(new RegExp(variavel, "g"), JSON.stringify(item));
-        });
 
-        elemento.dataset.mapa = JSON.stringify(mapaDados);
-        this.#dados = item;
-        this.atualizar_dados(this.#dados);
-    }
 
     
 
@@ -264,6 +252,6 @@ export class ComponenteConexaoBidirecionalDados extends ComponenteBase {
 
 
 // Define o novo elemento personalizado
-window.customElements.define('componente-dados-bidirecional', ComponenteConexaoBidirecionalDados);
+window.customElements.define('componente-reativo', ComponenteReativo);
 
 

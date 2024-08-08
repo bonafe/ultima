@@ -1,6 +1,6 @@
-import { ComponenteConexaoBidirecionalDados } from '../componente_conexao_bidirecional_dados.js';
+import { ComponenteReativo } from '../componente_reativo.js';
 
-export class BrEndereco extends ComponenteConexaoBidirecionalDados {
+export class BrEndereco extends ComponenteReativo {
 
     constructor() {
         super(
