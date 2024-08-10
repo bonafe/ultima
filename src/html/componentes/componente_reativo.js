@@ -133,7 +133,7 @@ export class ComponenteReativo extends ComponenteBase {
         }        
     }
 
-    obter_valor(objeto, caminhos) {
+    obter_valor(objeto, caminhos) {        
         return caminhos.reduce((acc, caminho) => (acc && acc[caminho] !== undefined) ? acc[caminho] : undefined, objeto);
     }
 
