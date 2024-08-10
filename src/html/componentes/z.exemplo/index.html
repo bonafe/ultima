@@ -40,7 +40,9 @@
                     ]
                     ,
                     observacoes: 'está é uma grande observação',
-                    ativo: true
+                    ativo: true,
+                    exibir_endereco: true,
+                    exibir_observacoes: true
                 };
 
                 brTeste.setAttribute('data-dados', JSON.stringify(json_dados_pessoa_com_2_enderecos));
@@ -51,5 +53,6 @@
 </head>
 <body>
     <br-teste></br-teste>
+    <button onclick="console.log(document.querySelector('br-teste').dataset)">Salvar</button>
 </body>
 </html>

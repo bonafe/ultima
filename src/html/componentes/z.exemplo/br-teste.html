@@ -50,8 +50,8 @@
                 <input type="text" id="inputNome" data-mapa='{"value":"nome"}' class='form-control'>
             </div>
             <div class="form-group half-width">
-                <label for="inputNome">Nome</label>
-                <input type="text" id="inputNome2" data-mapa='{"value":"nome"}' class='form-control'>
+                <label for="inputNome2">Nome</label>
+                <input type="text" id="inputNome____" data-mapa='{"value":"nome"}' class='form-control'>
             </div>
             <div class="form-group half-width">
                 <label for="inputTelefone">Telefone</label>
@@ -64,24 +64,53 @@
                 <input type="email" id="inputEmail" data-mapa='{"value":"email"}' class='form-control'>
             </div>
         </div>        
-        <div class="form-row">
-            <div class="form-group full-width">
-                <label for="inputObservacoes">Observações</label>
-                <input type="text" id="inputObservacoes" data-mapa='{"value":"observacoes"}' class='form-control'>
+        <template data-se="exibir_observacoes">
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="inputObservacoes">Observações</label>
+                    <input type="text" id="inputObservacoes" data-mapa='{"value":"observacoes"}' class='form-control'>
+                </div>
             </div>
-        </div>
+        </template>
+        <template data-senao-se="exibir_endereco">
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="inputObservacoes">Observações !!!Senão ENDEREÇO!!!</label>
+                    <input type="text" id="inputObservacoes" data-mapa='{"value":"observacoes"}' class='form-control'>
+                </div>
+            </div>
+        </template>
+        <template data-senao>
+            <div class="form-row" data-senao>
+                <div class="form-group full-width">
+                    <label for="inputObservacoes">Observações ******* Senão *******</label>
+                    <input type="text" id="inputObservacoes" data-mapa='{"value":"observacoes"}' class='form-control'>
+                </div>
+            </div>
+        </template>
+        <template data-senao>
+            <div class="form-row" data-senao>
+                <div class="form-group full-width">
+                    <label for="inputObservacoes">Observações ******* Senão *******</label>
+                    <input type="text" id="inputObservacoes" data-mapa='{"value":"observacoes"}' class='form-control'>
+                </div>
+            </div>
+        </template>
         <div class="form-row">
             <div class="form-group full-width">
                 <label for="inputAtivo">Ativo</label>
                 <input type="checkbox" id="inputAtivo" data-mapa='{"checked":"ativo"}' class='form-control'>
             </div>
         </div>
-        <div id="enderecos">
-            <h1>Endereços</h1>            
-            <br-endereco 
-                data-para-cada="endereco em enderecos" 
-                data-mapa='{"data-dados":"endereco"}'>
-            </br-endereco>            
-        </div>
+        <template data-se="exibir_endereco">
+            <div id="enderecos">
+                <h1>Endereços</h1>
+                <template data-lista="endereco in enderecos">
+                    <br-endereco                         
+                        data-mapa='{"data-dados":"endereco"}'>
+                    </br-endereco>            
+                </template>
+            </div>
+        </template>
     </form>
 </div>
