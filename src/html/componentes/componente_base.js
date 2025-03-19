@@ -238,20 +238,32 @@ export class ComponenteBase extends HTMLElement {
 
     verificar_carregamento(){
 
+        console.log(`--------------------------------------------------------------`);
+        console.log(`Verificando carregamento de ${this.constructor.name}`);
+
         const allDescendants = this.#no_raiz.querySelectorAll('*');
         
         this.#filhos_componente_base = Array.from(allDescendants).filter(child => child instanceof ComponenteBase);
+
+        console.log(`Número de filhos: ${this.#filhos_componente_base.length}`);
 
 
         this.#numero_total_filhos = this.#filhos_componente_base.length; 
 
         if (this.#numero_total_filhos === 0) {
+
+            console.log(`Componente ${this.constructor.name} não possui filhos`);
             this.#carregado = true;
             this.dispatchEvent(new CustomEvent(ComponenteBase.EVENTO_CARREGOU, { bubbles: true, composed: true }));
+
         }else{
             this.#filhos_componente_base.forEach(filho => {
                 
+                console.log(`*****************>>>>>>>      Verificando carregamento de ${filho.constructor.name}`);
+
                 if (filho.carregado) {
+
+                    console.log(`Componente ${filho.constructor.name} já carregado`);
 
                     this.#numero_filhos_carregados++;
 
@@ -259,7 +271,11 @@ export class ComponenteBase extends HTMLElement {
 
                 }else{
 
+                    console.log(`Componente ${filho.constructor.name} ainda não carregado. adicionando listener`);
+
                     filho.addEventListener(ComponenteBase.EVENTO_CARREGOU, evento => {
+
+                        console.log(`!-!_!-!-!_!_!__!---   Evento ${ComponenteBase.EVENTO_CARREGOU} disparado por ${filho.constructor.name}`);
 
                         //O evento do filho não é propagado
                         evento.preventDefault();
@@ -274,10 +290,11 @@ export class ComponenteBase extends HTMLElement {
     }
     
     verifica_se_todos_filhos_carregados(){
-
+        console.log(`Número de filhos carregados: ${this.#numero_filhos_carregados} de ${this.#numero_total_filhos}`);
         //Se todos os filhos estiverem carregados
         if (this.#numero_filhos_carregados === this.#numero_total_filhos) {
             this.#carregado = true;
+            console.log(`------------------------------>>>>>>>>>>>>>>>             Componente ${this.constructor.name} carregado`);
             this.dispatchEvent(new CustomEvent(ComponenteBase.EVENTO_CARREGOU, { bubbles: true, composed: true }));                    
         }
     }

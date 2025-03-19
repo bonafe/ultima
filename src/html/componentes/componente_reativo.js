@@ -23,6 +23,8 @@ export class ComponenteReativo extends ComponenteBase {
         this.#dados = undefined;  
         
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {
+            //console.log(`______________________________________________________________________________________________________________`);  
+            //console.log(`     [${this.constructor.name}]    ************** ComponenteReativo Evento Carregou`);
             this.renderizar();
         });
     }
@@ -33,9 +35,9 @@ export class ComponenteReativo extends ComponenteBase {
 
     set dados(novos_dados) {
         this.dataset.dados = JSON.stringify(novos_dados);       
-        console.log(`______________________________________________________________________________________________________________`);
-        console.log(`!!!!!!!`);
-        console.log(`     [${this.constructor.name}]    ************** Javscript Set dados`);               
+        //console.log(`______________________________________________________________________________________________________________`);
+        //console.log(`!!!!!!!`);
+        //console.log(`     [${this.constructor.name}]    ************** Javscript Set dados`);               
         this.atualizar_dados(novos_dados);
     }   
 
@@ -47,9 +49,9 @@ export class ComponenteReativo extends ComponenteBase {
 
         if (nome_atributo === 'data-dados') {                      
 
-            console.log(`______________________________________________________________________________________________________________`);
-            console.log(`!!!!!!!`);
-            console.log(`     [${this.constructor.name}]    ************** Modificação do atributo HTML dados`); 
+            //console.log(`______________________________________________________________________________________________________________`);
+            //console.log(`!!!!!!!`);
+            //console.log(`     [${this.constructor.name}]    ************** Modificação do atributo HTML dados`); 
             this.atualizar_dados(JSON.parse(valor_novo));
         }
     }
@@ -70,19 +72,19 @@ export class ComponenteReativo extends ComponenteBase {
     
     atualizar_dados(novos_dados) {
         /*
-        console.log(`     [${this.constructor.name}]    !!!!!!!`);
-        console.log(`     [${this.constructor.name}]    !!!!!!!`);
-        console.log(`     [${this.constructor.name}]    !!!!!!!`);
-        console.log(`     [${this.constructor.name}]    !!!!!!!`);
-        console.log(`     [${this.constructor.name}]    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! atualizando dados`);
+        //console.log(`     [${this.constructor.name}]    !!!!!!!`);
+        //console.log(`     [${this.constructor.name}]    !!!!!!!`);
+        //console.log(`     [${this.constructor.name}]    !!!!!!!`);
+        //console.log(`     [${this.constructor.name}]    !!!!!!!`);
+        //console.log(`     [${this.constructor.name}]    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! atualizando dados`);
         */
         if (!this.deve_atualizar(novos_dados)) {            
 
-            //console.log(`     [${this.constructor.name}]    ************************ !!! NÃO HÁ ALTERAÇÃO !!!         ${JSON.stringify(novos_dados)}`)
+            ////console.log(`     [${this.constructor.name}]    ************************ !!! NÃO HÁ ALTERAÇÃO !!!         ${JSON.stringify(novos_dados)}`)
 
         }else{
 
-            //console.log(`     [${this.constructor.name}]    ************************  NOVOS DADOS:         ${JSON.stringify(novos_dados)}`);   
+            ////console.log(`     [${this.constructor.name}]    ************************  NOVOS DADOS:         ${JSON.stringify(novos_dados)}`);   
 
             const elementos = super.no_raiz.querySelectorAll("[data-mapa]");
 
@@ -102,6 +104,8 @@ export class ComponenteReativo extends ComponenteBase {
 
                     if (valor_atual !== novo_valor) {
 
+                        console.log(`     [${this.constructor.name}]    ************** atualizando ${elemento.tagName} - ${elemento.id} - ${atributo_elemento} = ${novo_valor} --- ${caminho_dados}`);
+
                         if (atributo_elemento === "textContent" && elemento.textContent !== novo_valor) {
                             elemento.textContent = novo_valor;
                     
@@ -115,11 +119,13 @@ export class ComponenteReativo extends ComponenteBase {
                             }
                     
                         } else if (atributo_elemento === "value" && elemento.value !== novo_valor) {
+                            //console.log(`     [${this.constructor.name}]    ************** atualizando value ( ${elemento.id} ): ${atributo_elemento} = ${novo_valor}`);
                             elemento.value = novo_valor;
                     
                         } else if (elemento.getAttribute(atributo_elemento) !== String(novo_valor)) {
+                            console.dir(elemento);
                             let valor_em_string = (typeof novo_valor === 'object') ? JSON.stringify(novo_valor) : novo_valor;
-                            //console.log(`     [${this.constructor.name}]    ************** atualizando elemento ( ${elemento.id} ): ${atributo_elemento} = ${valor_em_string} [${typeof novo_valor}]`);
+                            //console.log(`     [${this.constructor.name}]    ************** atualizando setAttribute ( ${elemento.id} ): ${atributo_elemento} = ${valor_em_string}`);
                             elemento.setAttribute(atributo_elemento, valor_em_string);
                         }
                     }
@@ -128,7 +134,8 @@ export class ComponenteReativo extends ComponenteBase {
             });
 
             this.#dados = novos_dados;
-            //console.log(`     [${this.constructor.name}]    ************************  Atualizando atributo HTML dados`);
+            ////console.log(`     [${this.constructor.name}]    ************************  Atualizando atributo HTML dados`);
+            this.dispatchEvent(new Event("change"));
             this.setAttribute('data-dados', JSON.stringify(this.#dados));
         }        
     }
@@ -158,9 +165,9 @@ export class ComponenteReativo extends ComponenteBase {
 
     escutar_mudanca_conteudo() {
 
-        console.log(`______________________________________________________________________________________________________________`);
-        console.log ("                                 [ComponenteReativo] escutar_mudanca_conteudo                                ");
-        console.log(`______________________________________________________________________________________________________________`);
+        //console.log(`______________________________________________________________________________________________________________`);
+        //console.log ("                                 [ComponenteReativo] escutar_mudanca_conteudo                                ");
+        //console.log(`______________________________________________________________________________________________________________`);
 
         // Remove todos os listeners anteriores
         this.#listeners.forEach(({ elemento, funcao_mudanca_conteudo }) => {
@@ -227,7 +234,7 @@ export class ComponenteReativo extends ComponenteBase {
 
             const valor = this.obter_valor(this.#dados, expressao.split("."));
 
-            console.log (`${expressao} = ${valor} (${this.#dados === undefined})`);
+            //console.log (`${expressao} = ${valor} (${this.#dados === undefined})`);
 
             if (valor) {
                 const clone = template_elemento.content.cloneNode(true);
@@ -267,6 +274,8 @@ export class ComponenteReativo extends ComponenteBase {
             const elemento = evento.target;
 
          
+            console.log(`     [${this.constructor.name}]    ************** mudança de conteúdo: ${elemento.tagName} - ${elemento.id}`);
+
             const dados_atualizados = JSON.parse(JSON.stringify(this.#dados));
 
             
@@ -277,9 +286,9 @@ export class ComponenteReativo extends ComponenteBase {
                 this.atualizar_valor(dados_atualizados, caminho_dados.split("."), elemento[atributo_elemento]);
             });
 
-            console.log(`______________________________________________________________________________________________________________`);
-            console.log(`!!!!!!!`);
-            console.log(`     [${this.constructor.name}]    ************** mudança de conteúdo: ${elemento.tagName} - ${elemento.id}`);              
+            //console.log(`______________________________________________________________________________________________________________`);
+            //console.log(`!!!!!!!`);
+            //console.log(`     [${this.constructor.name}]    ************** mudança de conteúdo: ${elemento.tagName} - ${elemento.id}`);              
             this.atualizar_dados(dados_atualizados);
         };
     }

@@ -11,8 +11,13 @@
 
         window.addEventListener('load', () => {
             const brTeste = document.querySelector('br-teste');
-
             brTeste.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {               
+
+                console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
+                console.log(`!!!!!!!!!!!!!!!!!!!`);
+                console.log(`!!!!!!!!!!!!!!!!!!!                 brTeste Carregou`);
+                console.log(`!!!!!!!!!!!!!!!!!!!`);
+                console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
 
                 let json_dados_pessoa_com_2_enderecos = {
                     nome: 'Fulano de Tal',
@@ -52,7 +57,7 @@
     </script>
 </head>
 <body>
-    <br-teste></br-teste>
+    <br-teste data-dados='{"nome":"abelha"}'></br-teste>
     <button onclick="console.log(document.querySelector('br-teste').dataset)">Salvar</button>
 </body>
 </html>

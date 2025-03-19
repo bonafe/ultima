@@ -42,12 +42,12 @@
     }
 </style>
 
-<div class="form-container">
+<div class="form-container" id="vueapp">
     <form>
         <div class="form-row">
             <div class="form-group half-width">
                 <label for="inputNome">Nome</label>
-                <input type="text" id="inputNome" data-mapa='{"value":"nome"}' class='form-control'>
+                <input type="text" id="inputNome" v-model="nome" class='form-control'>
             </div>
             <div class="form-group half-width">
                 <label for="inputNome2">Nome</label>
@@ -102,7 +102,7 @@
                 <input type="checkbox" id="inputAtivo" data-mapa='{"checked":"ativo"}' class='form-control'>
             </div>
         </div>
-        <template data-se="exibir_endereco">
+        <!--template data-se="exibir_endereco">
             <div id="enderecos">
                 <h1>Endereços</h1>
                 <template data-lista="endereco in enderecos">
@@ -111,12 +111,16 @@
                     </br-endereco>            
                 </template>
             </div>
-        </template>
+        </template-->
+        <!--br-endereco                         
+            data-dados='{"data-dados":"enderecos.0"}'>
+        </br-endereco-->     
+        <!--br-endereco                         
+            data-mapa='{"data-dados":"enderecos.1"}'>
+        </br-endereco>   
         <br-endereco                         
             data-mapa='{"data-dados":"enderecos.0"}'>
-        </br-endereco>     
-        <br-endereco                         
-            data-mapa='{"data-dados":"enderecos.1"}'>
-        </br-endereco>     
+        </br-endereco-->   
+        
     </form>
 </div>

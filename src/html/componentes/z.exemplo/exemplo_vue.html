@@ -122,16 +122,25 @@
 <button id="mostrar" onclick="mostrar()">Mostrar</button>
   <script>
     let formulario_pessoa_vue = new Vue({
-      el: '#app',
+      el: document.querySelector('#app'),
       data() {
         return {
           form: {
             nome: 'teste',
             telefone: '111',
-            email: '',
+            email: '@@@',
             enderecos: [
               {
-                rua: '',
+                rua: 'rua amelia',
+                numero: '',
+                bairro: '',
+                cidade: '',
+                estado: '',
+                cep: '',
+                complemento: ''
+              },
+              {
+                rua: 'rua cintra',
                 numero: '',
                 bairro: '',
                 cidade: '',
@@ -140,8 +149,8 @@
                 complemento: ''
               }
             ],
-            observacoes: '',
-            ativo: false
+            observacoes: 'observa',
+            ativo: true
           }
         };
       }
