@@ -1,16 +1,16 @@
-import { EspacoDB } from "./grafo_db.js";
+import { GrafoDB } from "./grafo_db.js";
 
 
 
-export class EscritorEspacoDB extends EspacoDB{
+export class EscritorGrafoDB extends GrafoDB{
 
 
     static getInstance(){
 
-        if (!EscritorEspacoDB.instancia){
-            EscritorEspacoDB.instancia = new EscritorEspacoDB();
+        if (!EscritorGrafoDB.instancia){
+            EscritorGrafoDB.instancia = new EscritorGrafoDB();
         }
-        return EscritorEspacoDB.instancia;
+        return EscritorGrafoDB.instancia;
     }
 
 
@@ -31,26 +31,22 @@ export class EscritorEspacoDB extends EspacoDB{
 
         return new Promise ((resolve, reject) => {
 
-            this.limparObjectStore("elementos")
-                .then(() => this.limparObjectStore("componentes"))
-                    .then(() => this.limparObjectStore("visualizacoes"))
-                        .then(() => this.limparObjectStore("acoes"))
-                            .then(() => this.limparObjectStore("controladores"))
-                                .then(() => this.atualizarConfiguracoesPadrao())
-                                    .then(()=> resolve(true));
-        
+            this.limparObjectStore("grafos")
+                .then(() => this.limparObjectStore("configuracoes"))
+                    .then(() => this.atualizarConfiguracoesPadrao())
+                        .then(()=> resolve(true));        
         });      
     }
 
 
     
-    async atualizarComponente (componente){      
-        return this.atualizarRegistro (componente, "componentes");    
+    async atualizarGrafo (grafo){      
+        return this.atualizarRegistro (grafo, "grafos");    
     }
     
-    async atualizarComponentes (componentes){
+    async atualizarGrafos (grafos){
         return new Promise((resolve, reject) => {            
-            Promise.all(componentes.map (componente => this.atualizarComponente(componente))).then(retornos => {
+            Promise.all(grafos.map (grafo => this.atualizarGrafo(grafo))).then(retornos => {
                 resolve(true);
             });            
         });
@@ -58,48 +54,15 @@ export class EscritorEspacoDB extends EspacoDB{
 
 
 
-    async atualizarElemento (elemento){      
-        return this.atualizarRegistro (elemento, "elementos");    
+    async atualizarConfiguracao (configuracao){      
+        return this.atualizarRegistro (configuracao, "configuracoes");    
     }
 
-    async atualizarElementos (elementos){
+    async atualizarConfiguracoes (configuracoes){
         return new Promise((resolve, reject) => {            
-            Promise.all(elementos.map (elemento => this.atualizarElemento(elemento))).then(retornos => {
+            Promise.all(configuracoes.map (configuracao => this.atualizarConfiguracao(configuracao))).then(retornos => {
                 resolve(true);
             });            
         });
-    }
-    
-
-
-    async atualizarAcao (acao){      
-        return this.atualizarRegistro (acao, "acoes");    
-    }
-
-    async atualizarAcoes (acoes){
-        return new Promise((resolve, reject) => {            
-            Promise.all(acoes.map (acao => this.atualizarAcao(acao))).then(retornos => {
-                resolve(true);                
-            })
-        });
-    }
-
-
-
-    async atualizarControlador (controlador){      
-        return this.atualizarRegistro (controlador, "controladores");    
-    }
-
-    async atualizarControladores (controladores){
-        return new Promise((resolve, reject) => {            
-            Promise.all(controladores.map (controlador => this.atualizarControlador(controlador))).then(retornos => {
-                resolve(true);                
-            })
-        });
-    }
-    
-
-    async atualizarVisualizacao (visualizacao){      
-        return this.atualizarRegistro (visualizacao, "visualizacoes");    
-    }
+    }    
 }

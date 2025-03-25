@@ -43,8 +43,8 @@ export class GrafoDB extends DBBase{
             object_store_grafos.createIndex("index_descricao_descricao", "descricao", { unique: false});
 
 
-            let object_store_elementos = DBBase.banco.createObjectStore("configuracoes", { keyPath: "uuid" });                            
-            object_store_elementos.createIndex("index_nome_configuracao", ["nome"], { unique: false});
+            let object_store_elementos = db_base.banco.createObjectStore("configuracoes", { keyPath: "uuid" });                            
+            object_store_elementos.createIndex("index_nome_configuracao", "nome", { unique: false});
             object_store_elementos.createIndex("index_descricao_configuracao", "descricao", { unique: false});
 
             GrafoDB.criarBases();            

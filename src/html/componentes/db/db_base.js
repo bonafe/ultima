@@ -4,10 +4,7 @@
 export class DBBase extends EventTarget{
 
     
-    static EVENTO_BANCO_CARREGADO = "EVENTO_BANCO_CARREGADO";
-
-    static instancia = undefined;
-    
+    static EVENTO_BANCO_CARREGADO = "EVENTO_BANCO_CARREGADO";        
 
     constructor(nomeBanco, versao, funcoesDeUpgradeVersao){
 
