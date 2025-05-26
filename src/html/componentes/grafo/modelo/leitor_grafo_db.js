@@ -1,15 +1,15 @@
-import { EspacoDB } from "./espaco_db.js";
+import { GrafoDB } from "./grafo_db.js";
 
-export class LeitorEspacoDB extends EspacoDB{
+export class LeitorGrafoDB extends GrafoDB{
 
 
 
     static getInstance(){
 
-        if (!LeitorEspacoDB.instancia){
-            LeitorEspacoDB.instancia = new LeitorEspacoDB();
+        if (!LeitorGrafoDB.instancia){
+            LeitorGrafoDB.instancia = new LeitorGrafoDB();
         }
-        return LeitorEspacoDB.instancia;
+        return LeitorGrafoDB.instancia;
     }
 
 
@@ -20,56 +20,25 @@ export class LeitorEspacoDB extends EspacoDB{
 
 
 
-    async componentes(){        
-        return this.lerTodosRegistros("componentes");
+    async grafos(){        
+        return this.lerTodosRegistros("grafos");
     }
 
 
 
-    async componente(chave){        
-        return this.trazerRegistro(chave, "componentes", "index_nome_componente");
+    async grafo(chave){        
+        return this.trazerRegistro(chave, "grafo", "index_nome_grafo");
     }
 
 
 
-    async elementos(){        
-        return this.lerTodosRegistros("elementos");
+    async configuracoes(){        
+        return this.lerTodosRegistros("configuracoes");
     }
 
 
 
-    async elemento(chave){        
-        return this.trazerRegistro(chave, "elementos");
-    }
-
-
-
-    async acao(chave){        
-        return this.trazerRegistro(chave, "acoes");
-    }
-
-    async acoes(){        
-        return this.lerTodosRegistros("acoes");
-    }
-
-
-
-
-    async visualizacoes(){        
-        return this.lerTodosRegistros("visualizacoes");
-    }
-
-    async visualizacao(chave_visualizacao){        
-        return this.trazerRegistro(chave_visualizacao, "visualizacoes");
-    }
-
-    
-    async elemento_visualizacao(chave_visualizacao, chave_elemento_visualizacao){        
-        return this.trazerRegistro(chave_visualizacao, "visualizacoes").then(visualizacao => visualizacao.elementos.find(e => e.uuid == chave_elemento_visualizacao));
-    }
-
-
-    async controladores(){
-        return this.lerTodosRegistros("controladores");
+    async configuracao(chave){        
+        return this.trazerRegistro(chave, "configuracoes");
     }
 }

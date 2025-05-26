@@ -31,10 +31,18 @@
         <button onclick="resetar()">Resetar Grafo</button>
     </div>
 
-    <script>
+    <script type="module">
         
+        import { LeitorGrafoDB } from "./modelo/leitor_grafo_db.js";
+
         window.onload = () => {
-            window.iniciarGrafo (document.getElementById('network'));
+          
+            Promise.all([
+                LeitorGrafoDB.getInstance().grafos(),
+                LeitorGrafoDB.getInstance().configuracoes()
+            ]).then(([grafos, configuracoes]) => {
+                window.iniciarGrafo(document.getElementById('network'));
+            });
         }
 
         window.iniciarGrafo = (container) => {
