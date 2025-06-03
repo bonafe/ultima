@@ -120,7 +120,7 @@ export class Elemento extends ComponenteBase {
 
             function eventoSelecionouComponente(evento){           
                 evento.stopPropagation();
-                this.componente = this.componentes.find(c => c.nome == super.no_raiz.querySelector("#selectComponente").value);
+                this.componente = this.componentes.find(c => c.nome == this.no_raiz.querySelector("#selectComponente").value);
                 
                 this.elemento_visualizacao.componente = this.componente.nome;
 

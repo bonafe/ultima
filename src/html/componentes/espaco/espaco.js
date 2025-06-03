@@ -162,19 +162,19 @@ export class Espaco extends ComponenteBase{
 
 
     criarAcoes(){
-        super.noRaiz.querySelector("#fullscreen").addEventListener("click", () => {
+        super.no_raiz.querySelector("#fullscreen").addEventListener("click", () => {
             window.openFullscreen();
         });
     
-        super.noRaiz.querySelector("#configuracao").addEventListener("click", () => {
+        super.no_raiz.querySelector("#configuracao").addEventListener("click", () => {
           this.configuracao();
         });
     
-        super.noRaiz.querySelector("#ajuda").addEventListener("click", () => {
+        super.no_raiz.querySelector("#ajuda").addEventListener("click", () => {
           alert (`Última Versão: ${EspacoDB.VERSAO}`);
         });
     
-        super.noRaiz.querySelector("#mudarVisualizacao").addEventListener("click", () => {
+        super.no_raiz.querySelector("#mudarVisualizacao").addEventListener("click", () => {
           this.mudarVisualizacao();
         });
     }
@@ -231,7 +231,7 @@ export class Espaco extends ComponenteBase{
             this.visualizacao.remover();            
         }
 
-        let containerVisualizacao = super.noRaiz.querySelector(".secao_principal_ultima");
+        let containerVisualizacao = super.no_raiz.querySelector(".secao_principal_ultima");
 
         //Cria um novo HTMLElement baseado no indice da visualizacao selecionada
         this.visualizacao = document.createElement(

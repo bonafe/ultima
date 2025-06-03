@@ -58,7 +58,7 @@ export class ComponenteBase extends HTMLElement {
 
 
 
-    // Getter para noRaiz
+    // Getter para no_raiz
     get no_raiz() {
         return this.#no_raiz;
     }

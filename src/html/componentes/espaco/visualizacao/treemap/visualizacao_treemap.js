@@ -21,7 +21,7 @@ export class VisualizacaoTreemap extends Visualizacao{
 
         this.addEventListener(ComponenteBase.EVENTO_CARREGOU, () => {            
 
-            this.container = super.noRaiz.querySelector(".componente_navegacao_visualizacao");
+            this.container = super.no_raiz.querySelector(".componente_navegacao_visualizacao");
 
             this.carregarCSS("./visualizacao_treemap.css", import.meta.url)
                 .then(()=>{
